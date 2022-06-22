@@ -28,17 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.connectedLbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // label1
+            // connectedLbl
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(660, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
+            this.connectedLbl.ForeColor = System.Drawing.Color.Snow;
+            this.connectedLbl.Location = new System.Drawing.Point(590, 9);
+            this.connectedLbl.Name = "connectedLbl";
+            this.connectedLbl.Size = new System.Drawing.Size(105, 21);
+            this.connectedLbl.TabIndex = 0;
+            this.connectedLbl.Text = "Checking Apikey...";
+            this.connectedLbl.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // MainWindow
             // 
@@ -47,25 +48,22 @@
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(707, 524);
-            this.ControlBox = false;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.connectedLbl);
             this.ForeColor = System.Drawing.Color.NavajoWhite;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.Opacity = 0.55D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.TopMost = true;
             this.Load += new System.EventHandler(this.MainWindow_Load);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainWindow_KeyPress);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label connectedLbl;
     }
 }
 
