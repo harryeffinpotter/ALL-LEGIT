@@ -131,12 +131,10 @@ namespace ALL_LEGIT
             string DL = Properties.Settings.Default.DownloadDir + "\\" + FILENAME;
             if (File.Exists(DL))
             {
-                try
-                {
+
                     File.Delete(DL);
-                }
-                catch { return; }
-                }
+                
+            }
             WebClient webClient = new WebClient();
             webClient.DownloadProgressChanged += (s, e) =>
             {
@@ -144,7 +142,14 @@ namespace ALL_LEGIT
             };
             webClient.DownloadFileCompleted += (s, e) =>
             {
-                // any other code to process the file
+                dlProg.Visible = false;
+                foreach (ListViewItem item in listView1.Items)
+                {
+                if (item.SubItems[1].Text.Equals(URL))
+                    {
+                        listView1.Items.Remove(item);
+                    }
+                }
             };
             webClient.DownloadFileAsync(new Uri(URL),
                 $"{DL}");
@@ -186,19 +191,20 @@ namespace ALL_LEGIT
             {
                 foreach (ListViewItem item in listView1.Items)
                 {
-                    DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
+                    dlProg.Value = 0;
+           
                     if (item.Checked)
                     {
+                        DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
                         downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text);
                     }
-                    listView1.Items.Remove(item);
+
                 }
             }
             else
             {
                 MessageBox.Show("Please select items to download or hit clear.");
             }
-            dlProg.Visible = false;
         }
 
         private void CopyLinks_Click(object sender, EventArgs e)
