@@ -54,6 +54,9 @@
     <Reference Include="Azure.Core, Version=1.22.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
       <HintPath>packages\Azure.Core.1.22.0\lib\net461\Azure.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Gma.System.MouseKeyHook, Version=5.6.130.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MouseKeyHook.5.6.0\lib\net40\Gma.System.MouseKeyHook.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -209,6 +212,22 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Combination.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Hook.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.HotKeys.HotKeyArgs.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.HotKeys.HotKeySet+HotKeyHandler.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.HotKeys.HotKeySet.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.HotKeys.HotKeySetCollection.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.IKeyboardEvents.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.IKeyboardMouseEvents.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.IMouseEvents.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Implementation.KeyboardState.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.KeyCombinationExtensions.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.KeyEventArgsExt.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.KeyPressEventArgsExt.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.MouseEventExtArgs.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Sequence.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.WinApi.HookProcedure.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

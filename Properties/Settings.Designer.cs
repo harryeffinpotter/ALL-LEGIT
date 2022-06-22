@@ -58,5 +58,29 @@ namespace ALL_LEGIT.Properties {
                 this["DownloadDir"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RemDL {
+            get {
+                return ((bool)(this["RemDL"]));
+            }
+            set {
+                this["RemDL"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RemCP {
+            get {
+                return ((bool)(this["RemCP"]));
+            }
+            set {
+                this["RemCP"] = value;
+            }
+        }
     }
 }
