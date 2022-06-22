@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
+using System.Collections;
 
 namespace ALL_LEGIT
 {
@@ -26,11 +27,20 @@ namespace ALL_LEGIT
         public MainWindow()
         {
             InitializeComponent();
-
         }
 
         private async void MainWindow_Load(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.DownloadDir == null || Properties.Settings.Default.DownloadDir.Length < 3)
+            {
+                Properties.Settings.Default.DownloadDir = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\Downloads\\AllLegit Downloads";
+                Properties.Settings.Default.Save();
+                if (!Directory.Exists(Properties.Settings.Default.DownloadDir))
+                {
+                    Directory.CreateDirectory(Properties.Settings.Default.DownloadDir);
+                }
+            }
+            DownloadDir.Text = Properties.Settings.Default.DownloadDir;
             await ConnectViaAPIAsync();
             while (!loginsuccess)
             {
@@ -56,7 +66,7 @@ namespace ALL_LEGIT
         public static bool loginsuccess = false;
         public static async Task ConnectViaAPIAsync()
         {
- 
+
             apiNAME = Properties.Settings.Default.ApiNAME;
             APIKEY = Properties.Settings.Default.ApiKEY;
             if (!String.IsNullOrWhiteSpace(apiNAME) || !String.IsNullOrWhiteSpace(APIKEY))
@@ -86,7 +96,7 @@ namespace ALL_LEGIT
                 Process.Start(obj.data.user_url.ToString());
                 string CheckURL = obj.data.check_url.ToString();
                 obj = getJson(CheckURL);
-                bool Activated = false;
+                bool Activated;
                 Activated = bool.Parse(obj.data.activated.ToString());
                 while (!Activated)
                 {
@@ -113,6 +123,121 @@ namespace ALL_LEGIT
                     MessageBox.Show("Previously set API key no longer working... you must reconnect!");
                 }
             }
+
+
+        }
+        private void downloadFiles(string URL, string FILENAME)
+        {
+            string DL = Properties.Settings.Default.DownloadDir + "\\" + FILENAME;
+            if (File.Exists(DL))
+            {
+                try
+                {
+                    File.Delete(DL);
+                }
+                catch { return; }
+                }
+            WebClient webClient = new WebClient();
+            webClient.DownloadProgressChanged += (s, e) =>
+            {
+                dlProg.Value = e.ProgressPercentage;
+            };
+            webClient.DownloadFileCompleted += (s, e) =>
+            {
+                // any other code to process the file
+            };
+            webClient.DownloadFileAsync(new Uri(URL),
+                $"{DL}");
+
+
+        }
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.V))
+            {
+                string pasted = Clipboard.GetText();
+                if (pasted.StartsWith("magnet"))
+                {
+                    var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={pasted}");
+                    string magnetID = obj.data.magnets[0].id.ToString();
+                    obj = getJson($"magnet/status?agent={apiNAME}&apikey={APIKEY}&id={magnetID}");
+                    foreach (var key in obj.data.magnets.links)
+                    {
+         
+                        var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key.link}");
+                        string unlockedLink = result.data.link.ToString();
+                        listView1.Items.Add(new ListViewItem(new string[] {key.filename.ToString(), unlockedLink}));
+                    }
+                    listView1.Update();
+                    foreach (ListViewItem item in listView1.Items)
+                    {
+                        item.Checked = true;
+                    }
+                    listView1.Update();
+
+                }
+            }
+                return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void startDownloads_Click(object sender, EventArgs e)
+        {
+            if (listView1.CheckedItems.Count > 0)
+            {
+                foreach (ListViewItem item in listView1.Items)
+                {
+                    DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
+                    if (item.Checked)
+                    {
+                        downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text);
+                    }
+                    listView1.Items.Remove(item);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select items to download or hit clear.");
+            }
+            dlProg.Visible = false;
+        }
+
+        private void CopyLinks_Click(object sender, EventArgs e)
+        {
+            if (listView1.CheckedItems.Count > 0)
+            {
+                string forclip = "";
+                foreach (ListViewItem item in listView1.Items)
+                {
+                    if (item.Checked)
+                    {
+                        var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={item.SubItems[1].Text}");
+                        forclip += result.data.link.ToString() + "\n";
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select items to download or hit clear.");
+            }
+        }
+
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            listView1.Clear();
+        }
+
+        private void SetDLDIR_Click(object sender, EventArgs e)
+        {
+            FolderSelectDialog folderSelectDialog = new FolderSelectDialog();
+            folderSelectDialog.Title = "Select All Legit download directory...";
+            if (Properties.Settings.Default.DownloadDir != null)
+                folderSelectDialog.InitialDirectory = Properties.Settings.Default.DownloadDir;
+            if (folderSelectDialog.Show(Handle))
+            {
+                Properties.Settings.Default.DownloadDir = folderSelectDialog.FileName;
+                Properties.Settings.Default.Save();
+            }
+            DownloadDir.Text = Properties.Settings.Default.DownloadDir;
         }
     }
 }
