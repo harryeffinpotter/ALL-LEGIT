@@ -46,17 +46,18 @@
             // 
             // connectedLbl
             // 
+            this.connectedLbl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
             this.connectedLbl.ForeColor = System.Drawing.Color.Snow;
-            this.connectedLbl.Location = new System.Drawing.Point(590, 6);
+            this.connectedLbl.Location = new System.Drawing.Point(574, 6);
             this.connectedLbl.Name = "connectedLbl";
-            this.connectedLbl.Size = new System.Drawing.Size(105, 21);
+            this.connectedLbl.Size = new System.Drawing.Size(121, 21);
             this.connectedLbl.TabIndex = 0;
             this.connectedLbl.Text = "Checking Apikey...";
             this.connectedLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // listView1
             // 
-            this.listView1.BackColor = System.Drawing.SystemColors.MenuText;
+            this.listView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(70)))), ((int)(((byte)(60)))));
             this.listView1.CheckBoxes = true;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.FileName,
@@ -89,43 +90,49 @@
             // 
             // startDownloads
             // 
+            this.startDownloads.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(70)))), ((int)(((byte)(60)))));
+            this.startDownloads.FlatAppearance.BorderSize = 0;
             this.startDownloads.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.startDownloads.ForeColor = System.Drawing.Color.LightGreen;
-            this.startDownloads.Location = new System.Drawing.Point(567, 389);
+            this.startDownloads.ForeColor = System.Drawing.Color.White;
+            this.startDownloads.Location = new System.Drawing.Point(582, 389);
             this.startDownloads.Name = "startDownloads";
-            this.startDownloads.Size = new System.Drawing.Size(127, 31);
+            this.startDownloads.Size = new System.Drawing.Size(113, 29);
             this.startDownloads.TabIndex = 2;
             this.startDownloads.Text = "Start Downloads";
-            this.startDownloads.UseVisualStyleBackColor = true;
+            this.startDownloads.UseVisualStyleBackColor = false;
             this.startDownloads.Click += new System.EventHandler(this.startDownloads_Click);
             // 
             // ClearButton
             // 
+            this.ClearButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(70)))), ((int)(((byte)(60)))));
+            this.ClearButton.FlatAppearance.BorderSize = 0;
             this.ClearButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ClearButton.ForeColor = System.Drawing.Color.LightGreen;
+            this.ClearButton.ForeColor = System.Drawing.Color.White;
             this.ClearButton.Location = new System.Drawing.Point(13, 389);
             this.ClearButton.Name = "ClearButton";
-            this.ClearButton.Size = new System.Drawing.Size(64, 31);
+            this.ClearButton.Size = new System.Drawing.Size(64, 29);
             this.ClearButton.TabIndex = 2;
             this.ClearButton.Text = "Clear all";
-            this.ClearButton.UseVisualStyleBackColor = true;
+            this.ClearButton.UseVisualStyleBackColor = false;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
             // CopyLinks
             // 
+            this.CopyLinks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(70)))), ((int)(((byte)(60)))));
+            this.CopyLinks.FlatAppearance.BorderSize = 0;
             this.CopyLinks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CopyLinks.ForeColor = System.Drawing.Color.LightGreen;
+            this.CopyLinks.ForeColor = System.Drawing.Color.White;
             this.CopyLinks.Location = new System.Drawing.Point(492, 389);
             this.CopyLinks.Name = "CopyLinks";
-            this.CopyLinks.Size = new System.Drawing.Size(69, 31);
+            this.CopyLinks.Size = new System.Drawing.Size(84, 29);
             this.CopyLinks.TabIndex = 2;
             this.CopyLinks.Text = "Copy links";
-            this.CopyLinks.UseVisualStyleBackColor = true;
+            this.CopyLinks.UseVisualStyleBackColor = false;
             this.CopyLinks.Click += new System.EventHandler(this.CopyLinks_Click);
             // 
             // DownloadDir
             // 
-            this.DownloadDir.BackColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.DownloadDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(70)))), ((int)(((byte)(60)))));
             this.DownloadDir.ForeColor = System.Drawing.Color.White;
             this.DownloadDir.Location = new System.Drawing.Point(120, 6);
             this.DownloadDir.Name = "DownloadDir";
@@ -134,44 +141,47 @@
             // 
             // SetDLDIR
             // 
+            this.SetDLDIR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(70)))), ((int)(((byte)(60)))));
+            this.SetDLDIR.FlatAppearance.BorderSize = 0;
             this.SetDLDIR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SetDLDIR.ForeColor = System.Drawing.Color.LightGreen;
+            this.SetDLDIR.ForeColor = System.Drawing.Color.Snow;
             this.SetDLDIR.Location = new System.Drawing.Point(12, 5);
             this.SetDLDIR.Name = "SetDLDIR";
             this.SetDLDIR.Size = new System.Drawing.Size(102, 23);
             this.SetDLDIR.TabIndex = 2;
             this.SetDLDIR.Text = "Set Folder";
-            this.SetDLDIR.UseVisualStyleBackColor = true;
+            this.SetDLDIR.UseVisualStyleBackColor = false;
             this.SetDLDIR.Click += new System.EventHandler(this.SetDLDIR_Click);
             // 
             // dlProg
             // 
-            this.dlProg.BackColor = System.Drawing.Color.DimGray;
-            this.dlProg.ForeColor = System.Drawing.Color.PaleGreen;
+            this.dlProg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(70)))), ((int)(((byte)(60)))));
+            this.dlProg.ForeColor = System.Drawing.Color.PaleTurquoise;
             this.dlProg.Location = new System.Drawing.Point(83, 389);
             this.dlProg.Name = "dlProg";
-            this.dlProg.Size = new System.Drawing.Size(403, 31);
+            this.dlProg.Size = new System.Drawing.Size(403, 29);
             this.dlProg.TabIndex = 4;
             // 
             // DownloadingText
             // 
             this.DownloadingText.ForeColor = System.Drawing.Color.Snow;
-            this.DownloadingText.Location = new System.Drawing.Point(125, 424);
+            this.DownloadingText.Location = new System.Drawing.Point(83, 421);
             this.DownloadingText.Name = "DownloadingText";
-            this.DownloadingText.Size = new System.Drawing.Size(361, 21);
+            this.DownloadingText.Size = new System.Drawing.Size(403, 21);
             this.DownloadingText.TabIndex = 0;
             this.DownloadingText.Text = "...";
-            this.DownloadingText.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.DownloadingText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // RemDL
             // 
             this.RemDL.AutoSize = true;
             this.RemDL.CheckAlign = System.Drawing.ContentAlignment.TopRight;
-            this.RemDL.Location = new System.Drawing.Point(567, 424);
+            this.RemDL.ForeColor = System.Drawing.Color.Snow;
+            this.RemDL.Location = new System.Drawing.Point(582, 422);
             this.RemDL.Name = "RemDL";
-            this.RemDL.Size = new System.Drawing.Size(127, 17);
+            this.RemDL.Size = new System.Drawing.Size(113, 17);
             this.RemDL.TabIndex = 5;
-            this.RemDL.Text = "Remove downloaded";
+            this.RemDL.Text = "Clear Downloaded";
             this.RemDL.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.RemDL.UseVisualStyleBackColor = true;
             this.RemDL.CheckedChanged += new System.EventHandler(this.RemDL_CheckedChanged);
@@ -180,11 +190,12 @@
             // 
             this.RemCP.AutoSize = true;
             this.RemCP.CheckAlign = System.Drawing.ContentAlignment.TopRight;
-            this.RemCP.Location = new System.Drawing.Point(593, 441);
+            this.RemCP.ForeColor = System.Drawing.Color.Snow;
+            this.RemCP.Location = new System.Drawing.Point(491, 421);
             this.RemCP.Name = "RemCP";
-            this.RemCP.Size = new System.Drawing.Size(101, 17);
+            this.RemCP.Size = new System.Drawing.Size(86, 17);
             this.RemCP.TabIndex = 5;
-            this.RemCP.Text = "Remove copied";
+            this.RemCP.Text = "Clear Copied";
             this.RemCP.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.RemCP.UseVisualStyleBackColor = true;
             this.RemCP.CheckedChanged += new System.EventHandler(this.RemCP_CheckedChanged);
@@ -194,8 +205,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
-            this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(707, 524);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
+            this.ClientSize = new System.Drawing.Size(707, 447);
             this.Controls.Add(this.RemCP);
             this.Controls.Add(this.RemDL);
             this.Controls.Add(this.dlProg);
@@ -214,7 +225,6 @@
             this.Opacity = 0.95D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ALL LEGIT";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

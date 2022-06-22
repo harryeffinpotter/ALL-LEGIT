@@ -182,38 +182,44 @@ namespace ALL_LEGIT
                 string pasted = Clipboard.GetText();
                 if (pasted.StartsWith("magnet"))
                 {
-                    var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={pasted}");
-                    string magnetID = obj.data.magnets[0].id.ToString();
-                    string magnetName = obj.data.magnets[0].name.ToString();
-                    obj = getJson($"magnet/status?agent={apiNAME}&apikey={APIKEY}&id={magnetID}");
-                    foreach (var key in obj.data.magnets.links)
+                    string[] Mags = pasted.Split('\n');
+                    foreach (string Mag in Mags)
                     {
-                        bool skip = false;
-                        var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key.link}");
-                        string unlockedLink = result.data.link.ToString();
-                        foreach (ListViewItem item in listView1.Items)
+
+                        var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={pasted}");
+                        string magnetID = obj.data.magnets[0].id.ToString();
+                        string magnetName = obj.data.magnets[0].name.ToString();
+                        obj = getJson($"magnet/status?agent={apiNAME}&apikey={APIKEY}&id={magnetID}");
+                        foreach (var key in obj.data.magnets.links)
                         {
-                            if (item.SubItems[0].Text.Equals(key.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
+                            bool skip = false;
+                            var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key.link}");
+                            string unlockedLink = result.data.link.ToString();
+                            foreach (ListViewItem item in listView1.Items)
                             {
-                                skip = true;
+                                if (item.SubItems[0].Text.Equals(key.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
+                                {
+                                    skip = true;
+                                }
+                            }
+                            if (!skip)
+                            {
+                                listView1.Items.Add(new ListViewItem(new string[] { key.filename.ToString(), unlockedLink, magnetName }));
+
+                            }
+                            foreach (ListViewItem item in listView1.Items)
+                            {
+                                if (item.SubItems[2].Text.Equals(magnetName))
+                                {
+                                    item.Checked = true;
+
+                                }
                             }
                         }
-                        if (!skip)
-                        {
-                            listView1.Items.Add(new ListViewItem(new string[] { key.filename.ToString(), unlockedLink, magnetName }));
+                        listView1.Update();
+                        dlProg.Value = 0;
 
-                        }
-                        foreach (ListViewItem item in listView1.Items)
-                        {
-                            if (item.SubItems[2].Text.Equals(magnetName))
-                            {
-                                item.Checked = true;
-
-                            }
-                        }
-                    }              
-                    listView1.Update();
-                    dlProg.Value = 0;
+                    }
 
                 }
                 if (pasted.ToLower().StartsWith("https://"))
