@@ -42,6 +42,7 @@
             this.DownloadingText = new System.Windows.Forms.Label();
             this.RemDL = new System.Windows.Forms.CheckBox();
             this.RemCP = new System.Windows.Forms.CheckBox();
+            this.CancelButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // connectedLbl
@@ -73,6 +74,7 @@
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseDoubleClick);
             // 
             // FileName
             // 
@@ -133,7 +135,7 @@
             // 
             // DownloadDir
             // 
-            this.DownloadDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(70)))), ((int)(((byte)(60)))));
+            this.DownloadDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(191)))));
             this.DownloadDir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(10)))));
             this.DownloadDir.Location = new System.Drawing.Point(120, 12);
             this.DownloadDir.Name = "DownloadDir";
@@ -178,7 +180,7 @@
             this.RemDL.AutoSize = true;
             this.RemDL.CheckAlign = System.Drawing.ContentAlignment.TopRight;
             this.RemDL.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(191)))));
-            this.RemDL.Location = new System.Drawing.Point(582, 437);
+            this.RemDL.Location = new System.Drawing.Point(582, 438);
             this.RemDL.Name = "RemDL";
             this.RemDL.Size = new System.Drawing.Size(113, 17);
             this.RemDL.TabIndex = 5;
@@ -192,7 +194,7 @@
             this.RemCP.AutoSize = true;
             this.RemCP.CheckAlign = System.Drawing.ContentAlignment.TopRight;
             this.RemCP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(191)))));
-            this.RemCP.Location = new System.Drawing.Point(491, 436);
+            this.RemCP.Location = new System.Drawing.Point(491, 438);
             this.RemCP.Name = "RemCP";
             this.RemCP.Size = new System.Drawing.Size(86, 17);
             this.RemCP.TabIndex = 5;
@@ -200,6 +202,21 @@
             this.RemCP.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.RemCP.UseVisualStyleBackColor = true;
             this.RemCP.CheckedChanged += new System.EventHandler(this.RemCP_CheckedChanged);
+            // 
+            // CancelButton
+            // 
+            this.CancelButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(10)))));
+            this.CancelButton.FlatAppearance.BorderSize = 0;
+            this.CancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CancelButton.ForeColor = System.Drawing.Color.White;
+            this.CancelButton.Location = new System.Drawing.Point(12, 434);
+            this.CancelButton.Name = "CancelButton";
+            this.CancelButton.Size = new System.Drawing.Size(65, 23);
+            this.CancelButton.TabIndex = 2;
+            this.CancelButton.Text = "Cancel";
+            this.CancelButton.UseVisualStyleBackColor = false;
+            this.CancelButton.Visible = false;
+            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // MainWindow
             // 
@@ -213,6 +230,7 @@
             this.Controls.Add(this.dlProg);
             this.Controls.Add(this.DownloadDir);
             this.Controls.Add(this.SetDLDIR);
+            this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.CopyLinks);
             this.Controls.Add(this.startDownloads);
@@ -243,11 +261,12 @@
         private System.Windows.Forms.Button CopyLinks;
         private System.Windows.Forms.TextBox DownloadDir;
         private System.Windows.Forms.Button SetDLDIR;
-        public System.Windows.Forms.Label DownloadingText;
         private System.Windows.Forms.ProgressBar dlProg;
         private System.Windows.Forms.ColumnHeader Group;
         private System.Windows.Forms.CheckBox RemDL;
         private System.Windows.Forms.CheckBox RemCP;
+        private System.Windows.Forms.Label DownloadingText;
+        private System.Windows.Forms.Button CancelButton;
     }
 }
 

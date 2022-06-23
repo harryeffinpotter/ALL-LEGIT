@@ -32,7 +32,10 @@ namespace ALL_LEGIT
 
         private async void MainWindow_Load(object sender, EventArgs e)
         {
-
+            this.Invoke(() =>
+            {
+                DownloadingText.Text = $"";
+            });
             RemDL.Checked = Properties.Settings.Default.RemDL;
             RemCP.Checked = Properties.Settings.Default.RemCP;
 
@@ -71,8 +74,9 @@ namespace ALL_LEGIT
         public static bool loginsuccess = false;
         public static async Task ConnectViaAPIAsync()
         {
-
-            apiNAME = Properties.Settings.Default.ApiNAME;
+            Thread t1 = new Thread(() =>
+            {
+                apiNAME = Properties.Settings.Default.ApiNAME;
             APIKEY = Properties.Settings.Default.ApiKEY;
             if (!String.IsNullOrWhiteSpace(apiNAME) || !String.IsNullOrWhiteSpace(APIKEY))
             {
@@ -107,7 +111,7 @@ namespace ALL_LEGIT
                 {
                     obj = getJson(CheckURL);
                     Activated = bool.Parse(obj.data.activated.ToString());
-                    await Task.Delay(10000);
+                        Task.Delay(1000);
                 }
 
                 if (Activated)
@@ -128,11 +132,17 @@ namespace ALL_LEGIT
                     MessageBox.Show("Previously set API key no longer working... you must reconnect!");
                 }
             }
-
+            });
+            t1.Start();
+            while (t1.IsAlive)
+            {
+                await Task.Delay(100);
+            }
 
         }
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
+            Stopwatch sw = new Stopwatch(); // The stopwatch which we will be using to calculate the download speed
             string DIR = Properties.Settings.Default.DownloadDir + "\\" + MagnetNAME;
             if (!Directory.Exists(DIR))
             {
@@ -142,7 +152,7 @@ namespace ALL_LEGIT
             if (File.Exists(DL))
             {
                 DialogResult Overwrite1 = MessageBox.Show("File found, do you want to overwrite?", "Overwrite?", MessageBoxButtons.YesNo);
-                if (Overwrite1 != DialogResult.Yes)
+                if (Overwrite1 == DialogResult.Yes)
                 {
                     File.Delete(DL);
                 }
@@ -154,10 +164,25 @@ namespace ALL_LEGIT
             WebClient webClient = new WebClient();
             webClient.DownloadProgressChanged += (s, e) =>
             {
+                sw.Start();
+                string DLS;
+                DLS = String.Format("{0:0.00}", (e.BytesReceived / 1024 / 1024 / sw.Elapsed.TotalSeconds).ToString("0.00"));
+
+                this.Invoke(() =>
+                {
+                    DownloadingText.Text = $"Downloading file. {e.ProgressPercentage}% complete. Speed:{DLS}MB\\s";
+                });
                 dlProg.Value = e.ProgressPercentage;
+                if (cancel)
+                {
+                    webClient.Dispose();
+                    cancel = false;
+                }
             };
+
             webClient.DownloadFileCompleted += (s, e) =>
             {
+                sw.Stop();
                 if (RemDL.Checked)
                 {
                     foreach (ListViewItem item in listView1.Items)
@@ -175,11 +200,21 @@ namespace ALL_LEGIT
 
 
         }
+        public static bool notdone = true;
+        public static long total = 0;
+        public static long DLsofar = 0;
+        public static long ULsofar = 0;
+        public static double DownloadSpeed = 0;
+        public static double UploadSpeed = 0;
+        public static bool alertedonce = false;
+        public static bool isConverting = false;
         public async void DoAsyncConversion()
         {
             string pasted = Clipboard.GetText();
             if (pasted.StartsWith("magnet"))
             {
+                isConverting = true;
+                CancelButton.Visible = true;
                 string[] Mags = pasted.Split('\n');
                 foreach (string Mag in Mags)
                 {
@@ -187,103 +222,200 @@ namespace ALL_LEGIT
                     var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={pasted}");
                     string magnetID = obj.data.magnets[0].id.ToString();
                     string magnetName = obj.data.magnets[0].name.ToString();
-                    string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}&id={magnetID}";
-
-                    obj = getJson(MagnetPoll);
-                    string MagnetStatus = obj.data.magnets.status.ToString();
-                    if (MagnetStatus.Equals("Ready"))
+                    string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}";
+                    while (notdone)
                     {
-                    }
-                    else
-                    {
-                        MessageBox.Show("Torrent not cached, ALL LEGIT will download it and add it to the links list, but for now I can't seem to figure out" +
-                            " a way to do it asynchronously, so please let the program go for a bit if it seems to be stuck, it is downloading the torrent and then " +
-                            "uploading it, this will be fixed!");
-                        while (notdone)
+                        obj = getJson(MagnetPoll);
+                        foreach (var key in obj.data.magnets)
                         {
-                            MagnetStatus = obj.data.magnets.status.ToString();
-                            if (MagnetStatus.Equals("Downloading"))
+                            bool ready = false;
+                
+                            if (key.id.ToString().Equals(magnetID))
                             {
-                                Thread t1 = new Thread(() =>
+                                string MagnetStatus = key.status.ToString();
+                                if (MagnetStatus.Equals("Ready"))
                                 {
-                                    string seeders = obj.data.magnets.seeders.ToString();
-                                    notdone = true;
-                                    DownloadingText.Equals($"Downloading Magnet. Seeders: {seeders}");
-                                    total = long.Parse(obj.data.magnets.size.ToString());
-                                    DLsofar = long.Parse(obj.data.magnets.downloaded.ToString());
-                                    double percentcomplete = DLsofar / total * 100;
-                                    var Rounded = Math.Round(percentcomplete, 0);
-                                    dlProg.Value = (int)Rounded;
-                                });
-                                t1.Start();
-                                t1.IsBackground = true;
-                                while (t1.IsAlive)
-                                {
-                                    await Task.Delay(100);
+                                    notdone = false;
+                                    ready = true;
                                 }
+                                else
+                                {
+                                    if (!alertedonce)
+                                    {
+                                        MessageBox.Show("Torrent not cached, now converting!");
+                                        alertedonce = true;
+                                    }
+                                    MagnetStatus = key.status.ToString();
+                                    if (MagnetStatus.Equals("In Queue"))
+                                    {
+                                        Thread t1 = new Thread(() =>
+                                        {
+                                            this.Invoke(() =>
+                                            {
+                                                DownloadingText.Text = $"Torrent added to queue...";
+                                            });
 
-                            }
-                            else if (MagnetStatus.Equals("Ready"))
-                            {
-                                DownloadingText.Text.Equals($"Torrent conversion complete!");
-                            }
-                            else if (MagnetStatus.Equals("Uploading"))
-                            {
-                                Thread t1 = new Thread(() =>
-                                {
-                                    notdone = true;
-                                    DownloadingText.Equals($"Now uploading magnet...");
-                                    total = long.Parse(obj.data.magnets.size.ToString());
-                                    ULsofar = long.Parse(obj.data.magnets.uploaded.ToString());
-                                    double percentcomplete = ULsofar / total * 100;
-                                    var Rounded = Math.Round(percentcomplete, 0);
-                                    dlProg.Value = (int)Rounded;
-                                });
-                                t1.Start();
-                                t1.IsBackground = true;
-                                while (t1.IsAlive)
-                                {
-                                    await Task.Delay(100);
+                                        });
+                                        t1.Start();
+                                        t1.IsBackground = true;
+                                        while (t1.IsAlive)
+                                        {
+                                            if (cancel)
+                                            {
+                                                t1.Abort();
+                                                cancel = false;
+                                            }
+                                            await Task.Delay(100);
+                                        }
+                                    }
+                                    if (MagnetStatus.Equals("Downloading"))
+                                    {
+                                        Thread t1 = new Thread(() =>
+                                        {
+                                        string seeders = key.seeders.ToString();
+                                        notdone = true;
+                                            DownloadSpeed = double.Parse(key.downloadSpeed.ToString());
+                                            double DownloadSpeed2 = (DownloadSpeed / 1024) / 1024;
+                                            string DLS;
+                                            DLS = "Speed:" + String.Format("{0:0.00}", DownloadSpeed2) + $" MB/s";
+
+                             
+                                        total = long.Parse(StringUtilities.KeepOnlyNumbers(key.size.ToString()));
+                                        DLsofar = long.Parse(StringUtilities.KeepOnlyNumbers(key.downloaded.ToString()));
+
+                                            int percentComplete = (int)Math.Round((double)(100 * DLsofar) / total);
+                                            if (percentComplete < 0)
+                                            {
+                                                percentComplete = 0;
+                                            }
+                                            this.Invoke(() =>
+                                            {
+                                         
+                                                dlProg.Value = percentComplete;
+                                            });
+                                            this.Invoke(() =>
+                                            {
+                                                DownloadingText.Text = $"Downloading torrent. {percentComplete}% complete. Seeds:{seeders}. {DLS}";
+                                            });
+                                        });
+                                        t1.Start();
+                                        t1.IsBackground = true;
+                                        while (t1.IsAlive)
+                                        {
+                                            if (cancel)
+                                            {
+                                                t1.Abort();
+                                                cancel = false;
+                                            }
+                                            await Task.Delay(1000);
+                                        }
+
+                                    }
+                                    else if (MagnetStatus.Equals("Ready"))
+                                    {
+                                        this.Invoke(() => { DownloadingText.Text = $"Torrent conversion complete!"; });
+                                    }
+                                    else if (MagnetStatus.Equals("Uploading"))
+                                    {
+                                        Thread t1 = new Thread(() =>
+                                        {
+                                            notdone = true;
+                                            UploadSpeed = double.Parse(key.uploadSpeed.ToString());
+                                            double UploadSpeed2 = (UploadSpeed / 1024) / 1024;
+                                            string ULS;
+                                            ULS = "Speed: " + String.Format("{0:0.00}", UploadSpeed2) + $" MB/s";
+
+                       
+                                            total = long.Parse(StringUtilities.KeepOnlyNumbers(key.size.ToString()));
+                                            ULsofar = long.Parse(StringUtilities.KeepOnlyNumbers(key.uploaded.ToString()));
+
+                                            int percentComplete = (int)Math.Round((double)(100 * ULsofar) / total);
+                                            if (percentComplete < 0)
+                                            {
+                                                percentComplete = 0;
+                                            }
+                                            this.Invoke(() =>
+                                            {
+                                                dlProg.Value = percentComplete;
+                                            });
+                                            this.Invoke(() =>
+                                            {
+                                                DownloadingText.Text = $"Uploading to DDL links. {percentComplete}% complete. {ULS}";
+                                            });
+
+                                        });
+                                        t1.Start();
+                                        t1.IsBackground = true;
+                                        while (t1.IsAlive)
+                                        {
+                                            if (cancel)
+                                            {
+                                                t1.Abort();
+                                                cancel = false;
+                                            }
+                                            await Task.Delay(100);
+                                        }
+
+                                    }
                                 }
-
                             }
-
-
-                        }
-                        await Task.Delay(100);
-                    }
-                    foreach (var key in obj.data.magnets.links)
-                    {
-                        bool skip = false;
-                        var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key.link}");
-                        string unlockedLink = result.data.link.ToString();
-                        foreach (ListViewItem item in listView1.Items)
-                        {
-                            if (item.SubItems[0].Text.Equals(key.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
+                            if (ready)
                             {
-                                skip = true;
-                            }
-                        }
-                        if (!skip)
-                        {
-                            listView1.Items.Add(new ListViewItem(new string[] { key.filename.ToString(), unlockedLink, magnetName }));
+                                this.Invoke(() =>
+                                {
+                                    DownloadingText.Text = $"Adding links...";
+                                });
 
-                        }
-                        foreach (ListViewItem item in listView1.Items)
-                        {
-                            if (item.SubItems[2].Text.Equals(magnetName))
-                            {
-                                item.Checked = true;
+                                foreach (var key2 in key.links)
+                                {
+                                    bool skip = false;
+                                    var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key2.link.ToString()}");
+                                    try
+                                    {
+                                        string unlockedLink = result.data.link.ToString();
+
+                                
+                                
+                                    foreach (ListViewItem item in listView1.Items)
+                                    {
+                                        if (item.SubItems[0].Text.Equals(key2.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
+                                        {
+                                            skip = true;
+                                        }
+                           
+                                    }
+                                    if (!skip)
+                                    {
+                                        listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName }));
+
+                                    }
+                                    }
+                                    catch
+                                    {
+
+                                    }
+                                    skip = false;
+                                    foreach (ListViewItem item in listView1.Items)
+                                    {
+                                        if (item.SubItems[2].Text.Equals(magnetName))
+                                        {
+                                            item.Checked = true;
+
+                                        }
+                                    }
+                                }
+                                listView1.Update();
+                                dlProg.Value = 0;
 
                             }
                         }
                     }
-                    listView1.Update();
-                    dlProg.Value = 0;
-
+                    notdone = true;
                 }
             }
 
+
+            isConverting = false;
 
             if (pasted.ToLower().StartsWith("https://"))
             {
@@ -306,23 +438,35 @@ namespace ALL_LEGIT
 
                     }
                 }
-                catch 
+                catch
                 {
                     MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pasted:{pasted}");
                 }
 
             }
+            CancelButton.Visible = false;
+
+            this.Invoke(() =>
+            {
+                DownloadingText.Text = $"";
+            });
         }
-    
-        public static bool notdone = true;
-        public static long total = 0;
-        public static long DLsofar = 0;
-        public static long ULsofar = 0;
+
+
+
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.V))
             {
-                DoAsyncConversion();
+                if (!isConverting && !isDownloading)
+                {
+                    DoAsyncConversion();
+                }
+                else
+                {
+                    MessageBox.Show("Please allow current conversions/downloads to finish.");
+                    return false;
+                }
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
@@ -330,14 +474,16 @@ namespace ALL_LEGIT
         public static bool isDownloading = false;
         private async void startDownloads_Click(object sender, EventArgs e)
         {
-            if (isDownloading)
+            if (isDownloading || isConverting)
             {
-                MessageBox.Show("Please allow current download to finish before trying to start more!");
+                MessageBox.Show("Please allow current conversion/download to finish before trying to start more!");
                 return;
             }
             else
             {
                 isDownloading = true;
+                CancelButton.Visible = true;
+
                 if (listView1.CheckedItems.Count > 0)
                 {
                     foreach (ListViewItem item in listView1.Items)
@@ -356,6 +502,8 @@ namespace ALL_LEGIT
                     MessageBox.Show("Please select items to download or hit clear.");
                 }
                 isDownloading = false;
+                CancelButton.Visible = false;
+
             }
         }
 
@@ -422,6 +570,45 @@ namespace ALL_LEGIT
             Properties.Settings.Default.RemCP = RemCP.Checked;
             Properties.Settings.Default.Save();
 
+        }
+        public static bool cancel = false;
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            this.Invoke(() =>
+            {
+                DownloadingText.Text = $"";
+            });
+            this.Invoke(() =>
+            {
+                dlProg.Value = 0;
+            });
+        }
+
+        private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (!isConverting && !isDownloading)
+            {
+                DoAsyncConversion();
+            }
+            else
+            {
+                MessageBox.Show("Please allow current conversions/downloads to finish.");
+            }
+        }
+    }
+}
+
+public static class ControlExtensions
+{
+    public static void Invoke(this Control control, Action action)
+    {
+        if (control.InvokeRequired)
+        {
+            control.Invoke(new MethodInvoker(action), null);
+        }
+        else
+        {
+            action.Invoke();
         }
     }
 }
