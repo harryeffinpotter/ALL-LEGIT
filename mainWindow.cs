@@ -175,54 +175,119 @@ namespace ALL_LEGIT
 
 
         }
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        public async void DoAsyncConversion()
         {
-            if (keyData == (Keys.Control | Keys.V))
+            string pasted = Clipboard.GetText();
+            if (pasted.StartsWith("magnet"))
             {
-                string pasted = Clipboard.GetText();
-                if (pasted.StartsWith("magnet"))
+                string[] Mags = pasted.Split('\n');
+                foreach (string Mag in Mags)
                 {
-                    string[] Mags = pasted.Split('\n');
-                    foreach (string Mag in Mags)
+
+                    var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={pasted}");
+                    string magnetID = obj.data.magnets[0].id.ToString();
+                    string magnetName = obj.data.magnets[0].name.ToString();
+                    string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}&id={magnetID}";
+
+                    obj = getJson(MagnetPoll);
+                    string MagnetStatus = obj.data.magnets.status.ToString();
+                    if (MagnetStatus.Equals("Ready"))
                     {
-
-                        var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={pasted}");
-                        string magnetID = obj.data.magnets[0].id.ToString();
-                        string magnetName = obj.data.magnets[0].name.ToString();
-                        obj = getJson($"magnet/status?agent={apiNAME}&apikey={APIKEY}&id={magnetID}");
-                        foreach (var key in obj.data.magnets.links)
+                    }
+                    else
+                    {
+                        MessageBox.Show("Torrent not cached, ALL LEGIT will download it and add it to the links list, but for now I can't seem to figure out" +
+                            " a way to do it asynchronously, so please let the program go for a bit if it seems to be stuck, it is downloading the torrent and then " +
+                            "uploading it, this will be fixed!");
+                        while (notdone)
                         {
-                            bool skip = false;
-                            var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key.link}");
-                            string unlockedLink = result.data.link.ToString();
-                            foreach (ListViewItem item in listView1.Items)
+                            MagnetStatus = obj.data.magnets.status.ToString();
+                            if (MagnetStatus.Equals("Downloading"))
                             {
-                                if (item.SubItems[0].Text.Equals(key.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
+                                Thread t1 = new Thread(() =>
                                 {
-                                    skip = true;
+                                    string seeders = obj.data.magnets.seeders.ToString();
+                                    notdone = true;
+                                    DownloadingText.Equals($"Downloading Magnet. Seeders: {seeders}");
+                                    total = long.Parse(obj.data.magnets.size.ToString());
+                                    DLsofar = long.Parse(obj.data.magnets.downloaded.ToString());
+                                    double percentcomplete = DLsofar / total * 100;
+                                    var Rounded = Math.Round(percentcomplete, 0);
+                                    dlProg.Value = (int)Rounded;
+                                });
+                                t1.Start();
+                                t1.IsBackground = true;
+                                while (t1.IsAlive)
+                                {
+                                    await Task.Delay(100);
                                 }
-                            }
-                            if (!skip)
-                            {
-                                listView1.Items.Add(new ListViewItem(new string[] { key.filename.ToString(), unlockedLink, magnetName }));
 
                             }
-                            foreach (ListViewItem item in listView1.Items)
+                            else if (MagnetStatus.Equals("Ready"))
                             {
-                                if (item.SubItems[2].Text.Equals(magnetName))
+                                DownloadingText.Text.Equals($"Torrent conversion complete!");
+                            }
+                            else if (MagnetStatus.Equals("Uploading"))
+                            {
+                                Thread t1 = new Thread(() =>
                                 {
-                                    item.Checked = true;
-
+                                    notdone = true;
+                                    DownloadingText.Equals($"Now uploading magnet...");
+                                    total = long.Parse(obj.data.magnets.size.ToString());
+                                    ULsofar = long.Parse(obj.data.magnets.uploaded.ToString());
+                                    double percentcomplete = ULsofar / total * 100;
+                                    var Rounded = Math.Round(percentcomplete, 0);
+                                    dlProg.Value = (int)Rounded;
+                                });
+                                t1.Start();
+                                t1.IsBackground = true;
+                                while (t1.IsAlive)
+                                {
+                                    await Task.Delay(100);
                                 }
+
+                            }
+
+
+                        }
+                        await Task.Delay(100);
+                    }
+                    foreach (var key in obj.data.magnets.links)
+                    {
+                        bool skip = false;
+                        var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key.link}");
+                        string unlockedLink = result.data.link.ToString();
+                        foreach (ListViewItem item in listView1.Items)
+                        {
+                            if (item.SubItems[0].Text.Equals(key.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
+                            {
+                                skip = true;
                             }
                         }
-                        listView1.Update();
-                        dlProg.Value = 0;
+                        if (!skip)
+                        {
+                            listView1.Items.Add(new ListViewItem(new string[] { key.filename.ToString(), unlockedLink, magnetName }));
 
+                        }
+                        foreach (ListViewItem item in listView1.Items)
+                        {
+                            if (item.SubItems[2].Text.Equals(magnetName))
+                            {
+                                item.Checked = true;
+
+                            }
+                        }
                     }
+                    listView1.Update();
+                    dlProg.Value = 0;
 
                 }
-                if (pasted.ToLower().StartsWith("https://"))
+            }
+
+
+            if (pasted.ToLower().StartsWith("https://"))
+            {
+                try
                 {
                     string[] pastedsplit = pasted.Split('\n');
                     foreach (string s in pastedsplit)
@@ -230,7 +295,7 @@ namespace ALL_LEGIT
                         s.Trim();
                         var obj = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={s}");
                         string unlockedLink = obj.data.link.ToString();
-                        listView1.Items.Add(new ListViewItem(new string[] {obj.data.filename.ToString(), unlockedLink, obj.data.host.ToString() }));
+                        listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, obj.data.host.ToString() }));
                         foreach (ListViewItem item in listView1.Items)
                         {
                             if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[1].Text.Equals(unlockedLink))
@@ -240,10 +305,26 @@ namespace ALL_LEGIT
                         }
 
                     }
-
                 }
+                catch 
+                {
+                    MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pasted:{pasted}");
+                }
+
             }
-                return base.ProcessCmdKey(ref msg, keyData);
+        }
+    
+        public static bool notdone = true;
+        public static long total = 0;
+        public static long DLsofar = 0;
+        public static long ULsofar = 0;
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.V))
+            {
+                DoAsyncConversion();
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         public static bool isDownloading = false;
