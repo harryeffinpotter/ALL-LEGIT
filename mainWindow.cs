@@ -77,61 +77,61 @@ namespace ALL_LEGIT
             Thread t1 = new Thread(() =>
             {
                 apiNAME = Properties.Settings.Default.ApiNAME;
-            APIKEY = Properties.Settings.Default.ApiKEY;
-            if (!String.IsNullOrWhiteSpace(apiNAME) || !String.IsNullOrWhiteSpace(APIKEY))
-            {
-                apiNAME = Properties.Settings.Default.ApiNAME;
                 APIKEY = Properties.Settings.Default.ApiKEY;
-                var auth = getJson($"user?agent={apiNAME}&apikey={APIKEY}");
-                if (!auth.ToString().Contains("AUTH"))
+                if (!String.IsNullOrWhiteSpace(apiNAME) || !String.IsNullOrWhiteSpace(APIKEY))
                 {
-                    loginsuccess = true;
-                }
-                else
-                {
-                    MessageBox.Show("Previously set API key no longer working... you must reconnect!");
-                }
-            }
-
-            if (!loginsuccess)
-            {
-                Random random = new Random();
-                int randomNumber = random.Next(0, 1000);
-                apiNAME = $"AllLegit{randomNumber}";
-                Properties.Settings.Default.ApiNAME = apiNAME;
-                Properties.Settings.Default.Save();
-                var obj = getJson($"pin/get?agent={apiNAME}");
-
-                Process.Start(obj.data.user_url.ToString());
-                string CheckURL = obj.data.check_url.ToString();
-                obj = getJson(CheckURL);
-                bool Activated;
-                Activated = bool.Parse(obj.data.activated.ToString());
-                while (!Activated)
-                {
-                    obj = getJson(CheckURL);
-                    Activated = bool.Parse(obj.data.activated.ToString());
-                        Task.Delay(1000);
+                    apiNAME = Properties.Settings.Default.ApiNAME;
+                    APIKEY = Properties.Settings.Default.ApiKEY;
+                    var auth = getJson($"user?agent={apiNAME}&apikey={APIKEY}");
+                    if (!auth.ToString().Contains("AUTH"))
+                    {
+                        loginsuccess = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Previously set API key no longer working... you must reconnect!");
+                    }
                 }
 
-                if (Activated)
+                if (!loginsuccess)
                 {
-                    obj = getJson(CheckURL);
-                    APIKEY = obj.data.apikey.ToString();
-                    Properties.Settings.Default.ApiKEY = APIKEY;
+                    Random random = new Random();
+                    int randomNumber = random.Next(0, 1000);
+                    apiNAME = $"AllLegit{randomNumber}";
+                    Properties.Settings.Default.ApiNAME = apiNAME;
                     Properties.Settings.Default.Save();
-                }
+                    var obj = getJson($"pin/get?agent={apiNAME}");
 
-                var auth = getJson($"user?agent={apiNAME}&apikey={APIKEY}");
-                if (!auth.ToString().Contains("AUTH"))
-                {
-                    loginsuccess = true;
+                    Process.Start(obj.data.user_url.ToString());
+                    string CheckURL = obj.data.check_url.ToString();
+                    obj = getJson(CheckURL);
+                    bool Activated;
+                    Activated = bool.Parse(obj.data.activated.ToString());
+                    while (!Activated)
+                    {
+                        obj = getJson(CheckURL);
+                        Activated = bool.Parse(obj.data.activated.ToString());
+                        Task.Delay(1000);
+                    }
+
+                    if (Activated)
+                    {
+                        obj = getJson(CheckURL);
+                        APIKEY = obj.data.apikey.ToString();
+                        Properties.Settings.Default.ApiKEY = APIKEY;
+                        Properties.Settings.Default.Save();
+                    }
+
+                    var auth = getJson($"user?agent={apiNAME}&apikey={APIKEY}");
+                    if (!auth.ToString().Contains("AUTH"))
+                    {
+                        loginsuccess = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Previously set API key no longer working... you must reconnect!");
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("Previously set API key no longer working... you must reconnect!");
-                }
-            }
             });
             t1.Start();
             while (t1.IsAlive)
@@ -182,6 +182,11 @@ namespace ALL_LEGIT
 
             webClient.DownloadFileCompleted += (s, e) =>
             {
+                this.Invoke(() =>
+                {
+                    DownloadingText.Text = $"Download finished...";
+                });
+
                 sw.Stop();
                 if (RemDL.Checked)
                 {
@@ -229,7 +234,7 @@ namespace ALL_LEGIT
                         foreach (var key in obj.data.magnets)
                         {
                             bool ready = false;
-                
+
                             if (key.id.ToString().Equals(magnetID))
                             {
                                 string MagnetStatus = key.status.ToString();
@@ -272,16 +277,16 @@ namespace ALL_LEGIT
                                     {
                                         Thread t1 = new Thread(() =>
                                         {
-                                        string seeders = key.seeders.ToString();
-                                        notdone = true;
+                                            string seeders = key.seeders.ToString();
+                                            notdone = true;
                                             DownloadSpeed = double.Parse(key.downloadSpeed.ToString());
                                             double DownloadSpeed2 = (DownloadSpeed / 1024) / 1024;
                                             string DLS;
                                             DLS = "Speed:" + String.Format("{0:0.00}", DownloadSpeed2) + $" MB/s";
 
-                             
-                                        total = long.Parse(StringUtilities.KeepOnlyNumbers(key.size.ToString()));
-                                        DLsofar = long.Parse(StringUtilities.KeepOnlyNumbers(key.downloaded.ToString()));
+
+                                            total = long.Parse(StringUtilities.KeepOnlyNumbers(key.size.ToString()));
+                                            DLsofar = long.Parse(StringUtilities.KeepOnlyNumbers(key.downloaded.ToString()));
 
                                             int percentComplete = (int)Math.Round((double)(100 * DLsofar) / total);
                                             if (percentComplete < 0)
@@ -290,7 +295,7 @@ namespace ALL_LEGIT
                                             }
                                             this.Invoke(() =>
                                             {
-                                         
+
                                                 dlProg.Value = percentComplete;
                                             });
                                             this.Invoke(() =>
@@ -325,7 +330,7 @@ namespace ALL_LEGIT
                                             string ULS;
                                             ULS = "Speed: " + String.Format("{0:0.00}", UploadSpeed2) + $" MB/s";
 
-                       
+
                                             total = long.Parse(StringUtilities.KeepOnlyNumbers(key.size.ToString()));
                                             ULsofar = long.Parse(StringUtilities.KeepOnlyNumbers(key.uploaded.ToString()));
 
@@ -365,47 +370,72 @@ namespace ALL_LEGIT
                                 {
                                     DownloadingText.Text = $"Adding links...";
                                 });
-
-                                foreach (var key2 in key.links)
+                                Thread t1 = new Thread(() =>
                                 {
-                                    bool skip = false;
-                                    var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key2.link.ToString()}");
-                                    try
+                                    foreach (var key2 in key.links)
                                     {
-                                        string unlockedLink = result.data.link.ToString();
-
-                                
-                                
-                                    foreach (ListViewItem item in listView1.Items)
-                                    {
-                                        if (item.SubItems[0].Text.Equals(key2.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
+                                        bool skip = false;
+                                        var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key2.link.ToString()}");
+                                        try
                                         {
-                                            skip = true;
+                                            string unlockedLink = result.data.link.ToString();
+                                            this.Invoke(() =>
+                                            {
+                                                foreach (ListViewItem item in listView1.Items)
+                                                {
+                                                    if (item.SubItems[0].Text.Equals(key2.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
+                                                    {
+                                                        skip = true;
+                                                        DownloadingText.Text = $"Item already in list!";
+                                                    }
+                                                }
+                                                if (!skip)
+                                                {
+
+                                                    listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName }));
+
+                                                }
+
+                                                if (listView1.Items.Count == 0)
+                                                {
+                                                    this.Invoke(() =>
+                                                    {
+                                                        listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName }));
+                                                    });
+                                                }
+
+                                                skip = false;
+                                                foreach (ListViewItem item in listView1.Items)
+                                                {
+                                                    if (item.SubItems[2].Text.Equals(magnetName))
+                                                    {
+                                                        item.Checked = true;
+
+                                                    }
+                                                }
+                                            });
                                         }
-                           
-                                    }
-                                    if (!skip)
-                                    {
-                                        listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName }));
-
-                                    }
-                                    }
-                                    catch
-                                    {
-
-                                    }
-                                    skip = false;
-                                    foreach (ListViewItem item in listView1.Items)
-                                    {
-                                        if (item.SubItems[2].Text.Equals(magnetName))
+                                        catch
                                         {
-                                            item.Checked = true;
-
                                         }
                                     }
+                                });
+                                t1.Start();
+                                t1.IsBackground = true;
+                                while (t1.IsAlive)
+                                {
+                                    if (cancel)
+                                    {
+                                        t1.Abort();
+                                        cancel = false;
+                                    }
+                                    await Task.Delay(100);
                                 }
                                 listView1.Update();
                                 dlProg.Value = 0;
+                                listView1.BeginUpdate();
+                                listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                                listView1.EndUpdate();
 
                             }
                         }
@@ -421,23 +451,63 @@ namespace ALL_LEGIT
             {
                 try
                 {
-                    string[] pastedsplit = pasted.Split('\n');
-                    foreach (string s in pastedsplit)
+                    Thread t1 = new Thread(() =>
                     {
-                        s.Trim();
-                        var obj = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={s}");
-                        string unlockedLink = obj.data.link.ToString();
-                        listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, obj.data.host.ToString() }));
-                        foreach (ListViewItem item in listView1.Items)
+                        string[] pastedsplit = pasted.Split('\n');
+                        foreach (string s in pastedsplit)
                         {
-                            if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[1].Text.Equals(unlockedLink))
+                            s.Trim();
+                            var obj = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={s}");
+                            string unlockedLink = obj.data.link.ToString();
+                            bool skip = false;
+                            this.Invoke(() =>
                             {
-                                item.Checked = true;
-                            }
-                        }
+                                foreach (ListViewItem item in listView1.Items)
+                                {
+                                    if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Text.Equals(obj.data.host.ToString()))
+                                    {
+                                        skip = true;
+                                    }
+                                }
+                                if (!skip)
+                                {
 
+                                    listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, obj.data.host.ToString() }));
+
+                                }
+                                if (listView1.Items.Count == 0)
+                                {
+
+                                    listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, obj.data.host.ToString() }));
+
+                                }
+                                foreach (ListViewItem item in listView1.Items)
+                                {
+                                    if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[1].Text.Equals(unlockedLink))
+                                    {
+                                        item.Checked = true;
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    t1.Start();
+                    t1.IsBackground = true;
+                    while (t1.IsAlive)
+                    {
+                        if (cancel)
+                        {
+                            t1.Abort();
+                            cancel = false;
+                        }
+                        await Task.Delay(100);
                     }
+                    listView1.BeginUpdate();
+                    listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    listView1.EndUpdate();
+
                 }
+
                 catch
                 {
                     MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pasted:{pasted}");
@@ -584,7 +654,7 @@ namespace ALL_LEGIT
             });
         }
 
-        private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
+        public void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (!isConverting && !isDownloading)
             {
@@ -594,6 +664,25 @@ namespace ALL_LEGIT
             {
                 MessageBox.Show("Please allow current conversions/downloads to finish.");
             }
+        }
+
+        private void PasteButton_Click(object sender, EventArgs e)
+        {
+            if (!isConverting && !isDownloading)
+            {
+                DoAsyncConversion();
+            }
+            else
+            {
+                MessageBox.Show("Please allow current conversions/downloads to finish.");
+            }
+        }
+
+        private void MainWindow_Resize(object sender, EventArgs e)
+        {
+            listView1.BeginUpdate();
+            listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            listView1.EndUpdate();
         }
     }
 }
