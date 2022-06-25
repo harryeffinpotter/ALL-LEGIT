@@ -19,6 +19,7 @@ namespace ALL_LEGIT
             // Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainWindow());
+            Application.Exit();
         }
     }
 }

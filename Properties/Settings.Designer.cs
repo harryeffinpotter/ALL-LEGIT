@@ -82,5 +82,41 @@ namespace ALL_LEGIT.Properties {
                 this["RemCP"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TopMost {
+            get {
+                return ((bool)(this["TopMost"]));
+            }
+            set {
+                this["TopMost"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ZipPWS {
+            get {
+                return ((string)(this["ZipPWS"]));
+            }
+            set {
+                this["ZipPWS"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoExtract {
+            get {
+                return ((bool)(this["AutoExtract"]));
+            }
+            set {
+                this["AutoExtract"] = value;
+            }
+        }
     }
 }
