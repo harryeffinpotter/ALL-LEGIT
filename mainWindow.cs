@@ -16,7 +16,8 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
 using System.Collections;
-
+using Timer = System.Windows.Forms.Timer;
+using Gma.System.MouseKeyHook;
 
 namespace ALL_LEGIT
 {
@@ -24,14 +25,96 @@ namespace ALL_LEGIT
     {
         public static string APIKEY;
         public static string apiNAME;
-
+        public static bool waitingforkey = false;
+        public static Timer a = new Timer();
+        public static Keys hotkeyset = Properties.Settings.Default.HotKeyKeyData;
         public MainWindow()
         {
+
+            try
+            {
+                Hook.GlobalEvents().KeyDown += async (sender, e) =>
+                {
+
+
+                    if (waitingforkey)
+                    {
+
+                        if (e.KeyData.ToString().Equals("LControlKey"))
+                        {
+                            HotKeyBox.Text = e.KeyData.ToString().Replace("LControlKey", "Control +");
+                        }
+                        if (e.KeyData.Equals(Keys.Control) || e.KeyData.Equals(Keys.ControlKey) || e.KeyData.Equals(Keys.LControlKey))
+                        {
+                            HotKeyBox.Text = "Control +";
+                        }
+
+                        HotKeyBox.Text = e.KeyData.ToString().Replace(",", " +");
+                        if (HotKeyBox.Text.Contains("Control") && !HotKeyBox.Text.Contains("+") && !HotKeyBox.Text.Contains("LControlKey") || HotKeyBox.Text.Contains("LControlKey"))
+                        {
+                            HotKeyBox.Text = Properties.Settings.Default.HotKeyKeyData.ToString().Replace(",", " +");
+                        }
+                        if (e.KeyData.ToString().Contains("LControlKey, Control") || e.KeyData.ToString().Contains("Control") && !e.KeyData.ToString().Contains(" ") || e.KeyData.ToString().Contains("LControlKey") && !e.KeyData.ToString().Contains(" "))
+                        {
+                            return;
+
+                        }
+                        else
+                        {
+                            hotkeyset = e.KeyData;
+
+                        }
+                        Hook.GlobalEvents().KeyUp += (sendeee, eee) =>
+                        {
+                            if (hotkeyset.Equals(Keys.Control) || hotkeyset.Equals(Keys.ControlKey) || hotkeyset.Equals(Keys.LControlKey) || hotkeyset.ToString().Equals("LControlKey, Control"))
+                            {
+                                waitingforkey = false;
+                                return;
+                            }
+                            else
+                            {
+                                Properties.Settings.Default.HotKeyKeyData = hotkeyset;
+                                Properties.Settings.Default.Save();
+                                HotKeyBox.Text = Properties.Settings.Default.HotKeyKeyData.ToString().Replace(",", " +");
+                                waitingforkey = false;
+                            }
+
+
+                        };
+
+                    }
+
+                    else
+                    {
+                        if (e.KeyData == Properties.Settings.Default.HotKeyKeyData)
+                        {
+                            if (!isConverting && !isDownloading)
+                            {
+                                DoAsyncConversion();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Please allow current conversions/downloads to finish.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                return;
+                            }
+                        }
+                    }
+   
+
+                };
+            }
+            catch { }
+
             InitializeComponent();
         }
 
+
+
         private async void MainWindow_Load(object sender, EventArgs e)
         {
+            AutoDLBox.Checked = Properties.Settings.Default.AutoDL;
+            HotKeyBox.Text = Properties.Settings.Default.HotKeyKeyData.ToString().Replace(",", " +");
+
             AutoExtract.Checked = Properties.Settings.Default.AutoExtract;
             if (!String.IsNullOrEmpty(Properties.Settings.Default.ZipPWS))
             {
@@ -59,13 +142,15 @@ namespace ALL_LEGIT
             await ConnectViaAPIAsync();
             while (!loginsuccess)
             {
-                connectedLbl.Text = "Not Connected";
-                connectedLbl.ForeColor = Color.HotPink;
+
+                MainWindow.ActiveForm.Text = "All-Legit: Not Connected";
+
             }
             if (loginsuccess)
             {
-                connectedLbl.Text = "Connected!";
-                connectedLbl.ForeColor = Color.LightGreen;
+
+                MainWindow.ActiveForm.Text = "All-Legit: Connected";
+
             }
         }
 
@@ -256,10 +341,11 @@ namespace ALL_LEGIT
         public static bool filecryptinprog = false;
         public async void DoAsyncConversion()
         {
+
             cancel = false;
             SplashText.Visible = false;
             string pasted = Clipboard.GetText();
-            Thread t1 = new Thread(async () =>
+            Thread t1 = new Thread(() =>
             {
                 isConverting = true;
                 if (pasted.StartsWith("magnet"))
@@ -302,7 +388,7 @@ namespace ALL_LEGIT
                         {
                             CancelButton.Visible = true;
                         });
-            
+
                         var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={s}");
                         string status = obj.status.ToString();
 
@@ -339,14 +425,14 @@ namespace ALL_LEGIT
                             string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}";
                             while (notdone)
                             {
-                            if (cancel)
+                                if (cancel)
                                 {
                                     this.Invoke(() =>
                                     {
                                         DownloadingText.Text = $"";
                                         dlProg.Value = 0;
                                     });
-                         
+
                                     break;
                                 }
                                 obj = getJson(MagnetPoll);
@@ -542,7 +628,7 @@ namespace ALL_LEGIT
 
                         }
                         isConverting = false;
-                  
+
                     }
                 }
 
@@ -593,11 +679,11 @@ namespace ALL_LEGIT
                             cancel = true;
                         }
                     }
-                   
+
 
                 }
                 else if (pasted.ToLower().StartsWith("https://"))
-                    {
+                {
                     try
                     {
                         pasted = pasted.Trim();
@@ -789,7 +875,13 @@ namespace ALL_LEGIT
                     linkstoget = "";
                     filecryptinprog = false;
                 }
-                return;
+
+            }
+            if (Properties.Settings.Default.AutoDL)
+            {
+                object sender = null;
+                EventArgs e = new EventArgs();
+                startDownloads_Click(sender, e);
             }
         }
 
@@ -869,7 +961,7 @@ namespace ALL_LEGIT
                                         {
                                             Directory.CreateDirectory(ArchiveDIR);
                                         }
-                                 
+
                                         Utilities.ExtractFile(DL, ArchiveDIR);
                                     }
                                 }
@@ -1120,7 +1212,7 @@ namespace ALL_LEGIT
             }
             PWBox.Update();
 
-                listView1.Focus();
+            listView1.Focus();
         }
 
         private void AutoExtract_CheckedChanged(object sender, EventArgs e)
@@ -1159,6 +1251,7 @@ namespace ALL_LEGIT
 
         private void DownloadDir_Leave(object sender, EventArgs e)
         {
+
             if (!DownloadDir.Text.Equals(Properties.Settings.Default.DownloadDir))
             {
 
@@ -1173,6 +1266,19 @@ namespace ALL_LEGIT
                     DownloadDir.Text = Properties.Settings.Default.DownloadDir;
                 }
             }
+        }
+
+        private void HotKeyBtn_Click(object sender, EventArgs e)
+        {
+
+            waitingforkey = true;
+            HotKeyBox.Text = "Press desired hotkey...";
+        }
+
+        private void AutoDLBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AutoDL = AutoDLBox.Checked;
+            Properties.Settings.Default.Save();
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Gma.System.MouseKeyHook;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -15,11 +17,15 @@ namespace ALL_LEGIT
         [STAThread]
         static void Main()
         {
-      
+   
+
+
             // Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainWindow());
             Application.Exit();
         }
+
     }
+    
 }

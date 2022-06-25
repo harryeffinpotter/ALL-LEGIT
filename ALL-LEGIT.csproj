@@ -60,6 +60,9 @@
   <PropertyGroup>
     <ApplicationIcon>AL.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Azure.Core, Version=1.24.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
       <HintPath>packages\Azure.Core.1.24.0\lib\net461\Azure.Core.dll</HintPath>
@@ -69,6 +72,7 @@
     </Reference>
     <Reference Include="Gma.System.MouseKeyHook, Version=5.6.130.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\MouseKeyHook.5.6.0\lib\net40\Gma.System.MouseKeyHook.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -1611,7 +1615,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <Resource Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -1628,7 +1632,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Azure.Core.dll" />
     <EmbeddedResource Include="Costura.dll" />
-    <EmbeddedResource Include="Gma.System.MouseKeyHook.dll" />
     <EmbeddedResource Include="Microsoft.Bcl.AsyncInterfaces.dll" />
     <EmbeddedResource Include="Microsoft.Graph.Core.dll" />
     <EmbeddedResource Include="Microsoft.Graph.dll" />
@@ -1658,6 +1661,7 @@
     <EmbeddedResource Include="System.Web.Http.WebHost.dll" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Gma.System.MouseKeyHook.dll" />
     <Content Include="HTMLPage1.html" />
     <Content Include="_bin\node.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -4119,4 +4123,8 @@
   <Import Project="packages\Costura.Fody.5.7.0\build\Costura.Fody.targets" Condition="Exists('packages\Costura.Fody.5.7.0\build\Costura.Fody.targets')" />
   <Import Project="packages\Fody.6.6.3\build\Fody.targets" Condition="Exists('packages\Fody.6.6.3\build\Fody.targets')" />
   <Import Project="packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>
