@@ -16,8 +16,18 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
 using System.Collections;
+using SevenZip;
+using SharpCompress;
 using Timer = System.Windows.Forms.Timer;
 using Gma.System.MouseKeyHook;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharpCompress.Archives.Rar;
+using SharpCompress.Archives.SevenZip;
+using SharpCompress.Archives.Zip;
+using SharpCompress.Archives.Tar;
+using SharpCompress.Archives.GZip;
+
+
 
 namespace ALL_LEGIT
 {
@@ -91,6 +101,8 @@ namespace ALL_LEGIT
                             if (!isConverting && !isDownloading)
                             {
                                 DoAsyncConversion();
+                                isConverting = false;
+                                isDownloading = false;
                             }
                             else
                             {
@@ -99,16 +111,15 @@ namespace ALL_LEGIT
                             }
                         }
                     }
-   
+
 
                 };
             }
             catch { }
 
             InitializeComponent();
+
         }
-
-
 
         private async void MainWindow_Load(object sender, EventArgs e)
         {
@@ -142,15 +153,19 @@ namespace ALL_LEGIT
             await ConnectViaAPIAsync();
             while (!loginsuccess)
             {
+                this.Invoke(() =>
+                {
+                    this.Text = "All-Legit: Not Connected";
+                });
 
-                MainWindow.ActiveForm.Text = "All-Legit: Not Connected";
 
             }
             if (loginsuccess)
             {
-
-                MainWindow.ActiveForm.Text = "All-Legit: Connected";
-
+                this.Invoke(() =>
+                {
+                    this.Text = "All-Legit: Connected";
+                });
             }
         }
 
@@ -253,8 +268,10 @@ namespace ALL_LEGIT
 
 
         }
+        public static bool overwrite = false;
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
+    
             Stopwatch sw = new Stopwatch(); // The stopwatch which we will be using to calculate the download speed
             string DIR = Properties.Settings.Default.DownloadDir + "\\" + MagnetNAME;
             if (!Directory.Exists(DIR))
@@ -264,8 +281,21 @@ namespace ALL_LEGIT
             string DL = Properties.Settings.Default.DownloadDir + "\\" + MagnetNAME + "\\" + FILENAME;
             if (File.Exists(DL))
             {
-                DialogResult Overwrite1 = MessageBox.Show("File found, do you want to overwrite?", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                if (Overwrite1 == DialogResult.Yes)
+                if (!overwrite)
+                {
+                    DialogResult Overwrite1 = MessageBox.Show("Files found, do you want to overwrite?", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    if (Overwrite1 == DialogResult.Yes)
+                    {
+                        overwrite = true;
+
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+              
+                if (overwrite)
                 {
                     File.Delete(DL);
                 }
@@ -304,17 +334,21 @@ namespace ALL_LEGIT
                 sw.Stop();
                 if (RemDL.Checked)
                 {
-                    foreach (ListViewItem item in listView1.Items)
+                    this.Invoke(() =>
                     {
-                        if (item.SubItems[1].Text.Equals(URL))
+                        listView1.BeginUpdate();
+
+                        foreach (ListViewItem item in listView1.Items)
                         {
-                            this.Invoke(() =>
+                            if (item.SubItems[1].Text.Equals(URL))
                             {
                                 listView1.Items.Remove(item);
-                                listView1.Update();
-                            });
+
+                            }
                         }
-                    }
+                        listView1.EndUpdate();
+                    });
+
                 }
 
 
@@ -635,7 +669,7 @@ namespace ALL_LEGIT
 
 
 
-                if (pasted.ToLower().StartsWith("https://filecrypt.co") || pasted.ToLower().StartsWith("https://www.filecrypt.co"))
+                if (pasted.ToLower().StartsWith("https://filecrypt.") || pasted.ToLower().StartsWith("https://www.filecrypt."))
                 {
                     pasted = pasted.Trim();
                     string[] output = new string[] { pasted };
@@ -910,7 +944,6 @@ namespace ALL_LEGIT
         {
             if (isDownloading || isConverting)
             {
-                MessageBox.Show("Please allow current conversion/download to finish before trying to start more!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 return;
             }
             else
@@ -921,10 +954,9 @@ namespace ALL_LEGIT
 
                 if (listView1.CheckedItems.Count > 0)
                 {
-                    foreach (ListViewItem item in listView1.Items)
+                    foreach (ListViewItem item in listView1.CheckedItems)
                     {
-                        if (item.Checked)
-                        {
+                     
                             DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
                             await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text);
                             if (AutoExtract.Checked)
@@ -932,9 +964,9 @@ namespace ALL_LEGIT
                                 DLList += $"{item.SubItems[0].Text};{item.SubItems[2].Text}\n";
                             }
 
-                        }
 
                     }
+                    overwrite = false;
                     if (AutoExtract.Checked)
                     {
                         this.Invoke(() =>
@@ -942,11 +974,37 @@ namespace ALL_LEGIT
                             string[] SplitDLList = DLList.Split('\n');
                             foreach (string FullDL in SplitDLList)
                             {
+
                                 if (!String.IsNullOrWhiteSpace(FullDL))
                                 {
+                                 
                                     string[] DLS = FullDL.Split(';');
-                                    if (DLS[0].ToString().EndsWith(".zip".ToLower()) || DLS[0].ToString().EndsWith(".7z.001".ToLower()) || DLS[0].ToString().EndsWith(".7z".ToLower())
-                                        || DLS[0].ToString().EndsWith(".001".ToLower()) || DLS[0].ToString().EndsWith(".part01.rar".ToLower()) || DLS[0].ToString().EndsWith(".rar".ToLower()) && !DLS[0].ToString().Contains(".part".ToLower()))
+                                    bool Extract = false;
+                                    if (DLS[0].ToString().ToLower().EndsWith(".rar"))
+                                    {
+                                        var archive = RarArchive.Open(Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString() + "\\" + DLS[0].ToString());
+                                        if (archive.IsMultipartVolume())
+                                        {
+                                            if (!archive.IsFirstVolume())
+                                            {
+                                                continue;
+                                            }
+                                            else
+                                            {
+                                                Extract = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Extract = true;
+                       
+                                        }
+                                    }
+                                    else if (DLS[0].ToString().Contains(".001") &&  DLS[0].ToString().Contains("7z") || DLS[0].ToString().Contains(".01") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().EndsWith(".7z") || DLS[0].ToString().EndsWith(".zip"))
+                                    {
+                                        Extract = true;
+                                    }
+                                    if (Extract)
                                     {
                                         DownloadingText.Text = "Extracting archives...";
                                         string DLDir = Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString();
@@ -961,13 +1019,11 @@ namespace ALL_LEGIT
                                         {
                                             Directory.CreateDirectory(ArchiveDIR);
                                         }
-
                                         Utilities.ExtractFile(DL, ArchiveDIR);
                                     }
-                                }
-
+                                    Extract = false;
+                                }   
                             }
-
                         });
                     }
                     this.Invoke(() =>
@@ -975,7 +1031,7 @@ namespace ALL_LEGIT
                         dlProg.Value = 0;
                         DownloadingText.Text = "";
                     });
-
+                    overwrite = false;
                 }
                 else
                 {
@@ -1148,8 +1204,8 @@ namespace ALL_LEGIT
 
         private void PWBox_Enter(object sender, EventArgs e)
         {
-            if (String.IsNullOrWhiteSpace(Properties.Settings.Default.ZipPWS))
-            {
+            if (PWBox.Text == "your;commonly;used;zip;passwords")
+            {            
                 PWBox.Text = "";
             }
             else

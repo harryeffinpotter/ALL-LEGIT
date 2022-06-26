@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharpCompress;
 
 namespace ALL_LEGIT
 {
@@ -34,24 +35,44 @@ namespace ALL_LEGIT
             }
             catch (Exception ex)
             {
-                if (ex.ToString().Contains("assword"))
+                if (ex.Message.Contains("assword"))
                 {
-                    if (!String.IsNullOrEmpty(MainWindow.PWLIST))
+                    if (!String.IsNullOrEmpty(Properties.Settings.Default.ZipPWS))
                     {
                         string[] PWArray = MainWindow.PWLIST.Split(';');
+                        int PWArrCount = PWArray.Length;
+                        int fails = 0;
                         foreach (string PW in PWArray)
                         {
-                            ProcessStartInfo pro = new ProcessStartInfo();
-                            pro.WindowStyle = ProcessWindowStyle.Hidden;
-                            pro.FileName = $"{Environment.CurrentDirectory}\\7z.exe";
-                            pro.Arguments = string.Format($"x \"{{}}\" -y -o\"{{1}}\" -p\"{PW}\"", sourceArchive, destination);
-                            Process x = Process.Start(pro);
-                            if (!x.HasExited)
-                                x.WaitForExit();
+                            try
+                            {
+                                ProcessStartInfo pro = new ProcessStartInfo();
+                                pro.WindowStyle = ProcessWindowStyle.Hidden;
+                                pro.FileName = $"{Environment.CurrentDirectory}\\7z.exe";
+                                pro.Arguments = string.Format("x \"{0}\" -y -o\"{1}\"", sourceArchive, destination) + $"-p\"{PW}\"";
+                                Process x = Process.Start(pro);
+                                if (!x.HasExited)
+                                    x.WaitForExit();
+                            }
+                            catch (Exception ex2)
+                            {
+                               if (ex2.Message.Contains("assword"))
+                                {
+                                    fails++;
+                                }
+                            }
+                        }
+                        if (fails == PWArrCount)
+                        {
+                            MessageBox.Show("Archive is passworded and supplied passwords(if any) did not work.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
                     }
+                    else
+                    {
+                        MessageBox.Show("Archive is password protected, add correct password to PW box to fix this.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+
+                    }
                 }
-                MessageBox.Show("Zip is passworded, please enter password in passwords textbox!");
             }
         }
 
