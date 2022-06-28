@@ -78,21 +78,19 @@ namespace ALL_LEGIT
 
         public static void DecryptDLC()
         {
-            int DLCNumber = 0;
-            string[] files = Directory.GetFiles($"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\Downloads", "*.dlc", SearchOption.TopDirectoryOnly);
-     
-                foreach (string file in files)
+            int DLCNumber = MainWindow.CurrentDLC;
+            string[] files = Directory.GetFiles(Environment.CurrentDirectory + "\\_bin", "*.dlc", SearchOption.TopDirectoryOnly);
+
+            foreach (string file in files)
             {
-                string filename = Path.GetFileName(file);
-                File.Move(file, $"{Environment.CurrentDirectory}\\_bin\\{filename}");
+                string filename = Path.GetFileName($"{Environment.CurrentDirectory}\\_bin\\{DLCNumber}.dlc");
                 ProcessStartInfo pro = new ProcessStartInfo();
-                    pro.WindowStyle = ProcessWindowStyle.Hidden;
+                pro.WindowStyle = ProcessWindowStyle.Hidden;
                 pro.FileName = $"cmd.exe";
                 pro.WorkingDirectory = $"{Environment.CurrentDirectory}\\_bin";
-                pro.Arguments = $"/c decrypt-dlc.cmd {filename} -o urls{DLCNumber}.txt";
+                pro.Arguments = $"/c decrypt-dlc.cmd \"{filename}\" -o {DLCNumber}.txt";
                 Process x = Process.Start(pro);
-                x.WaitForExit();    
-                DLCNumber++;
+                x.WaitForExit();
                 try
                 {
                     File.Delete($"{Environment.CurrentDirectory}\\_bin\\{filename}");
@@ -102,7 +100,7 @@ namespace ALL_LEGIT
 
                 }
             }
-  
+
 
 
         }

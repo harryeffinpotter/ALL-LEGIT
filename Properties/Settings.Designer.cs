@@ -166,5 +166,17 @@ namespace ALL_LEGIT.Properties {
                 this["AutoDL"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoOverwrite {
+            get {
+                return ((bool)(this["AutoOverwrite"]));
+            }
+            set {
+                this["AutoOverwrite"] = value;
+            }
+        }
     }
 }

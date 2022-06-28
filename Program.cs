@@ -1,4 +1,5 @@
-﻿using Gma.System.MouseKeyHook;
+﻿
+using Gma.System.MouseKeyHook;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,7 +18,7 @@ namespace ALL_LEGIT
         [STAThread]
         static void Main()
         {
-   
+
 
 
             // Application.EnableVisualStyles();
