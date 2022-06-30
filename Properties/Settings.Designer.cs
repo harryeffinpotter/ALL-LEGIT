@@ -178,5 +178,29 @@ namespace ALL_LEGIT.Properties {
                 this["AutoOverwrite"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Min2Tray {
+            get {
+                return ((bool)(this["Min2Tray"]));
+            }
+            set {
+                this["Min2Tray"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Close2Tray {
+            get {
+                return ((bool)(this["Close2Tray"]));
+            }
+            set {
+                this["Close2Tray"] = value;
+            }
+        }
     }
 }

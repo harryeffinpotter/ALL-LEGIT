@@ -38,60 +38,103 @@ namespace ALL_LEGIT
     {// 1. Import InteropServices
 
 
-/// 2. Declare DownloadsFolder KNOWNFOLDERID
-private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E467B");
+        /// 2. Declare DownloadsFolder KNOWNFOLDERID
+        private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E467B");
 
-    /// 3. Import SHGetKnownFolderPath method
-    /// <summary>
-    /// Retrieves the full path of a known folder identified by the folder's KnownFolderID.
-    /// </summary>
-    /// <param name="id">A KnownFolderID that identifies the folder.</param>
-    /// <param name="flags">Flags that specify special retrieval options. This value can be
-    ///     0; otherwise, one or more of the KnownFolderFlag values.</param>
-    /// <param name="token">An access token that represents a particular user. If this
-    ///     parameter is NULL, which is the most common usage, the function requests the known
-    ///     folder for the current user. Assigning a value of -1 indicates the Default User.
-    ///     The default user profile is duplicated when any new user account is created.
-    ///     Note that access to the Default User folders requires administrator privileges.
-    ///     </param>
-    /// <param name="path">When this method returns, contains the address of a string that
-    ///     specifies the path of the known folder. The returned path does not include a
-    ///     trailing backslash.</param>
-    /// <returns>Returns S_OK if successful, or an error value otherwise.</returns>
-    [DllImport("shell32.dll", CharSet = CharSet.Auto)]
-    private static extern int SHGetKnownFolderPath(ref Guid id, int flags, IntPtr token, out IntPtr path);
+        /// 3. Import SHGetKnownFolderPath method
+        /// <summary>
+        /// Retrieves the full path of a known folder identified by the folder's KnownFolderID.
+        /// </summary>
+        /// <param name="id">A KnownFolderID that identifies the folder.</param>
+        /// <param name="flags">Flags that specify special retrieval options. This value can be
+        ///     0; otherwise, one or more of the KnownFolderFlag values.</param>
+        /// <param name="token">An access token that represents a particular user. If this
+        ///     parameter is NULL, which is the most common usage, the function requests the known
+        ///     folder for the current user. Assigning a value of -1 indicates the Default User.
+        ///     The default user profile is duplicated when any new user account is created.
+        ///     Note that access to the Default User folders requires administrator privileges.
+        ///     </param>
+        /// <param name="path">When this method returns, contains the address of a string that
+        ///     specifies the path of the known folder. The returned path does not include a
+        ///     trailing backslash.</param>
+        /// <returns>Returns S_OK if successful, or an error value otherwise.</returns>
+        [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+        private static extern int SHGetKnownFolderPath(ref Guid id, int flags, IntPtr token, out IntPtr path);
         /// 4. Declare method that returns the Downloads Path as string
         /// Returns the absolute downloads directory specified on the system.
         /// </summary>
         /// <returns></returns>
         /// 
         public static string FilecryptURL = "";
-    public static string GetDownloadsPath()
-    {
-        if (Environment.OSVersion.Version.Major < 6) throw new NotSupportedException();
-
-        IntPtr pathPtr = IntPtr.Zero;
-
-        try
+        public static string GetDownloadsPath()
         {
-            SHGetKnownFolderPath(ref FolderDownloads, 0, IntPtr.Zero, out pathPtr);
-            return Marshal.PtrToStringUni(pathPtr);
+            if (Environment.OSVersion.Version.Major < 6) throw new NotSupportedException();
+
+            IntPtr pathPtr = IntPtr.Zero;
+
+            try
+            {
+                SHGetKnownFolderPath(ref FolderDownloads, 0, IntPtr.Zero, out pathPtr);
+                return Marshal.PtrToStringUni(pathPtr);
+            }
+            finally
+            {
+                Marshal.FreeCoTaskMem(pathPtr);
+            }
+
         }
-        finally
+        private void menuItem1_Click(object Sender, EventArgs e)
         {
-            Marshal.FreeCoTaskMem(pathPtr);
+            // Close the form, which closes the application.
+            this.Close();
+            Application.Exit();
         }
-    }
-
-
-    public static string APIKEY; 
+        private System.Windows.Forms.ContextMenu contextMenu1;
+        private System.Windows.Forms.MenuItem menuItem1;
+        public static string APIKEY;
         public static string apiNAME;
         public static bool waitingforkey = false;
         public static Timer a = new Timer();
         public static System.Windows.Forms.Keys hotkeyset = Properties.Settings.Default.HotKeyKeyData;
         public MainWindow()
         {
+            InitializeComponent();
 
+            this.components = new System.ComponentModel.Container();
+            this.contextMenu1 = new System.Windows.Forms.ContextMenu();
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+
+            // Initialize contextMenu1
+            this.contextMenu1.MenuItems.AddRange(
+                        new System.Windows.Forms.MenuItem[] { this.menuItem1 });
+
+            // Initialize menuItem1
+            this.menuItem1.Index = 0;
+            this.menuItem1.Text = "E&xit";
+            this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
+
+
+            // Create the NotifyIcon.
+            // The Icon property sets the icon that will appear
+            // in the systray for this application.
+            ALTrayIcon.Icon = new Icon("_bin\\AL.ico");
+
+            // The ContextMenu property sets the menu that will
+            // appear when the systray icon is right clicked.
+            ALTrayIcon.ContextMenu = this.contextMenu1;
+
+            // The Text property sets the text that will be displayed,
+            // in a tooltip, when the mouse hovers over the systray icon.
+            ALTrayIcon.Text = "All Legit";
+            ALTrayIcon.Visible = false;
+
+            // Handle the DoubleClick event to activate the form.
+ 
+            var appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+                Microsoft.Win32.Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
+                      appName, 11000, Microsoft.Win32.RegistryValueKind.DWord);
+
+      
             try
             {
                 Hook.GlobalEvents().KeyDown += async (sender, e) =>
@@ -168,14 +211,13 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
             }
             catch { }
 
-            InitializeComponent();
 
         }
 
-
-
         private async void MainWindow_Load(object sender, EventArgs e)
         {
+            Close2Tray.Checked = Properties.Settings.Default.Close2Tray;
+            Min2Tray.Checked = Properties.Settings.Default.Min2Tray;
             AutoDelete.Checked = Properties.Settings.Default.AutoOverwrite;
             AutoDLBox.Checked = Properties.Settings.Default.AutoDL;
             HotKeyBox.Text = Properties.Settings.Default.HotKeyKeyData.ToString().Replace(",", " +");
@@ -194,7 +236,7 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
             RemDL.Checked = Properties.Settings.Default.RemDL;
             if (Properties.Settings.Default.DownloadDir == null || Properties.Settings.Default.DownloadDir.Length < 3)
             {
-                Properties.Settings.Default.DownloadDir = GetDownloadsPath() + "All Legit Downloads";
+                Properties.Settings.Default.DownloadDir = GetDownloadsPath() + "\\All Legit Downloads";
                 Properties.Settings.Default.Save();
             }
             if (!Directory.Exists(Properties.Settings.Default.DownloadDir))
@@ -323,7 +365,7 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
         public static bool overwrite = false;
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
-    
+
             Stopwatch sw = new Stopwatch(); // The stopwatch which we will be using to calculate the download speed
             string DIR = Properties.Settings.Default.DownloadDir + "\\" + MagnetNAME;
             if (!Directory.Exists(DIR))
@@ -350,7 +392,7 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
                         return;
                     }
                 }
-              
+
                 if (overwrite)
                 {
                     File.Delete(DL);
@@ -430,26 +472,26 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
         public static string filecryptlist = "";
         public static bool filecryptinprog = false;
 
-            /// <summary>
-            /// The URLMON library contains this function, URLDownloadToFile, which is a way
-            /// to download files without user prompts.  The ExecWB( _SAVEAS ) function always
-            /// prompts the user, even if _DONTPROMPTUSER parameter is specified, for "internet
-            /// security reasons".  This function gets around those reasons.
-            /// </summary>
-            /// <param name="callerPointer">Pointer to caller object (AX).</param>
-            /// <param name="url">String of the URL.</param>
-            /// <param name="filePathWithName">String of the destination filename/path.</param>
-            /// <param name="reserved">[reserved].</param>
-            /// <param name="callBack">A callback function to monitor progress or abort.</param>
-            /// <returns>0 for okay.</returns>
-            /// source: http://www.pinvoke.net/default.aspx/urlmon/URLDownloadToFile%20.html
-            [DllImport("urlmon.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        /// <summary>
+        /// The URLMON library contains this function, URLDownloadToFile, which is a way
+        /// to download files without user prompts.  The ExecWB( _SAVEAS ) function always
+        /// prompts the user, even if _DONTPROMPTUSER parameter is specified, for "internet
+        /// security reasons".  This function gets around those reasons.
+        /// </summary>
+        /// <param name="callerPointer">Pointer to caller object (AX).</param>
+        /// <param name="url">String of the URL.</param>
+        /// <param name="filePathWithName">String of the destination filename/path.</param>
+        /// <param name="reserved">[reserved].</param>
+        /// <param name="callBack">A callback function to monitor progress or abort.</param>
+        /// <returns>0 for okay.</returns>
+        /// source: http://www.pinvoke.net/default.aspx/urlmon/URLDownloadToFile%20.html
+        [DllImport("urlmon.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern Int32 URLDownloadToFile(
-                [MarshalAs(UnmanagedType.IUnknown)] object callerPointer,
-                [MarshalAs(UnmanagedType.LPWStr)] string url,
-                [MarshalAs(UnmanagedType.LPWStr)] string filePathWithName,
-                Int32 reserved,
-                IntPtr callBack);
+            [MarshalAs(UnmanagedType.IUnknown)] object callerPointer,
+            [MarshalAs(UnmanagedType.LPWStr)] string url,
+            [MarshalAs(UnmanagedType.LPWStr)] string filePathWithName,
+            Int32 reserved,
+            IntPtr callBack);
 
 
         /// <summary>
@@ -469,311 +511,332 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
             cancel = false;
             SplashText.Visible = false;
             string pasted = Clipboard.GetText();
-          
+
             isConverting = true;
             if (pasted.StartsWith("magnet"))
             {
+                if (ALTrayIcon.Visible)
+                {                   
+                        
+                     this.Invoke(() =>
+                    {
+                        ALTrayIcon.ShowBalloonTip(10000, "Adding FileCrypt links", "Adding FileCrypt links to All Legit!", ToolTipIcon.None);
+                    });
+                }
+
                 Thread t1 = new Thread(async () =>
                 {
                     pasted = pasted.Trim();
-                string[] output = new string[] { pasted };
-                if (pasted.Contains(";"))
-                {
-                    string[] pastedsplit = pasted.Split(';');
-                    output = pastedsplit;
-
-                }
-                else if (pasted.Contains("\r\n"))
-                {
-                    pasted = pasted.Replace("\r\n", "\n");
-                    string[] pastedsplit = pasted.Split('\n');
-                    output = pastedsplit;
-                }
-                else if (pasted.Contains('\r'))
-                {
-                    string[] pastedsplit = pasted.Split('\r');
-                    output = pastedsplit;
-                }
-                else if (pasted.Contains('\n'))
-                {
-                    string[] pastedsplit = pasted.Split('\n');
-                    output = pastedsplit;
-                }
-                bool isErrors = false;
-                int a = 0;
-                int b = 0;
-                int c = 0;
-                string a1 = "";
-                string b1 = "";
-                string c1 = "";
-                foreach (string s in output)
-                {
-                    this.Invoke(() =>
+                    string[] output = new string[] { pasted };
+                    if (pasted.Contains(";"))
                     {
-                        CancelButton.Visible = true;
-                    });
+                        string[] pastedsplit = pasted.Split(';');
+                        output = pastedsplit;
 
-                    var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={s}");
-                    string status = obj.status.ToString();
-
-                    if (obj.data.magnets[0].ToString().Contains("error"))
-                    {
-                        isErrors = true;
-                        string error = obj.data.magnets[0].error.code.ToString();
-                        if (error.Contains("MAGNET_INVALID_URI"))
-                        {
-                            a++;
-                            a1 += $"{s}\n";
-                        }
-                        if (error.Contains("MAGNET_TOO_MANY_ACTIVE"))
-                        {
-                            b++;
-                            b1 += $"{s}\n";
-                        }
-                        if (error.Contains("MAGNET_NO_SERVER"))
-                        {
-                            c++;
-                            c1 += $"{s}\n";
-                        }
                     }
-                    if (isErrors)
+                    else if (pasted.Contains("\r\n"))
                     {
-                        continue;
+                        pasted = pasted.Replace("\r\n", "\n");
+                        string[] pastedsplit = pasted.Split('\n');
+                        output = pastedsplit;
                     }
-                    else
+                    else if (pasted.Contains('\r'))
                     {
-
-                        string magnetName = obj.data.magnets[0].name.ToString();
-
-                        string magnetID = obj.data.magnets[0].id.ToString();
-                        string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}";
-                        while (notdone)
+                        string[] pastedsplit = pasted.Split('\r');
+                        output = pastedsplit;
+                    }
+                    else if (pasted.Contains('\n'))
+                    {
+                        string[] pastedsplit = pasted.Split('\n');
+                        output = pastedsplit;
+                    }
+                    bool isErrors = false;
+                    int a = 0;
+                    int b = 0;
+                    int c = 0;
+                    string a1 = "";
+                    string b1 = "";
+                    string c1 = "";
+                    foreach (string s in output)
+                    {
+                        this.Invoke(() =>
                         {
-                            if (cancel)
+                            CancelButton.Visible = true;
+                        });
+
+                        var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={s}");
+                        string status = obj.status.ToString();
+
+                        if (obj.data.magnets[0].ToString().Contains("error"))
+                        {
+                            isErrors = true;
+                            string error = obj.data.magnets[0].error.code.ToString();
+                            if (error.Contains("MAGNET_INVALID_URI"))
                             {
-                                this.Invoke(() =>
-                                {
-                                    DownloadingText.Text = $"";
-                                    dlProg.Value = 0;
-                                });
-
-                                break;
+                                a++;
+                                a1 += $"{s}\n";
                             }
-                            obj = getJson(MagnetPoll);
-                            foreach (var key in obj.data.magnets)
+                            if (error.Contains("MAGNET_TOO_MANY_ACTIVE"))
                             {
-                                bool ready = false;
+                                b++;
+                                b1 += $"{s}\n";
+                            }
+                            if (error.Contains("MAGNET_NO_SERVER"))
+                            {
+                                c++;
+                                c1 += $"{s}\n";
+                            }
+                        }
+                        if (isErrors)
+                        {
+                            continue;
+                        }
+                        else
+                        {
 
-                                if (key.id.ToString().Equals(magnetID))
-                                {
-                                    string MagnetStatus = key.status.ToString();
-                                    if (MagnetStatus.Equals("Ready"))
-                                    {
-                                        notdone = false;
-                                        ready = true;
-                                    }
-                                    else
-                                    {
-                                        if (!alertedonce)
-                                        {
-                                            MessageBox.Show("Torrent not cached, now converting!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                                            alertedonce = true;
-                                        }
-                                        MagnetStatus = key.status.ToString();
-                                        if (MagnetStatus.Equals("In Queue"))
-                                        {
+                            string magnetName = obj.data.magnets[0].name.ToString();
 
-                                            this.Invoke(() =>
-                                            {
-                                                DownloadingText.Text = $"Torrent added to queue...";
-                                            });
-
-                                        }
-                                        if (MagnetStatus.Equals("Downloading"))
-                                        {
-
-                                            string seeders = key.seeders.ToString();
-                                            notdone = true;
-                                            DownloadSpeed = double.Parse(key.downloadSpeed.ToString());
-                                            double DownloadSpeed2 = (DownloadSpeed / 1024) / 1024;
-                                            string DLS;
-                                            DLS = "Speed:" + String.Format("{0:0.00}", DownloadSpeed2) + $" MB/s";
-
-
-                                            total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
-                                            DLsofar = long.Parse(Utilities.KeepOnlyNumbers(key.downloaded.ToString()));
-
-                                            int percentComplete = (int)Math.Round((double)(100 * DLsofar) / total);
-                                            if (percentComplete < 0)
-                                            {
-                                                percentComplete = 0;
-                                            }
-                                            this.Invoke(() =>
-                                            {
-
-                                                dlProg.Value = percentComplete;
-                                            });
-                                            this.Invoke(() =>
-                                            {
-                                                DownloadingText.Text = $"Downloading torrent. {percentComplete}% complete. Seeds:{seeders}. {DLS}";
-                                            });
-
-
-                                        }
-                                        else if (MagnetStatus.Equals("Ready"))
-                                        {
-                                            this.Invoke(() => { DownloadingText.Text = $"Torrent conversion complete!"; });
-                                        }
-                                        else if (MagnetStatus.Equals("Uploading"))
-                                        {
-
-                                            notdone = true;
-                                            UploadSpeed = double.Parse(key.uploadSpeed.ToString());
-                                            double UploadSpeed2 = (UploadSpeed / 1024) / 1024;
-                                            string ULS;
-                                            ULS = "Speed: " + String.Format("{0:0.00}", UploadSpeed2) + $" MB/s";
-
-
-                                            total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
-                                            ULsofar = long.Parse(Utilities.KeepOnlyNumbers(key.uploaded.ToString()));
-
-                                            int percentComplete = (int)Math.Round((double)(100 * ULsofar) / total);
-                                            if (percentComplete < 0)
-                                            {
-                                                percentComplete = 0;
-                                            }
-                                            this.Invoke(() =>
-                                            {
-                                                dlProg.Value = percentComplete;
-                                            });
-                                            this.Invoke(() =>
-                                            {
-                                                DownloadingText.Text = $"Uploading to DDL links. {percentComplete}% complete. {ULS}";
-                                            });
-
-
-
-
-                                        }
-                                    }
-                                }
-                                if (ready)
+                            string magnetID = obj.data.magnets[0].id.ToString();
+                            string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}";
+                            while (notdone)
+                            {
+                                if (cancel)
                                 {
                                     this.Invoke(() =>
                                     {
-                                        DownloadingText.Text = $"Adding links...";
-                                    });
-
-                                    foreach (var key2 in key.links)
-                                    {
-                                        bool skip = false;
-                                        var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key2.link.ToString()}");
-                                        try
-                                        {
-                                            string unlockedLink = result.data.link.ToString();
-                                            double FileSize = double.Parse(result.data.filesize.ToString());
-                                            string FileSizeInt = "";
-                                            if ((FileSize / 1024 / 1024) > 1000)
-                                            {
-                                                FileSizeInt = String.Format("{0:0.00}", (FileSize / 1024 / 1024 / 1024).ToString("0.00")) + "GB";
-
-                                            }
-                                            else
-                                            {
-                                                FileSizeInt = (String.Format("{0:0.00}", (FileSize / 1024 / 1024).ToString("0.00"))) + "MB";
-                                            }
-
-
-                                            this.Invoke(() =>
-                                            {
-                                                foreach (ListViewItem item in listView1.Items)
-                                                {
-                                                    if (item.SubItems[0].Text.Equals(key2.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
-                                                    {
-                                                        skip = true;
-                                                        DownloadingText.Text = $"Item already in list!";
-                                                    }
-                                                }
-                                                if (!skip)
-                                                {
-
-                                                    listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
-
-                                                }
-
-                                                if (listView1.Items.Count == 0)
-                                                {
-                                                    this.Invoke(() =>
-                                                    {
-                                                        listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
-                                                    });
-                                                }
-
-                                                skip = false;
-                                                foreach (ListViewItem item in listView1.Items)
-                                                {
-                                                    if (item.SubItems[2].Text.Equals(magnetName))
-                                                    {
-                                                        item.Checked = true;
-
-                                                    }
-                                                }
-                                            });
-                                        }
-                                        catch
-                                        {
-                                        }
-                                    }
-                                    this.Invoke(() =>
-                                    {
+                                        DownloadingText.Text = $"";
                                         dlProg.Value = 0;
                                     });
 
+                                    break;
+                                }
+                                obj = getJson(MagnetPoll);
+                                foreach (var key in obj.data.magnets)
+                                {
+                                    bool ready = false;
+
+                                    if (key.id.ToString().Equals(magnetID))
+                                    {
+                                        string MagnetStatus = key.status.ToString();
+                                        if (MagnetStatus.Equals("Ready"))
+                                        {
+                                            notdone = false;
+                                            ready = true;
+                                        }
+                                        else
+                                        {
+                                            if (!alertedonce)
+                                            {
+                                                MessageBox.Show("Torrent not cached, now converting!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                                alertedonce = true;
+                                            }
+                                            MagnetStatus = key.status.ToString();
+                                            if (MagnetStatus.Equals("In Queue"))
+                                            {
+
+                                                this.Invoke(() =>
+                                                {
+                                                    DownloadingText.Text = $"Torrent added to queue...";
+                                                });
+
+                                            }
+                                            if (MagnetStatus.Equals("Downloading"))
+                                            {
+
+                                                string seeders = key.seeders.ToString();
+                                                notdone = true;
+                                                DownloadSpeed = double.Parse(key.downloadSpeed.ToString());
+                                                double DownloadSpeed2 = (DownloadSpeed / 1024) / 1024;
+                                                string DLS;
+                                                DLS = "Speed:" + String.Format("{0:0.00}", DownloadSpeed2) + $" MB/s";
+
+
+                                                total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
+                                                DLsofar = long.Parse(Utilities.KeepOnlyNumbers(key.downloaded.ToString()));
+
+                                                int percentComplete = (int)Math.Round((double)(100 * DLsofar) / total);
+                                                if (percentComplete < 0)
+                                                {
+                                                    percentComplete = 0;
+                                                }
+                                                this.Invoke(() =>
+                                                {
+
+                                                    dlProg.Value = percentComplete;
+                                                });
+                                                this.Invoke(() =>
+                                                {
+                                                    DownloadingText.Text = $"Downloading torrent. {percentComplete}% complete. Seeds:{seeders}. {DLS}";
+                                                });
+
+
+                                            }
+                                            else if (MagnetStatus.Equals("Ready"))
+                                            {
+                                                this.Invoke(() => { DownloadingText.Text = $"Torrent conversion complete!"; });
+                                            }
+                                            else if (MagnetStatus.Equals("Uploading"))
+                                            {
+
+                                                notdone = true;
+                                                UploadSpeed = double.Parse(key.uploadSpeed.ToString());
+                                                double UploadSpeed2 = (UploadSpeed / 1024) / 1024;
+                                                string ULS;
+                                                ULS = "Speed: " + String.Format("{0:0.00}", UploadSpeed2) + $" MB/s";
+
+
+                                                total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
+                                                ULsofar = long.Parse(Utilities.KeepOnlyNumbers(key.uploaded.ToString()));
+
+                                                int percentComplete = (int)Math.Round((double)(100 * ULsofar) / total);
+                                                if (percentComplete < 0)
+                                                {
+                                                    percentComplete = 0;
+                                                }
+                                                this.Invoke(() =>
+                                                {
+                                                    dlProg.Value = percentComplete;
+                                                });
+                                                this.Invoke(() =>
+                                                {
+                                                    DownloadingText.Text = $"Uploading to DDL links. {percentComplete}% complete. {ULS}";
+                                                });
+
+
+
+
+                                            }
+                                        }
+                                    }
+                                    if (ready)
+                                    {
+                                        this.Invoke(() =>
+                                        {
+                                            DownloadingText.Text = $"Adding links...";
+                                        });
+
+                                        foreach (var key2 in key.links)
+                                        {
+                                            bool skip = false;
+                                            var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key2.link.ToString()}");
+                                            try
+                                            {
+                                                string unlockedLink = result.data.link.ToString();
+                                                double FileSize = double.Parse(result.data.filesize.ToString());
+                                                string FileSizeInt = "";
+                                                if ((FileSize / 1024 / 1024) > 1000)
+                                                {
+                                                    FileSizeInt = String.Format("{0:0.00}", (FileSize / 1024 / 1024 / 1024).ToString("0.00")) + "GB";
+
+                                                }
+                                                else
+                                                {
+                                                    FileSizeInt = (String.Format("{0:0.00}", (FileSize / 1024 / 1024).ToString("0.00"))) + "MB";
+                                                }
+
+
+                                                this.Invoke(() =>
+                                                {
+                                                    foreach (ListViewItem item in listView1.Items)
+                                                    {
+                                                        if (item.SubItems[0].Text.Equals(key2.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
+                                                        {
+                                                            skip = true;
+                                                            DownloadingText.Text = $"Item already in list!";
+                                                        }
+                                                    }
+                                                    if (!skip)
+                                                    {
+
+                                                        listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
+
+                                                    }
+
+                                                    if (listView1.Items.Count == 0)
+                                                    {
+                                                        this.Invoke(() =>
+                                                        {
+                                                            listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
+                                                        });
+                                                    }
+
+                                                    skip = false;
+                                                    foreach (ListViewItem item in listView1.Items)
+                                                    {
+                                                        if (item.SubItems[2].Text.Equals(magnetName))
+                                                        {
+                                                            item.Checked = true;
+
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                            catch
+                                            {
+                                            }
+                                        }
+                                        this.Invoke(() =>
+                                        {
+                                            dlProg.Value = 0;
+                                        });
+
+                                    }
                                 }
                             }
                         }
+                        notdone = true;
                     }
-                    notdone = true;
-                }
-                if (isErrors)
+                    if (isErrors)
+                    {
+                        if (a > 0)
+                        {
+                            MessageBox.Show($"{a1}\nMagnet(s) not valid.", "Invalid magnet.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+
+                        }
+                        if (b > 0)
+                        {
+                            MessageBox.Show($"{b1}\nAlready have maximum allowed active magnets (30).", "Cannot add over 30 torrents.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        }
+                        if (c > 0)
+                        {
+                            MessageBox.Show($"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "Server error.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+
+                        }
+                        isConverting = false;
+
+                    }
+
+                });
+                t1.Start();
+                t1.IsBackground = true;
+                while (t1.IsAlive)
                 {
-                    if (a > 0)
+                    if (cancel)
                     {
-                        MessageBox.Show($"{a1}\nMagnet(s) not valid.", "Invalid magnet.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-
+                        t1.Abort();
+                        cancel = false;
                     }
-                    if (b > 0)
-                    {
-                        MessageBox.Show($"{b1}\nAlready have maximum allowed active magnets (30).", "Cannot add over 30 torrents.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                    }
-                    if (c > 0)
-                    {
-                        MessageBox.Show($"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "Server error.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-
-                    }
-                    isConverting = false;
-
+                    await Task.Delay(100);
                 }
-                
-            });
-            t1.Start();
-            t1.IsBackground = true;
-            while (t1.IsAlive)
-            {
-                if (cancel)
-                {
-                    t1.Abort();
-                    cancel = false;
-                }
-                await Task.Delay(100);
             }
-        }
 
 
 
 
             if (pasted.ToLower().StartsWith("https://filecrypt.") || pasted.ToLower().StartsWith("https://www.filecrypt."))
             {
+     
+                    DownloadingText.Text = "Decrypting Filecrypt.cc DLC file...";
+          
+             
+                    if (ALTrayIcon.Visible)
+                    {
+                              this.Invoke(() =>
+                              {
+                                  ALTrayIcon.ShowBalloonTip(10000, "Adding FileCrypt links", "Adding FileCrypt links to All Legit!", ToolTipIcon.None);
+                             });
+            }
+             
                 CurrentDLC = randomNumber;
                 pasted = pasted.Trim();
                 string[] output = new string[] { pasted };
@@ -805,21 +868,29 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
                     FilecryptURL = s;
                     webBrowser1.ScriptErrorsSuppressed = true;
                     webBrowser1.Visible = true;
-                   webBrowser1.Navigate(FilecryptURL);
+                    webBrowser1.Navigate(FilecryptURL);
 
                     this.Invoke(() =>
                     {
                         DownloadingText.Text = "Decrypting Filecrypt.cc DLC file...";
                     });
-                    filecryptinprog = true;
-       
+                    filecryptinprog = true; https://rapidgator.net/file/7eff4e849173427a6330a6ecac9a891f/APFS.2.1.110.SaNet.st.rar.html
+
                     Utilities.DecryptDLC();
-         
+
 
                 }
             }
             else if (pasted.ToLower().StartsWith("https://"))
             {
+                if (ALTrayIcon.Visible)
+                {
+                    this.Invoke(() =>
+                    {
+                        ALTrayIcon.ShowBalloonTip(10000, "Adding links", "Adding links to All Legit!", ToolTipIcon.None);
+                    });
+
+                }
                 try
                 {
                     pasted = pasted.Trim();
@@ -981,11 +1052,11 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
 
 
             this.Invoke(() =>
-                {
-                    CancelButton.Visible = false;
-                    DownloadingText.Text = $"";
-                    listView1.Update();
-                });
+            {
+                CancelButton.Visible = false;
+                DownloadingText.Text = $"";
+                listView1.Update();
+            });
 
 
             isConverting = false;
@@ -1023,7 +1094,7 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
             }
         }
 
-        
+
 
 
 
@@ -1062,13 +1133,13 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
                 {
                     foreach (ListViewItem item in listView1.CheckedItems)
                     {
-                     
-                            DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
-                            await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text);
-                            if (AutoExtract.Checked)
-                            {
-                                DLList += $"{item.SubItems[0].Text};{item.SubItems[2].Text}\n";
-                            }
+
+                        DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
+                        await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text);
+                        if (AutoExtract.Checked)
+                        {
+                            DLList += $"{item.SubItems[0].Text};{item.SubItems[2].Text}\n";
+                        }
 
 
                     }
@@ -1083,7 +1154,7 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
 
                                 if (!String.IsNullOrWhiteSpace(FullDL))
                                 {
-                                 
+
                                     string[] DLS = FullDL.Split(';');
                                     bool Extract = false;
                                     if (DLS[0].ToString().ToLower().EndsWith(".rar"))
@@ -1103,10 +1174,10 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
                                         else
                                         {
                                             Extract = true;
-                       
+
                                         }
                                     }
-                                    else if (DLS[0].ToString().Contains(".001") &&  DLS[0].ToString().Contains("7z") || DLS[0].ToString().Contains(".01") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().EndsWith(".7z") || DLS[0].ToString().EndsWith(".zip"))
+                                    else if (DLS[0].ToString().Contains(".001") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().Contains(".01") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().EndsWith(".7z") || DLS[0].ToString().EndsWith(".zip"))
                                     {
                                         Extract = true;
                                     }
@@ -1128,7 +1199,7 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
                                         Utilities.ExtractFile(DL, ArchiveDIR);
                                     }
                                     Extract = false;
-                                }   
+                                }
                             }
                         });
                     }
@@ -1139,7 +1210,7 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
                     });
                     overwrite = false;
                 }
-                else if(listView1.Items.Count > 0 && !filecryptinprog)
+                else if (listView1.Items.Count > 0 && !filecryptinprog)
                 {
                     MessageBox.Show("Please select items to download first.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 }
@@ -1241,16 +1312,7 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
             }
         }
 
-        private void MainWindow_Resize(object sender, EventArgs e)
-        {
-            if (listView1.Items.Count == 0)
-            {
-                return;
-            }
-            listView1.BeginUpdate();
-            listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            listView1.EndUpdate();
-        }
+
 
         public void listView1_MouseDoubleClick(object sender, EventArgs e)
         {
@@ -1304,7 +1366,7 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
         private void PWBox_Enter(object sender, EventArgs e)
         {
             if (PWBox.Text == "your;common;zip;passwords")
-            {            
+            {
                 PWBox.Text = "";
             }
             else
@@ -1449,11 +1511,11 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             var links = webBrowser1.Document.GetElementsByTagName("button");
-     
+
             foreach (HtmlElement link in links)
                 if (link.GetAttribute("className").Contains("dlcdownload"))
                 {
-           
+
                     string DLCID = link.OuterHtml;
                     DLCID = Utilities.RemoveEverythingBeforeFirst(DLCID, "(");
                     DLCID = Utilities.RemoveEverythingAfterFirst(DLCID, ")");
@@ -1466,10 +1528,84 @@ private static Guid FolderDownloads = new Guid("374DE290-123F-4565-9164-39C4925E
                     webBrowser1.Visible = false;
 
                 }
-            }
         }
 
+        private void MainWindow_Resize_1(object sender, EventArgs e)
+        {
+
+
+
+            //if the form is minimized  
+            //hide it from the task bar  
+            //and show the system tray icon (represented by the NotifyIcon control)  
+            if (Min2Tray.Checked)
+            {
+
+                if (this.WindowState == FormWindowState.Minimized)
+                {
+                    Hide();
+                    ALTrayIcon.Visible = true;
+                }
+
+            }
+            if (listView1.Items.Count == 0)
+            {
+                return;
+            }
+            listView1.BeginUpdate();
+            listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            listView1.EndUpdate();
+        }
+
+
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Properties.Settings.Default.Close2Tray)
+            {
+                if (e.CloseReason == CloseReason.UserClosing)
+                {
+                    ALTrayIcon.Visible = true;
+                    this.Hide();
+                    e.Cancel = true;
+                }
+            }
+
+        }
+
+        private void Min2Tray_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Min2Tray = Close2Tray.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Close2Tray_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Close2Tray = Close2Tray.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
+        {
+
+        }
+
+        private void ALTrayIcon_MouseDoubleClick_1(object sender, MouseEventArgs e)
+        {
+  
+                Show();
+                this.WindowState = FormWindowState.Normal;
+                ALTrayIcon.Visible = false;
+      
+        }
+
+        private void ALTrayIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
     }
+}
+
 
 
 public static class ControlExtensions
