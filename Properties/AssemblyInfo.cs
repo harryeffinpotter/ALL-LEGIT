@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CefSharp.MinimalExample.WinForms")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("AllLegit")]
+[assembly: AssemblyDescription("All Legit is an All Debrid helper that can parse magnets,  filecrypt links, links from all of AllDebrid's supported hosts, and auto download+extraction!")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CefSharp.MinimalExample.WinForms")]
+[assembly: AssemblyCompany("HarryEffinPotter")]
+[assembly: AssemblyProduct("AllLegit")]
 [assembly: AssemblyCopyright("Copyright © 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
+[assembly: ComVisible(true)]
 
 // Version information for an assembly consists of the following four values:
 //

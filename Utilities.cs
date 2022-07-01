@@ -76,26 +76,29 @@ namespace ALL_LEGIT
             }
         }
 
-        public static void DecryptDLC()
-        {
-            int DLCNumber = MainWindow.CurrentDLC;
-            string[] files = Directory.GetFiles(Environment.CurrentDirectory + "\\_bin", "*.dlc", SearchOption.TopDirectoryOnly);
+        public static void DecryptDLC(MainWindow mainWindow)
+        {     
 
-            foreach (string file in files)
+            string[] files = Directory.GetFiles(Environment.CurrentDirectory, "*.dlc", SearchOption.AllDirectories);
+            string[] files2 = Directory.GetFiles(MainWindow.GetDownloadsPath(), "*.dlc",SearchOption.AllDirectories);
+            string[] joinedResult = files.Concatenate(files2);
+            mainWindow.Text = "";
+        
+            foreach (string file in joinedResult)
             {
-                string filename = Path.GetFileName($"{Environment.CurrentDirectory}\\_bin\\{DLCNumber}.dlc");
+                int DLCNumber = MainWindow.randomNumber;
                 ProcessStartInfo pro = new ProcessStartInfo();
                 pro.WindowStyle = ProcessWindowStyle.Hidden;
                 pro.FileName = $"cmd.exe";
                 pro.WorkingDirectory = $"{Environment.CurrentDirectory}\\_bin";
-                pro.Arguments = $"/c decrypt-dlc.cmd \"{filename}\" -o {DLCNumber}.txt";
-                Process x = Process.Start(pro);
+                pro.Arguments = $"/c decrypt-dlc.cmd \"{file}\" -o \"{Environment.CurrentDirectory}\\_bin\\{DLCNumber}.txt\"";
+               Process  x = Process.Start(pro);
                 x.WaitForExit();
                 try
                 {
-                    File.Delete($"{Environment.CurrentDirectory}\\_bin\\{filename}");
+                    File.Delete(file);
                 }
-                catch
+                 catch
                 {
 
                 }
@@ -151,6 +154,22 @@ namespace ALL_LEGIT
             return s;
         }
     }
+
+
 }
+public static class Extension
+{
+    public static T[] Concatenate<T>(this T[] first, T[] second)
+    {
+        if (first == null)
+        {
+            return second;
+        }
+        if (second == null)
+        {
+            return first;
+        }
 
-
+        return first.Concat(second).ToArray();
+    }
+}

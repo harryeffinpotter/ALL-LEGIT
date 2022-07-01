@@ -42,11 +42,13 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>2</WarningLevel>
+    <WarningLevel>4</WarningLevel>
     <Prefer32Bit>true</Prefer32Bit>
+    <DocumentationFile>
+    </DocumentationFile>
+    <FileAlignment>1024</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -63,10 +65,14 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
-    <ApplicationIcon>_bin\AL.ico</ApplicationIcon>
+    <ApplicationIcon>AL.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>App.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AWSSDK.CloudWatchEvents, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
@@ -408,6 +414,13 @@
     <Compile Include="MainWindowHelpers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities.Extension.cs" />
+    <Compile Include="WebFormForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WebFormForm.Designer.cs">
+      <DependentUpon>WebFormForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="_bin\node_modules\npm\node_modules\node-gyp\lib\Find-VisualStudio.cs" />
     <EmbeddedResource Include="mainWindow.resx">
       <DependentUpon>mainWindow.cs</DependentUpon>
@@ -422,63 +435,23 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Resource Include="App.manifest" />
-    <None Include="packages.config" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Combination.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Hook.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.HotKeys.HotKeyArgs.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.HotKeys.HotKeySet+HotKeyHandler.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.HotKeys.HotKeySet.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.HotKeys.HotKeySetCollection.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.IKeyboardEvents.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.IKeyboardMouseEvents.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.IMouseEvents.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Implementation.KeyboardState.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.KeyCombinationExtensions.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.KeyEventArgsExt.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.KeyPressEventArgsExt.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.MouseEventExtArgs.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Sequence.datasource" />
-    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.WinApi.HookProcedure.datasource" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <None Include="_bin\CHANGELOG.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\corepack">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\corepack.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\decrypt-dlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\decrypt-dlc.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\decrypt-dlc.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\install_tools.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\nodevars.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_etw_provider.man">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="WebFormForm.resx">
+      <DependentUpon>WebFormForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="_bin\CHANGELOG.md" />
+    <None Include="_bin\corepack" />
+    <None Include="_bin\corepack.cmd" />
+    <None Include="_bin\decrypt-dlc" />
+    <None Include="_bin\decrypt-dlc.cmd" />
+    <None Include="_bin\decrypt-dlc.ps1" />
+    <None Include="_bin\install_tools.bat" />
+    <None Include="_bin\LICENSE" />
+    <None Include="_bin\nodevars.bat" />
+    <None Include="_bin\node_etw_provider.man" />
+    <None Include="_bin\node_modules\%40types\node\LICENSE" />
+    <None Include="_bin\node_modules\%40types\node\package.json" />
+    <None Include="_bin\node_modules\%40types\node\README.md" />
+    <None Include="_bin\node_modules\.package-lock.json" />
     <None Include="_bin\node_modules\corepack\LICENSE.md" />
     <None Include="_bin\node_modules\corepack\package.json" />
     <None Include="_bin\node_modules\corepack\README.md" />
@@ -528,9 +501,7 @@
     <None Include="_bin\node_modules\corepack\shims\yarnpkg.cmd" />
     <None Include="_bin\node_modules\corepack\shims\yarnpkg.ps1" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\.eslintrc" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\bin\decrypt-dlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\bin\decrypt-dlc" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-conv" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-conv.cmd" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-conv.ps1" />
@@ -1701,21 +1672,40 @@
     <None Include="_bin\node_modules\npm\node_modules\yallist\package.json" />
     <None Include="_bin\node_modules\npm\package.json" />
     <None Include="_bin\node_modules\npm\README.md" />
-    <None Include="_bin\npm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="_bin\npm" />
+    <None Include="_bin\npm.cmd" />
+    <None Include="_bin\npx" />
+    <None Include="_bin\npx.cmd" />
+    <None Include="_bin\package-lock.json" />
+    <None Include="_bin\package.json" />
+    <None Include="_bin\README.md" />
+    <Resource Include="App.manifest" />
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Combination.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Hook.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.HotKeys.HotKeyArgs.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.HotKeys.HotKeySet+HotKeyHandler.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.HotKeys.HotKeySet.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.HotKeys.HotKeySetCollection.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.IKeyboardEvents.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.IKeyboardMouseEvents.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.IMouseEvents.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Implementation.KeyboardState.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.KeyCombinationExtensions.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.KeyEventArgsExt.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.KeyPressEventArgsExt.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.MouseEventExtArgs.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Sequence.datasource" />
+    <None Include="Properties\DataSources\Gma.System.MouseKeyHook.WinApi.HookProcedure.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="_bin\npm.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\npx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\npx.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="App.config" />
@@ -1764,13 +1754,12 @@
     <EmbeddedResource Include="System.Web.Http.WebHost.dll" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Gma.System.MouseKeyHook.dll" />
-    <Content Include="HTMLPage1.html" />
-    <EmbeddedResource Include="SevenZipSharp.dll" />
-    <Content Include="SharpCompress.dll" />
-    <Content Include="_bin\node.exe">
+    <Content Include="AL.ico" />
+    <Content Include="_bin\AL.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="_bin\mom.txt" />
+    <Content Include="_bin\node.exe" />
     <Content Include="_bin\node_modules\corepack\dist\corepack.js" />
     <Content Include="_bin\node_modules\corepack\dist\npm.js" />
     <Content Include="_bin\node_modules\corepack\dist\npx.js" />
@@ -4129,13 +4118,65 @@
     <Content Include="_bin\node_modules\npm\node_modules\write-file-atomic\lib\index.js" />
     <Content Include="_bin\node_modules\npm\node_modules\yallist\iterator.js" />
     <Content Include="_bin\node_modules\npm\node_modules\yallist\yallist.js" />
+    <EmbeddedResource Include="Gma.System.MouseKeyHook.dll" />
+    <Content Include="HTMLPage1.html" />
+    <EmbeddedResource Include="SevenZipSharp.dll" />
+    <Content Include="SharpCompress.dll" />
     <None Include="Fody.dll" />
-    <None Include="_bin\AL.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\assert.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\assert\strict.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\async_hooks.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\buffer.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\child_process.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\cluster.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\console.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\constants.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\crypto.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\dgram.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\diagnostics_channel.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\dns.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\dns\promises.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\domain.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\events.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\fs.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\fs\promises.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\globals.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\globals.global.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\http.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\http2.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\https.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\index.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\inspector.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\module.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\net.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\os.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\path.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\perf_hooks.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\process.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\punycode.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\querystring.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\readline.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\repl.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\stream.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\stream\consumers.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\stream\promises.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\stream\web.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\string_decoder.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\test.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\timers.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\timers\promises.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\tls.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\trace_events.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\tty.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\url.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\util.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\v8.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\vm.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\wasi.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\worker_threads.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\zlib.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\ajv.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\chalk\types\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\commander\typings\index.d.ts" />
@@ -4213,10 +4254,11 @@
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\strip-ansi\index.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="_bin\node_modules\npm\tap-snapshots\" />
+    <Analyzer Include="packages\AWSSDK.CloudWatchEvents.3.7.4.120\analyzers\dotnet\cs\AWSSDK.CloudWatchEvents.CodeAnalysis.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="packages\AWSSDK.CloudWatchEvents.3.7.4.120\analyzers\dotnet\cs\AWSSDK.CloudWatchEvents.CodeAnalysis.dll" />
+    <Folder Include="_bin\node_modules\.bin\" />
+    <Folder Include="_bin\node_modules\npm\tap-snapshots\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\System.Text.Json.6.0.5\build\System.Text.Json.targets" Condition="Exists('packages\System.Text.Json.6.0.5\build\System.Text.Json.targets')" />
