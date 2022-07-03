@@ -42,21 +42,25 @@
             this.SetDLDIR = new System.Windows.Forms.Button();
             this.dlProg = new System.Windows.Forms.ProgressBar();
             this.DownloadingText = new System.Windows.Forms.Label();
-            this.RemDL = new System.Windows.Forms.CheckBox();
             this.CancelButton = new System.Windows.Forms.Button();
             this.PasteButton = new System.Windows.Forms.Button();
             this.StayOnTopCheckbox = new System.Windows.Forms.CheckBox();
             this.SplashText = new System.Windows.Forms.Label();
             this.AutoExtract = new System.Windows.Forms.CheckBox();
             this.PWBox = new System.Windows.Forms.TextBox();
-            this.HotKeyBtn = new System.Windows.Forms.Button();
             this.HotKeyBox = new System.Windows.Forms.TextBox();
             this.AutoDLBox = new System.Windows.Forms.CheckBox();
-            this.AutoDelete = new System.Windows.Forms.CheckBox();
+            this.AutoOverwrite = new System.Windows.Forms.CheckBox();
             this.ALTrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.Min2Tray = new System.Windows.Forms.CheckBox();
+            this.settingsP = new System.Windows.Forms.Panel();
             this.Close2Tray = new System.Windows.Forms.CheckBox();
-            this.findDLC = new System.Windows.Forms.Button();
+            this.Min2Tray = new System.Windows.Forms.CheckBox();
+            this.autoDelZips = new System.Windows.Forms.CheckBox();
+            this.RemDL = new System.Windows.Forms.CheckBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.HotKeyBtn = new System.Windows.Forms.Button();
+            this.settingsP.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // listView1
@@ -78,14 +82,15 @@
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listView1.HideSelection = false;
             this.listView1.ImeMode = System.Windows.Forms.ImeMode.On;
-            this.listView1.Location = new System.Drawing.Point(12, 61);
+            this.listView1.Location = new System.Drawing.Point(12, 56);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(936, 528);
+            this.listView1.Size = new System.Drawing.Size(797, 550);
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.DoubleClick += new System.EventHandler(this.listView1_MouseDoubleClick);
             this.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseDoubleClick);
+            this.listView1.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
             // FileName
             // 
@@ -110,14 +115,14 @@
             // startDownloads
             // 
             this.startDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.startDownloads.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(10)))));
+            this.startDownloads.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.startDownloads.FlatAppearance.BorderSize = 0;
             this.startDownloads.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.startDownloads.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.startDownloads.ForeColor = System.Drawing.Color.White;
-            this.startDownloads.Location = new System.Drawing.Point(832, 595);
+            this.startDownloads.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.startDownloads.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.startDownloads.Location = new System.Drawing.Point(677, 612);
             this.startDownloads.Name = "startDownloads";
-            this.startDownloads.Size = new System.Drawing.Size(116, 25);
+            this.startDownloads.Size = new System.Drawing.Size(132, 25);
             this.startDownloads.TabIndex = 5;
             this.startDownloads.Text = "Start Downloads";
             this.startDownloads.UseVisualStyleBackColor = false;
@@ -126,12 +131,12 @@
             // ClearButton
             // 
             this.ClearButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ClearButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(10)))));
+            this.ClearButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ClearButton.FlatAppearance.BorderSize = 0;
             this.ClearButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.ClearButton.ForeColor = System.Drawing.Color.White;
-            this.ClearButton.Location = new System.Drawing.Point(15, 595);
+            this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClearButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.ClearButton.Location = new System.Drawing.Point(12, 612);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(64, 25);
             this.ClearButton.TabIndex = 8;
@@ -142,14 +147,14 @@
             // CopyLinks
             // 
             this.CopyLinks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.CopyLinks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(10)))));
+            this.CopyLinks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.CopyLinks.FlatAppearance.BorderSize = 0;
             this.CopyLinks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CopyLinks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.CopyLinks.ForeColor = System.Drawing.Color.White;
-            this.CopyLinks.Location = new System.Drawing.Point(734, 595);
+            this.CopyLinks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CopyLinks.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.CopyLinks.Location = new System.Drawing.Point(575, 612);
             this.CopyLinks.Name = "CopyLinks";
-            this.CopyLinks.Size = new System.Drawing.Size(92, 25);
+            this.CopyLinks.Size = new System.Drawing.Size(96, 25);
             this.CopyLinks.TabIndex = 10;
             this.CopyLinks.Text = "Copy links";
             this.CopyLinks.UseVisualStyleBackColor = false;
@@ -162,29 +167,31 @@
             this.DownloadDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
             this.DownloadDir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DownloadDir.ForeColor = System.Drawing.Color.White;
-            this.DownloadDir.Location = new System.Drawing.Point(12, 6);
+            this.DownloadDir.Location = new System.Drawing.Point(12, 4);
             this.DownloadDir.Name = "DownloadDir";
-            this.DownloadDir.Size = new System.Drawing.Size(236, 22);
+            this.DownloadDir.Size = new System.Drawing.Size(377, 22);
             this.DownloadDir.TabIndex = 7;
             this.DownloadDir.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DownloadDir_KeyPress);
             this.DownloadDir.Leave += new System.EventHandler(this.DownloadDir_Leave);
+            this.DownloadDir.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
             // SetDLDIR
             // 
             this.SetDLDIR.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.SetDLDIR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(10)))));
+            this.SetDLDIR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.SetDLDIR.FlatAppearance.BorderSize = 0;
             this.SetDLDIR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SetDLDIR.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.SetDLDIR.ForeColor = System.Drawing.Color.Snow;
-            this.SetDLDIR.Location = new System.Drawing.Point(12, 33);
+            this.SetDLDIR.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetDLDIR.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.SetDLDIR.Location = new System.Drawing.Point(233, 29);
             this.SetDLDIR.Name = "SetDLDIR";
-            this.SetDLDIR.Size = new System.Drawing.Size(100, 23);
+            this.SetDLDIR.Size = new System.Drawing.Size(156, 22);
             this.SetDLDIR.TabIndex = 3;
-            this.SetDLDIR.Text = "Set Output Dir";
+            this.SetDLDIR.Text = "Set Output Directory";
             this.SetDLDIR.UseVisualStyleBackColor = false;
             this.SetDLDIR.Click += new System.EventHandler(this.SetDLDIR_Click);
+            this.SetDLDIR.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
             // dlProg
             // 
@@ -192,9 +199,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dlProg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
             this.dlProg.ForeColor = System.Drawing.Color.White;
-            this.dlProg.Location = new System.Drawing.Point(85, 595);
+            this.dlProg.Location = new System.Drawing.Point(85, 612);
             this.dlProg.Name = "dlProg";
-            this.dlProg.Size = new System.Drawing.Size(643, 25);
+            this.dlProg.Size = new System.Drawing.Size(484, 25);
             this.dlProg.TabIndex = 9;
             // 
             // DownloadingText
@@ -203,37 +210,22 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DownloadingText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DownloadingText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(191)))));
-            this.DownloadingText.Location = new System.Drawing.Point(85, 622);
+            this.DownloadingText.Location = new System.Drawing.Point(12, 640);
             this.DownloadingText.Name = "DownloadingText";
-            this.DownloadingText.Size = new System.Drawing.Size(643, 24);
+            this.DownloadingText.Size = new System.Drawing.Size(797, 24);
             this.DownloadingText.TabIndex = 12;
             this.DownloadingText.Text = "...";
             this.DownloadingText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // RemDL
-            // 
-            this.RemDL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.RemDL.AutoSize = true;
-            this.RemDL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.RemDL.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(191)))));
-            this.RemDL.Location = new System.Drawing.Point(844, 626);
-            this.RemDL.Name = "RemDL";
-            this.RemDL.Size = new System.Drawing.Size(104, 20);
-            this.RemDL.TabIndex = 6;
-            this.RemDL.Text = "Clear Done";
-            this.RemDL.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.RemDL.UseVisualStyleBackColor = true;
-            this.RemDL.CheckedChanged += new System.EventHandler(this.RemDL_CheckedChanged);
-            // 
             // CancelButton
             // 
             this.CancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CancelButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(10)))));
+            this.CancelButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
             this.CancelButton.FlatAppearance.BorderSize = 0;
             this.CancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.CancelButton.ForeColor = System.Drawing.Color.White;
-            this.CancelButton.Location = new System.Drawing.Point(15, 634);
+            this.CancelButton.Location = new System.Drawing.Point(12, 612);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(64, 25);
             this.CancelButton.TabIndex = 11;
@@ -247,14 +239,14 @@
             this.PasteButton.AccessibleDescription = "w";
             this.PasteButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.PasteButton.BackColor = System.Drawing.Color.Teal;
+            this.PasteButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.PasteButton.FlatAppearance.BorderSize = 0;
             this.PasteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PasteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PasteButton.ForeColor = System.Drawing.Color.White;
-            this.PasteButton.Location = new System.Drawing.Point(823, 6);
+            this.PasteButton.ForeColor = System.Drawing.Color.Black;
+            this.PasteButton.Location = new System.Drawing.Point(642, 29);
             this.PasteButton.Name = "PasteButton";
-            this.PasteButton.Size = new System.Drawing.Size(125, 23);
+            this.PasteButton.Size = new System.Drawing.Size(118, 22);
             this.PasteButton.TabIndex = 2;
             this.PasteButton.Text = "Paste links";
             this.PasteButton.UseVisualStyleBackColor = false;
@@ -263,19 +255,19 @@
             // StayOnTopCheckbox
             // 
             this.StayOnTopCheckbox.AccessibleDescription = "w";
-            this.StayOnTopCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.StayOnTopCheckbox.AutoSize = true;
-            this.StayOnTopCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StayOnTopCheckbox.BackColor = System.Drawing.Color.Transparent;
+            this.StayOnTopCheckbox.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Bold);
             this.StayOnTopCheckbox.ForeColor = System.Drawing.Color.White;
-            this.StayOnTopCheckbox.Location = new System.Drawing.Point(844, 34);
+            this.StayOnTopCheckbox.Location = new System.Drawing.Point(575, 5);
             this.StayOnTopCheckbox.Name = "StayOnTopCheckbox";
-            this.StayOnTopCheckbox.Size = new System.Drawing.Size(104, 20);
+            this.StayOnTopCheckbox.Size = new System.Drawing.Size(195, 21);
             this.StayOnTopCheckbox.TabIndex = 1;
-            this.StayOnTopCheckbox.Text = "Stay on top";
-            this.StayOnTopCheckbox.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.StayOnTopCheckbox.UseVisualStyleBackColor = true;
-            this.StayOnTopCheckbox.CheckedChanged += new System.EventHandler(this.StayOnTopCheckbox_CheckedChanged);
+            this.StayOnTopCheckbox.Text = "Keep All Legit on top";
+            this.StayOnTopCheckbox.UseVisualStyleBackColor = false;
+            this.StayOnTopCheckbox.CheckedChanged += new System.EventHandler(this.StayOnTopCheckbox_CheckedChanged_1);
+            this.StayOnTopCheckbox.Click += new System.EventHandler(this.StayOnTopCheckbox_Click);
+            this.StayOnTopCheckbox.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
             // SplashText
             // 
@@ -285,64 +277,49 @@
             this.SplashText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
             this.SplashText.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SplashText.ForeColor = System.Drawing.Color.White;
-            this.SplashText.Location = new System.Drawing.Point(112, 102);
+            this.SplashText.Location = new System.Drawing.Point(180, 94);
             this.SplashText.Name = "SplashText";
-            this.SplashText.Size = new System.Drawing.Size(737, 466);
+            this.SplashText.Size = new System.Drawing.Size(460, 483);
             this.SplashText.TabIndex = 4;
             this.SplashText.Text = "ALL LEGIT 1.0\r\n\r\nCTRL+V/Paste Links button to convert Magnets or Links.\r\n\r\nSepera" +
     "te multiples by\r\nsemi-colon, comma, or new line.";
             this.SplashText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.SplashText.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
             // AutoExtract
             // 
-            this.AutoExtract.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.AutoExtract.AutoSize = true;
-            this.AutoExtract.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AutoExtract.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.AutoExtract.Location = new System.Drawing.Point(472, 34);
+            this.AutoExtract.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            this.AutoExtract.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.AutoExtract.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.AutoExtract.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.AutoExtract.Location = new System.Drawing.Point(5, 161);
             this.AutoExtract.Name = "AutoExtract";
-            this.AutoExtract.Size = new System.Drawing.Size(108, 20);
+            this.AutoExtract.Size = new System.Drawing.Size(419, 26);
             this.AutoExtract.TabIndex = 0;
-            this.AutoExtract.Text = "Auto Extract";
-            this.AutoExtract.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.AutoExtract.UseVisualStyleBackColor = true;
+            this.AutoExtract.Text = "Extract finished downloads";
+            this.AutoExtract.UseVisualStyleBackColor = false;
             this.AutoExtract.CheckedChanged += new System.EventHandler(this.AutoExtract_CheckedChanged);
+            this.AutoExtract.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
             // 
             // PWBox
             // 
-            this.PWBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.PWBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            this.PWBox.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.PWBox.Enabled = false;
             this.PWBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PWBox.ForeColor = System.Drawing.Color.White;
-            this.PWBox.Location = new System.Drawing.Point(474, 6);
+            this.PWBox.Location = new System.Drawing.Point(5, 187);
             this.PWBox.Name = "PWBox";
-            this.PWBox.Size = new System.Drawing.Size(230, 22);
+            this.PWBox.Size = new System.Drawing.Size(419, 22);
             this.PWBox.TabIndex = 4;
             this.PWBox.Text = "your;common;zip;passwords";
             this.PWBox.Click += new System.EventHandler(this.PWBox_Enter);
             this.PWBox.Enter += new System.EventHandler(this.PWBox_Enter);
             this.PWBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PWBox_KeyPress);
             this.PWBox.Leave += new System.EventHandler(this.PWBox_Leave);
-            // 
-            // HotKeyBtn
-            // 
-            this.HotKeyBtn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.HotKeyBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(10)))));
-            this.HotKeyBtn.FlatAppearance.BorderSize = 0;
-            this.HotKeyBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.HotKeyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.HotKeyBtn.ForeColor = System.Drawing.Color.Snow;
-            this.HotKeyBtn.Location = new System.Drawing.Point(254, 33);
-            this.HotKeyBtn.Name = "HotKeyBtn";
-            this.HotKeyBtn.Size = new System.Drawing.Size(81, 23);
-            this.HotKeyBtn.TabIndex = 3;
-            this.HotKeyBtn.Text = "Set Hotkey";
-            this.HotKeyBtn.UseVisualStyleBackColor = false;
-            this.HotKeyBtn.Click += new System.EventHandler(this.HotKeyBtn_Click);
+            this.PWBox.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            this.PWBox.MouseHover += new System.EventHandler(this.showSettings_MouseHover);
             // 
             // HotKeyBox
             // 
@@ -351,44 +328,44 @@
             this.HotKeyBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
             this.HotKeyBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.HotKeyBox.ForeColor = System.Drawing.Color.White;
-            this.HotKeyBox.Location = new System.Drawing.Point(254, 6);
+            this.HotKeyBox.Location = new System.Drawing.Point(395, 4);
             this.HotKeyBox.Name = "HotKeyBox";
-            this.HotKeyBox.Size = new System.Drawing.Size(214, 22);
+            this.HotKeyBox.Size = new System.Drawing.Size(167, 22);
             this.HotKeyBox.TabIndex = 7;
             this.HotKeyBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DownloadDir_KeyPress);
             this.HotKeyBox.Leave += new System.EventHandler(this.DownloadDir_Leave);
+            this.HotKeyBox.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
             // AutoDLBox
             // 
-            this.AutoDLBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.AutoDLBox.AutoSize = true;
-            this.AutoDLBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AutoDLBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.AutoDLBox.Location = new System.Drawing.Point(118, 34);
+            this.AutoDLBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            this.AutoDLBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.AutoDLBox.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.AutoDLBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.AutoDLBox.Location = new System.Drawing.Point(5, 31);
             this.AutoDLBox.Name = "AutoDLBox";
-            this.AutoDLBox.Size = new System.Drawing.Size(130, 20);
+            this.AutoDLBox.Size = new System.Drawing.Size(419, 26);
             this.AutoDLBox.TabIndex = 0;
-            this.AutoDLBox.Text = "Auto Download";
-            this.AutoDLBox.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.AutoDLBox.UseVisualStyleBackColor = true;
+            this.AutoDLBox.Text = "Auto download added items";
+            this.AutoDLBox.UseVisualStyleBackColor = false;
             this.AutoDLBox.CheckedChanged += new System.EventHandler(this.AutoDLBox_CheckedChanged);
             // 
-            // AutoDelete
+            // AutoOverwrite
             // 
-            this.AutoDelete.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.AutoDelete.AutoSize = true;
-            this.AutoDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AutoDelete.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.AutoDelete.Location = new System.Drawing.Point(341, 34);
-            this.AutoDelete.Name = "AutoDelete";
-            this.AutoDelete.Size = new System.Drawing.Size(126, 20);
-            this.AutoDelete.TabIndex = 0;
-            this.AutoDelete.Text = "Auto Overwrite";
-            this.AutoDelete.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.AutoDelete.UseVisualStyleBackColor = true;
-            this.AutoDelete.CheckedChanged += new System.EventHandler(this.AutoDelete_CheckedChanged);
+            this.AutoOverwrite.AutoSize = true;
+            this.AutoOverwrite.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            this.AutoOverwrite.Dock = System.Windows.Forms.DockStyle.Top;
+            this.AutoOverwrite.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.AutoOverwrite.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.AutoOverwrite.Location = new System.Drawing.Point(5, 83);
+            this.AutoOverwrite.Name = "AutoOverwrite";
+            this.AutoOverwrite.Size = new System.Drawing.Size(419, 26);
+            this.AutoOverwrite.TabIndex = 0;
+            this.AutoOverwrite.Text = "Re-download/Overwrite existing files";
+            this.AutoOverwrite.UseVisualStyleBackColor = false;
+            this.AutoOverwrite.CheckedChanged += new System.EventHandler(this.AutoDelete_CheckedChanged);
+            this.AutoOverwrite.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
             // 
             // ALTrayIcon
             // 
@@ -401,54 +378,117 @@
             this.ALTrayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ALTrayIcon_MouseClick);
             this.ALTrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ALTrayIcon_MouseDoubleClick_1);
             // 
-            // Min2Tray
+            // settingsP
             // 
-            this.Min2Tray.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Min2Tray.AutoSize = true;
-            this.Min2Tray.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Min2Tray.ForeColor = System.Drawing.Color.White;
-            this.Min2Tray.Location = new System.Drawing.Point(588, 34);
-            this.Min2Tray.Name = "Min2Tray";
-            this.Min2Tray.Size = new System.Drawing.Size(128, 20);
-            this.Min2Tray.TabIndex = 1;
-            this.Min2Tray.Text = "Minimize 2 tray";
-            this.Min2Tray.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.Min2Tray.UseVisualStyleBackColor = true;
-            this.Min2Tray.CheckedChanged += new System.EventHandler(this.Min2Tray_CheckedChanged);
+            this.settingsP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            this.settingsP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.settingsP.Controls.Add(this.Close2Tray);
+            this.settingsP.Controls.Add(this.Min2Tray);
+            this.settingsP.Controls.Add(this.AutoExtract);
+            this.settingsP.Controls.Add(this.PWBox);
+            this.settingsP.Controls.Add(this.AutoOverwrite);
+            this.settingsP.Controls.Add(this.autoDelZips);
+            this.settingsP.Controls.Add(this.AutoDLBox);
+            this.settingsP.Controls.Add(this.RemDL);
+            this.settingsP.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.settingsP.Location = new System.Drawing.Point(377, 4);
+            this.settingsP.Name = "settingsP";
+            this.settingsP.Padding = new System.Windows.Forms.Padding(5);
+            this.settingsP.Size = new System.Drawing.Size(433, 218);
+            this.settingsP.TabIndex = 13;
+            this.settingsP.Visible = false;
+            this.settingsP.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            this.settingsP.MouseHover += new System.EventHandler(this.showSettings_MouseHover);
             // 
             // Close2Tray
             // 
-            this.Close2Tray.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.Close2Tray.AutoSize = true;
-            this.Close2Tray.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Close2Tray.ForeColor = System.Drawing.Color.White;
-            this.Close2Tray.Location = new System.Drawing.Point(723, 34);
+            this.Close2Tray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            this.Close2Tray.Dock = System.Windows.Forms.DockStyle.Top;
+            this.Close2Tray.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.Close2Tray.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.Close2Tray.Location = new System.Drawing.Point(5, 135);
             this.Close2Tray.Name = "Close2Tray";
-            this.Close2Tray.Size = new System.Drawing.Size(114, 20);
-            this.Close2Tray.TabIndex = 1;
-            this.Close2Tray.Text = "Close 2 Tray";
-            this.Close2Tray.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.Close2Tray.UseVisualStyleBackColor = true;
+            this.Close2Tray.Size = new System.Drawing.Size(419, 26);
+            this.Close2Tray.TabIndex = 7;
+            this.Close2Tray.Text = "Close to system tray";
+            this.Close2Tray.UseVisualStyleBackColor = false;
             this.Close2Tray.CheckedChanged += new System.EventHandler(this.Close2Tray_CheckedChanged);
             // 
-            // findDLC
+            // Min2Tray
             // 
-            this.findDLC.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.Min2Tray.AutoSize = true;
+            this.Min2Tray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            this.Min2Tray.Dock = System.Windows.Forms.DockStyle.Top;
+            this.Min2Tray.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.Min2Tray.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.Min2Tray.Location = new System.Drawing.Point(5, 109);
+            this.Min2Tray.Name = "Min2Tray";
+            this.Min2Tray.Size = new System.Drawing.Size(419, 26);
+            this.Min2Tray.TabIndex = 8;
+            this.Min2Tray.Text = "Minimize to system tray";
+            this.Min2Tray.UseVisualStyleBackColor = false;
+            this.Min2Tray.CheckedChanged += new System.EventHandler(this.Min2Tray_CheckedChanged);
+            // 
+            // autoDelZips
+            // 
+            this.autoDelZips.AutoSize = true;
+            this.autoDelZips.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            this.autoDelZips.Dock = System.Windows.Forms.DockStyle.Top;
+            this.autoDelZips.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.autoDelZips.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.autoDelZips.Location = new System.Drawing.Point(5, 57);
+            this.autoDelZips.Name = "autoDelZips";
+            this.autoDelZips.Size = new System.Drawing.Size(419, 26);
+            this.autoDelZips.TabIndex = 0;
+            this.autoDelZips.Text = "Delete zips after successful extraction";
+            this.autoDelZips.UseVisualStyleBackColor = false;
+            this.autoDelZips.CheckedChanged += new System.EventHandler(this.autoDelZips_CheckedChanged);
+            this.autoDelZips.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
+            // 
+            // RemDL
+            // 
+            this.RemDL.AutoSize = true;
+            this.RemDL.Dock = System.Windows.Forms.DockStyle.Top;
+            this.RemDL.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.RemDL.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.RemDL.Location = new System.Drawing.Point(5, 5);
+            this.RemDL.Name = "RemDL";
+            this.RemDL.Size = new System.Drawing.Size(419, 26);
+            this.RemDL.TabIndex = 6;
+            this.RemDL.Text = "Clear Finished";
+            this.RemDL.UseVisualStyleBackColor = true;
+            this.RemDL.CheckedChanged += new System.EventHandler(this.RemDL_CheckedChanged);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(769, 12);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(40, 38);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 14;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            this.pictureBox1.MouseHover += new System.EventHandler(this.showSettings_MouseHover);
+            // 
+            // HotKeyBtn
+            // 
+            this.HotKeyBtn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.findDLC.BackColor = System.Drawing.Color.Teal;
-            this.findDLC.FlatAppearance.BorderSize = 0;
-            this.findDLC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.findDLC.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.findDLC.ForeColor = System.Drawing.Color.White;
-            this.findDLC.Location = new System.Drawing.Point(710, 6);
-            this.findDLC.Name = "findDLC";
-            this.findDLC.Size = new System.Drawing.Size(107, 23);
-            this.findDLC.TabIndex = 2;
-            this.findDLC.Text = "Parse .DLC\'s";
-            this.findDLC.UseVisualStyleBackColor = false;
-            this.findDLC.Click += new System.EventHandler(this.findDLC_Click);
+            this.HotKeyBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.HotKeyBtn.FlatAppearance.BorderSize = 0;
+            this.HotKeyBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.HotKeyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HotKeyBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.HotKeyBtn.Location = new System.Drawing.Point(447, 29);
+            this.HotKeyBtn.Name = "HotKeyBtn";
+            this.HotKeyBtn.Size = new System.Drawing.Size(115, 22);
+            this.HotKeyBtn.TabIndex = 3;
+            this.HotKeyBtn.Text = "Global Hotkey";
+            this.HotKeyBtn.UseVisualStyleBackColor = false;
+            this.HotKeyBtn.Click += new System.EventHandler(this.HotKeyBtn_Click);
             // 
             // MainWindow
             // 
@@ -457,16 +497,11 @@
             this.AutoScroll = true;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
-            this.ClientSize = new System.Drawing.Size(960, 671);
-            this.Controls.Add(this.PWBox);
-            this.Controls.Add(this.SplashText);
-            this.Controls.Add(this.AutoDLBox);
-            this.Controls.Add(this.AutoDelete);
-            this.Controls.Add(this.AutoExtract);
-            this.Controls.Add(this.Close2Tray);
-            this.Controls.Add(this.Min2Tray);
+            this.ClientSize = new System.Drawing.Size(821, 671);
+            this.Controls.Add(this.settingsP);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.StayOnTopCheckbox);
-            this.Controls.Add(this.RemDL);
+            this.Controls.Add(this.SplashText);
             this.Controls.Add(this.dlProg);
             this.Controls.Add(this.HotKeyBox);
             this.Controls.Add(this.DownloadDir);
@@ -474,7 +509,6 @@
             this.Controls.Add(this.SetDLDIR);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.ClearButton);
-            this.Controls.Add(this.findDLC);
             this.Controls.Add(this.PasteButton);
             this.Controls.Add(this.CopyLinks);
             this.Controls.Add(this.startDownloads);
@@ -490,7 +524,12 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
             this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
+            this.MouseLeave += new System.EventHandler(this.settingsP_MouseLeave);
             this.Resize += new System.EventHandler(this.MainWindow_Resize_1);
+            this.settingsP.ResumeLayout(false);
+            this.settingsP.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -505,7 +544,6 @@
         private System.Windows.Forms.TextBox DownloadDir;
         private System.Windows.Forms.Button SetDLDIR;
         private System.Windows.Forms.ColumnHeader Group;
-        private System.Windows.Forms.CheckBox RemDL;
         private System.Windows.Forms.Label DownloadingText;
         private new System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.Button PasteButton;
@@ -515,15 +553,18 @@
         private System.Windows.Forms.CheckBox AutoExtract;
         private System.Windows.Forms.TextBox PWBox;
         private new System.Windows.Forms.ColumnHeader Size;
-        private System.Windows.Forms.Button HotKeyBtn;
         private System.Windows.Forms.TextBox HotKeyBox;
         private System.Windows.Forms.CheckBox AutoDLBox;
-        private System.Windows.Forms.CheckBox AutoDelete;
+        private System.Windows.Forms.CheckBox AutoOverwrite;
         private System.Windows.Forms.NotifyIcon ALTrayIcon;
-        private System.Windows.Forms.CheckBox Min2Tray;
-        private System.Windows.Forms.CheckBox Close2Tray;
         private System.Windows.Forms.Button ClearButton;
-        private System.Windows.Forms.Button findDLC;
+        private System.Windows.Forms.Panel settingsP;
+        private System.Windows.Forms.CheckBox autoDelZips;
+        private System.Windows.Forms.CheckBox RemDL;
+        private System.Windows.Forms.CheckBox Close2Tray;
+        private System.Windows.Forms.CheckBox Min2Tray;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button HotKeyBtn;
     }
 }
 

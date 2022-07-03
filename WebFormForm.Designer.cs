@@ -68,21 +68,21 @@
             this.closeBrowser.Name = "closeBrowser";
             this.closeBrowser.Size = new System.Drawing.Size(667, 41);
             this.closeBrowser.TabIndex = 16;
-            this.closeBrowser.Text = "Close All Legit captcha browser";
+            this.closeBrowser.Text = "I can\'t solve this captcha..";
             this.closeBrowser.UseVisualStyleBackColor = false;
-            this.closeBrowser.Click += new System.EventHandler(this.startDownloads_Click);
+            this.closeBrowser.Click += new System.EventHandler(this.closeBrowser_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(147, 762);
+            this.label2.Location = new System.Drawing.Point(83, 762);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(714, 16);
+            this.label2.Size = new System.Drawing.Size(843, 16);
             this.label2.TabIndex = 15;
             this.label2.Text = " (Browser should close automatically after solving captcha use this if it is stuc" +
-    "k longer than 30 seconds)";
+    "k to solve it manually in your defaul browser)";
             // 
             // WebFormForm
             // 
@@ -97,6 +97,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WebFormForm";
             this.Text = "AllLegit: Solve Captcha";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.WebFormForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

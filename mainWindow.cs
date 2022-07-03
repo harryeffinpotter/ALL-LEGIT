@@ -218,10 +218,11 @@ namespace ALL_LEGIT
         {
             Close2Tray.Checked = Properties.Settings.Default.Close2Tray;
             Min2Tray.Checked = Properties.Settings.Default.Min2Tray;
-            AutoDelete.Checked = Properties.Settings.Default.AutoOverwrite;
+            RemDL.Checked = Properties.Settings.Default.RemDL;
+            AutoOverwrite.Checked = Properties.Settings.Default.AutoOverwrite;
             AutoDLBox.Checked = Properties.Settings.Default.AutoDL;
+            autoDelZips.Checked = Properties.Settings.Default.DelZips;
             HotKeyBox.Text = Properties.Settings.Default.HotKeyKeyData.ToString().Replace(",", " +");
-
             AutoExtract.Checked = Properties.Settings.Default.AutoExtract;
             if (!String.IsNullOrEmpty(Properties.Settings.Default.ZipPWS))
             {
@@ -411,7 +412,7 @@ namespace ALL_LEGIT
 
                 this.Invoke(() =>
                 {
-                    DownloadingText.Text = $"Downloading file. {e.ProgressPercentage}% complete. Speed:{DLS}MB\\s";
+                    DownloadingText.Text = $"Downloading: {FILENAME}. {e.ProgressPercentage}% complete. Speed:{DLS}MB\\s";
                     dlProg.Value = e.ProgressPercentage;
                 });
 
@@ -513,7 +514,7 @@ namespace ALL_LEGIT
             string pasted = Clipboard.GetText();
 
             isConverting = true;
-            if (pasted.StartsWith("magnet"))
+            if (pasted.ToLower().StartsWith("magnet".ToLower()))
             {
                 if (ALTrayIcon.Visible)
                 {
@@ -627,7 +628,7 @@ namespace ALL_LEGIT
                                         {
                                             if (!alertedonce)
                                             {
-                                                MessageBox.Show("Torrent not cached, now converting!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                                MessageBox.Show($"{magnetName} not cached, now converting!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                                                 alertedonce = true;
                                             }
                                             MagnetStatus = key.status.ToString();
@@ -666,7 +667,7 @@ namespace ALL_LEGIT
                                                 });
                                                 this.Invoke(() =>
                                                 {
-                                                    DownloadingText.Text = $"Downloading torrent. {percentComplete}% complete. Seeds:{seeders}. {DLS}";
+                                                    DownloadingText.Text = $"All Debrid is downloading torrent: {magnetName}. {percentComplete}% complete. Seeds:{seeders}. {DLS}\n(NOTE: If youa cancel this you will have to go to your magnets page on the AD website and remove it.";
                                                 });
 
 
@@ -870,10 +871,7 @@ namespace ALL_LEGIT
                     Form WebFormForm = new WebFormForm();
                     WebFormForm.ShowDialog();
 
-                    this.Invoke(() =>
-                    {
-                        DownloadingText.Text = "Decrypting Filecrypt.cc DLC file...";
-                    });
+      
                     filecryptinprog = true;
 
                     Utilities.DecryptDLC();
@@ -881,7 +879,7 @@ namespace ALL_LEGIT
 
                 }
             }
-            else if (pasted.ToLower().StartsWith("https://"))
+            else if (pasted.ToLower().StartsWith("https://".ToLower()))
             {
                 if (ALTrayIcon.Visible)
                 {
@@ -962,6 +960,12 @@ namespace ALL_LEGIT
 
                                 string unlockedLink = obj.data.link.ToString();
                                 double FileSize = double.Parse(obj.data.filesize.ToString());
+                                string FullFileName = obj.data.filename.ToString();
+                                string FileNameNoExt = Utilities.RemoveEverythingAfterLast(FullFileName, ".");
+                                if (FileNameNoExt.Contains(".part") || FileNameNoExt.Contains(".7z") || FileNameNoExt.Contains(".zip"))
+                                {
+                                    FileNameNoExt = Utilities.RemoveEverythingAfterLast(FileNameNoExt, ".");
+                                }
                                 string FileSizeInt = "";
                                 if ((FileSize / 1024 / 1024) > 1000)
                                 {
@@ -978,7 +982,7 @@ namespace ALL_LEGIT
                                 {
                                     foreach (ListViewItem item in listView1.Items)
                                     {
-                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Text.Equals(obj.data.host.ToString()))
+                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Equals(FileNameNoExt))
                                         {
                                             skip = true;
                                         }
@@ -986,13 +990,13 @@ namespace ALL_LEGIT
                                     if (!skip)
                                     {
 
-                                        listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, obj.data.host.ToString(), FileSizeInt }));
+                                        listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, FileNameNoExt, FileSizeInt }));
 
                                     }
                                     if (listView1.Items.Count == 0)
                                     {
 
-                                        listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, obj.data.host.ToString(), FileSizeInt }));
+                                        listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, FileNameNoExt, FileSizeInt }));
 
                                     }
                                     foreach (ListViewItem item in listView1.Items)
@@ -1115,15 +1119,12 @@ namespace ALL_LEGIT
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
+        public static string dlsPara = "";
 
         public static bool isDownloading = false;
         private async void startDownloads_Click(object sender, EventArgs e)
-        {
-            if (isDownloading || isConverting)
-            {
-                return;
-            }
-            else
+        
+          {
             {
                 string DLList = "";
                 isDownloading = true;
@@ -1133,12 +1134,17 @@ namespace ALL_LEGIT
                 {
                     foreach (ListViewItem item in listView1.CheckedItems)
                     {
+                        this.Invoke(() =>
+                        {
+                            DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
+                        });
 
-                        DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
                         await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text);
                         if (AutoExtract.Checked)
                         {
+                            dlsPara += $"{Properties.Settings.Default.DownloadDir}\\{item.SubItems[2].Text}\\{item.SubItems[0].Text};";
                             DLList += $"{item.SubItems[0].Text};{item.SubItems[2].Text}\n";
+
                         }
 
 
@@ -1146,7 +1152,7 @@ namespace ALL_LEGIT
                     overwrite = false;
                     if (AutoExtract.Checked)
                     {
-                        this.Invoke(() =>
+                        this.Invoke(async () =>
                         {
                             string[] SplitDLList = DLList.Split('\n');
                             foreach (string FullDL in SplitDLList)
@@ -1164,6 +1170,7 @@ namespace ALL_LEGIT
                                         {
                                             if (!archive.IsFirstVolume())
                                             {
+                                                Extract = false;
                                                 continue;
                                             }
                                             else
@@ -1190,18 +1197,23 @@ namespace ALL_LEGIT
                                         {
                                             Directory.CreateDirectory(DLDir);
                                         }
-                                        string FileName = DLS[0].ToString().Remove(DLS[0].ToString().Length - 4);
-                                        string ArchiveDIR = DLDir + "\\" + "_AutoExtracted" + "\\" + FileName;
+                                        string FileName = Path.GetFileNameWithoutExtension(DL);
+                                        string ArchiveDIR = DLDir;
                                         if (!Directory.Exists(ArchiveDIR))
                                         {
                                             Directory.CreateDirectory(ArchiveDIR);
                                         }
                                         Utilities.ExtractFile(DL, ArchiveDIR);
+                                        Extract = false;
+
                                     }
-                                    Extract = false;
+
+        
                                 }
                             }
                         });
+
+
                     }
                     this.Invoke(() =>
                     {
@@ -1214,9 +1226,21 @@ namespace ALL_LEGIT
                 {
                     MessageBox.Show("Please select items to download first.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 }
+
+        
                 isDownloading = false;
                 CancelButton.Visible = false;
 
+            }
+            string[] para = dlsPara.Split(';');
+            foreach (string file in para)
+            {
+                if (File.Exists(file))
+                {
+                    System.GC.Collect();
+                    System.GC.WaitForPendingFinalizers();
+                    File.Delete(file);
+                }
             }
         }
 
@@ -1281,6 +1305,14 @@ namespace ALL_LEGIT
         {
             Properties.Settings.Default.RemDL = RemDL.Checked;
             Properties.Settings.Default.Save();
+            if (RemDL.Checked)
+            {
+                RemDL.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                RemDL.ForeColor = Color.FromArgb(0, 100, 80);
+            }
         }
 
         public static bool cancel = false;
@@ -1339,12 +1371,14 @@ namespace ALL_LEGIT
             {
                 this.TopMost = false;
             }
-
-        }
-
-        private void SplashText_Click(object sender, EventArgs e)
-        {
-
+            if (StayOnTopCheckbox.Checked)
+            {
+                StayOnTopCheckbox.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                StayOnTopCheckbox.ForeColor = Color.FromArgb(0, 100, 80);
+            }
         }
         private void DownloadDir_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -1444,6 +1478,14 @@ namespace ALL_LEGIT
             {
                 PWBox.Enabled = false;
             }
+            if (AutoExtract.Checked)
+            {
+                AutoExtract.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                AutoExtract.ForeColor = Color.FromArgb(0, 100, 80);
+            }
         }
 
         private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -1487,7 +1529,6 @@ namespace ALL_LEGIT
 
         private void HotKeyBtn_Click(object sender, EventArgs e)
         {
-
             waitingforkey = true;
             HotKeyBox.Text = "Press desired hotkey...";
         }
@@ -1496,12 +1537,28 @@ namespace ALL_LEGIT
         {
             Properties.Settings.Default.AutoDL = AutoDLBox.Checked;
             Properties.Settings.Default.Save();
+            if (AutoDLBox.Checked)
+            {
+                AutoDLBox.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                AutoDLBox.ForeColor = Color.FromArgb(0, 100, 80);
+            }
         }
 
         private void AutoDelete_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.AutoOverwrite = AutoDelete.Checked;
+            Properties.Settings.Default.AutoOverwrite = AutoOverwrite.Checked;
             Properties.Settings.Default.Save();
+            if (AutoOverwrite.Checked)
+            {
+                AutoOverwrite.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                AutoOverwrite.ForeColor = Color.FromArgb(0, 100, 80);
+            }
         }
 
 
@@ -1556,12 +1613,28 @@ namespace ALL_LEGIT
         {
             Properties.Settings.Default.Min2Tray = Close2Tray.Checked;
             Properties.Settings.Default.Save();
+            if (Min2Tray.Checked)
+            {
+                Min2Tray.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                Min2Tray.ForeColor = Color.FromArgb(0, 100, 80);
+            }
         }
 
         private void Close2Tray_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.Close2Tray = Close2Tray.Checked;
             Properties.Settings.Default.Save();
+            if (Close2Tray.Checked)
+            {
+                Close2Tray.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                Close2Tray.ForeColor = Color.FromArgb(0, 100, 80);
+            }
         }
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
@@ -1580,11 +1653,70 @@ namespace ALL_LEGIT
 
         private void ALTrayIcon_MouseClick(object sender, MouseEventArgs e)
         {
-
+            this.Show();
         }
 
-        private void findDLC_Click(object sender, EventArgs e)
+
+
+        private void HotKeyBox_TextChanged(object sender, EventArgs e)
         {
+
+            waitingforkey = true;
+            HotKeyBox.Text = "Press desired hotkey...";
+        }
+
+        private void showSettings_MouseEnter(object sender, EventArgs e)
+        {
+            settingsP.Visible = true;
+        }
+        public static bool InSettings = false;
+        public static bool InSettingsP = false;
+
+        private void settingsP_MouseLeave(object sender, EventArgs e)
+        {
+            settingsP.Visible = false;
+        }
+
+        private void showSettings_MouseHover(object sender, EventArgs e)
+        {
+            settingsP.Visible = true;
+        }
+
+        private void settingsP_MouseHover(object sender, EventArgs e)
+        {
+            settingsP.Visible = true;
+        }
+
+        private void StayOnTopCheckbox_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.TopMost = StayOnTopCheckbox.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void autoDelZips_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.DelZips = autoDelZips.Checked;
+            Properties.Settings.Default.Save();
+            if (autoDelZips.Checked)
+            {
+                autoDelZips.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                autoDelZips.ForeColor = Color.FromArgb(0, 100, 80);
+            }
+        }
+
+        private void StayOnTopCheckbox_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (StayOnTopCheckbox.Checked)
+            {
+                this.TopMost = true;
+            }
+            else
+            {
+                this.TopMost = false;
+            }
 
         }
     }

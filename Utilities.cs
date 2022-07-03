@@ -16,7 +16,8 @@ namespace ALL_LEGIT
     {
 
 
-        public static void ExtractFile(string sourceArchive, string destination)
+    
+public static void ExtractFile(string sourceArchive, string destination)
         {
             try
             {
@@ -33,10 +34,11 @@ namespace ALL_LEGIT
                 Process x = Process.Start(pro);
                 if (!x.HasExited)
                     x.WaitForExit();
+      
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("assword"))
+                if (ex.ToString().Contains("assword"))
                 {
                     if (!String.IsNullOrEmpty(Properties.Settings.Default.ZipPWS))
                     {
@@ -83,21 +85,34 @@ namespace ALL_LEGIT
             string[] files = Directory.GetFiles(Environment.CurrentDirectory, "*.dlc", SearchOption.AllDirectories);
             string[] files2 = Directory.GetFiles(MainWindow.GetDownloadsPath(), "*.dlc",SearchOption.AllDirectories);
             string[] joinedResult = files.Concatenate(files2);
-      
+            string currentDLCfile = "";
       
             foreach (string file in joinedResult)
             {
+                string parentpath = System.IO.Directory.GetParent(file).FullName;
+                if (!parentpath.EndsWith("_bin"))
+                {
+
+                    string JUSTNAME = Path.GetFileName(file);
+                    File.Move(file, $"{Environment.CurrentDirectory}\\_bin\\{JUSTNAME}");
+                    currentDLCfile = $"{Environment.CurrentDirectory}\\_bin\\{JUSTNAME}";
+                }
+                else
+                {
+                    currentDLCfile = file;
+                }
+
                 int DLCNumber = MainWindow.randomNumber;
                 ProcessStartInfo pro = new ProcessStartInfo();
                 pro.WindowStyle = ProcessWindowStyle.Hidden;
                 pro.FileName = $"cmd.exe";
                 pro.WorkingDirectory = $"{Environment.CurrentDirectory}\\_bin";
-                pro.Arguments = $"/c decrypt-dlc.cmd \"{file}\" -o \"{Environment.CurrentDirectory}\\_bin\\{DLCNumber}.txt\"";
+                pro.Arguments = $"/c decrypt-dlc.cmd \"{currentDLCfile}\" -o \"{Environment.CurrentDirectory}\\_bin\\{DLCNumber}.txt\"";
                Process  x = Process.Start(pro);
                 x.WaitForExit();
                 try
                 {
-                    File.Delete(file);
+                    File.Delete(currentDLCfile);
                 }
                  catch
                 {

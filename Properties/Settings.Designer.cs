@@ -202,5 +202,17 @@ namespace ALL_LEGIT.Properties {
                 this["Close2Tray"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DelZips {
+            get {
+                return ((bool)(this["DelZips"]));
+            }
+            set {
+                this["DelZips"] = value;
+            }
+        }
     }
 }

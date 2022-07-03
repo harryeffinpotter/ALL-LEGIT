@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -87,17 +89,40 @@ namespace ALL_LEGIT
             }
         }
 
-        private void startDownloads_Click(object sender, EventArgs e)
-        {
-            webBrowser1.Stop();
-            this.Close();
 
-        }
 
         private void WebFormForm_Load(object sender, EventArgs e)
         {
             webBrowser1.ScriptErrorsSuppressed = true;
             webBrowser1.Navigate(MainWindow.FilecryptURL);
         }
+
+        private void closeBrowser_Click(object sender, EventArgs e)
+        {
+          
+            webBrowser1.Stop();
+            closeBrowser.Text = "DONE!! -- DO NOT CLICK THIS UNTIL AFTER YOU SOLVE CAPTCHA AND DOWNLOAD DLC FILE!";
+            MessageBox.Show("Once you press OK  to this prompt your default browser will show up contianing the captcha that All Legit couldn't load (probably the picture one).\n\n" +
+                "You must do these three steps:\n\n1.Solve the captcha.\n2.Click the green DLC button on the links page, save it to downloads.\n.3.CLose the browser out.\n\nThast's it!." +
+                "", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+            this.Hide();
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = MainWindow.FilecryptURL
+                }
+            };
+            process.Start();
+            process.WaitForExit();
+            MessageBox.Show("This is step one, move this message to the side so you can solve the captcha  in your browser now, wait for the timer first if it asks. Once you submit the captcha and the next page loads hit OK.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+
+            MessageBox.Show("Final step! Now all you have to do is click the RIGHT HALF OF THE GREEN BUTTON, it says DLC on it and has a little down arrow, click that and allow your browser to save it to the DEFAULT DOWNLOADS FOLDER.\n\nAnd that's it! As soon as the DLC file downloads successfully (its only a few KB, you can close your browser!", "DLC file downloaded?", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+            Utilities.DecryptDLC();
+            this.Close();
+
+        }
     }
+
 }
+

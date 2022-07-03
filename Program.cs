@@ -19,14 +19,18 @@ namespace ALL_LEGIT
         static void Main()
         {
 
+            try
+            {
 
+                // Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainWindow());
+                Application.Exit();
 
-            // Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
-            Application.Exit();
+            }
+            catch { }
         }
 
     }
-    
+
 }
