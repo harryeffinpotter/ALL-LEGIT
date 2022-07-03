@@ -95,7 +95,6 @@ namespace ALL_LEGIT
         public static string apiNAME;
         public static bool waitingforkey = false;
         public static Timer a = new Timer();
-        public static bool Activated = false;
         public static System.Windows.Forms.Keys hotkeyset = Properties.Settings.Default.HotKeyKeyData;
         public MainWindow()
         {
@@ -127,7 +126,7 @@ namespace ALL_LEGIT
             // The Text property sets the text that will be displayed,
             // in a tooltip, when the mouse hovers over the systray icon.
             ALTrayIcon.Text = "All Legit";
-            ALTrayIcon.Visible = true;
+            ALTrayIcon.Visible = false;
 
             // Handle the DoubleClick event to activate the form.
 
@@ -193,13 +192,23 @@ namespace ALL_LEGIT
                     {
                         if (e.KeyData == Properties.Settings.Default.HotKeyKeyData)
                         {
-                       
-                               DoAsyncConversion();
-
-                        };
+                            if (!isConverting && !isDownloading)
+                            {
+                                DoAsyncConversion();
+                                isConverting = false;
+                                isDownloading = false;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Please allow current conversions/downloads to finish.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                return;
+                            }
+                        }
                     }
+
+
                 };
-             }
+            }
             catch { }
 
 
@@ -276,7 +285,6 @@ namespace ALL_LEGIT
                 return null;
             }
         }
-
         public static bool loginsuccess = false;
         public static async Task ConnectViaAPIAsync()
         {
@@ -297,9 +305,6 @@ namespace ALL_LEGIT
                         }
                         else
                         {
-                            loginsuccess= false;
-                            Properties.Settings.Default.ApiKEY = "";
-                            Properties.Settings.Default.ApiNAME = "";
                             MessageBox.Show("Previously set API key no longer working... you must reconnect!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
                     }
@@ -318,16 +323,15 @@ namespace ALL_LEGIT
                         obj = getJson(CheckURL);
                         bool Activated;
                         Activated = bool.Parse(obj.data.activated.ToString());
-                        while (Activated)
+                        while (!Activated)
                         {
                             obj = getJson(CheckURL);
                             Activated = bool.Parse(obj.data.activated.ToString());
                             Task.Delay(1000);
                         }
 
-                        if (!Activated)
+                        if (Activated)
                         {
-                            MessageBox.Show(CheckURL);
                             obj = getJson(CheckURL);
                             APIKEY = obj.data.apikey.ToString();
                             Properties.Settings.Default.ApiKEY = APIKEY;
@@ -341,14 +345,13 @@ namespace ALL_LEGIT
                         }
                         else
                         {
-                            loginsuccess = false;
                             MessageBox.Show("Previously set API key no longer working... you must reconnect!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
-                    MessageBox.Show(ex.ToString());
+                    Application.Exit();
                 }
             });
             t1.Start();
@@ -394,7 +397,7 @@ namespace ALL_LEGIT
                 {
                     File.Delete(DL);
                 }
-            else
+                else
                 {
                     return;
                 }
@@ -421,8 +424,6 @@ namespace ALL_LEGIT
 
             webClient.DownloadFileCompleted += (s, e) =>
             {
-                webClient.Dispose();
-
                 this.Invoke(() =>
                 {
                     DownloadingText.Text = $"Download finished...";
@@ -499,28 +500,30 @@ namespace ALL_LEGIT
         /// <param name="url">the url with the file</param>
         /// <param name="destinationFullPathWithName">the absolut full path with the filename as destination</param>
         /// <returns></returns>
-        public static FileInfo DownloadFile(string url, string destinationFullPathWithName)
+        public FileInfo DownloadFile(string url, string destinationFullPathWithName)
         {
             URLDownloadToFile(null, url, destinationFullPathWithName, 0, IntPtr.Zero);
             return new FileInfo(destinationFullPathWithName);
         }
-        public async void
-DoAsyncConversion()
+        public async void DoAsyncConversion()
         {
 
             cancel = false;
             SplashText.Visible = false;
             string pasted = Clipboard.GetText();
 
+            isConverting = true;
             if (pasted.StartsWith("magnet"))
             {
-                
+                if (ALTrayIcon.Visible)
+                {
 
                     this.Invoke(() =>
                     {
-                        ALTrayIcon.ShowBalloonTip(10000, "Adding magnet links to All Legit!", "Adding magnet links", ToolTipIcon.None);
+                        ALTrayIcon.ShowBalloonTip(10000, "Adding FileCrypt links", "Adding FileCrypt links to All Legit!", ToolTipIcon.None);
                     });
-            
+                }
+
                 Thread t1 = new Thread(async () =>
                 {
                     pasted = pasted.Trim();
@@ -626,8 +629,6 @@ DoAsyncConversion()
                                             {
                                                 MessageBox.Show("Torrent not cached, now converting!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                                                 alertedonce = true;
-                                                isConverting = true;
-
                                             }
                                             MagnetStatus = key.status.ToString();
                                             if (MagnetStatus.Equals("In Queue"))
@@ -672,8 +673,6 @@ DoAsyncConversion()
                                             }
                                             else if (MagnetStatus.Equals("Ready"))
                                             {
-                                                isConverting = false;
-
                                                 this.Invoke(() => { DownloadingText.Text = $"Torrent conversion complete!"; });
                                             }
                                             else if (MagnetStatus.Equals("Uploading"))
@@ -785,7 +784,6 @@ DoAsyncConversion()
                                 }
                             }
                         }
-
                         notdone = true;
                     }
                     if (isErrors)
@@ -806,7 +804,6 @@ DoAsyncConversion()
                         }
                         isConverting = false;
 
-
                     }
 
                 });
@@ -826,18 +823,19 @@ DoAsyncConversion()
 
 
 
-            if (pasted.ToLower().StartsWith("https://filecrypt.") || pasted.ToLower().StartsWith("https://www.filecrypt."))
+            if (pasted.ToLower().StartsWith("https://filecrypt.".ToLower()) || pasted.ToLower().StartsWith("https://www.filecrypt.".ToLower()))
             {
 
                 DownloadingText.Text = "Decrypting Filecrypt.cc DLC file...";
 
 
-            
+                if (ALTrayIcon.Visible)
+                {
                     this.Invoke(() =>
                     {
                         ALTrayIcon.ShowBalloonTip(10000, "Adding FileCrypt links", "Adding FileCrypt links to All Legit!", ToolTipIcon.None);
                     });
-           
+                }
 
                 CurrentDLC = randomNumber;
                 pasted = pasted.Trim();
@@ -866,32 +864,33 @@ DoAsyncConversion()
                 }
                 foreach (string s in output)
                 {
+
+                    FilecryptURL = s;
+
+                    Form WebFormForm = new WebFormForm();
+                    WebFormForm.ShowDialog();
+
                     this.Invoke(() =>
                     {
                         DownloadingText.Text = "Decrypting Filecrypt.cc DLC file...";
                     });
-                    FilecryptURL = s;
-                    WebFormForm webFormForm = new WebFormForm();
-                    webFormForm.Show();
-                    Thread t1 = new Thread(async () =>
-                    {
-                        Utilities.DecryptDLC(this);
-                    });
-                    t1.Start();
-                    while (t1.IsAlive)
-                    {
-                        await Task.Delay(100);
-                    }
+                    filecryptinprog = true;
+
+                    Utilities.DecryptDLC();
+
+
                 }
             }
             else if (pasted.ToLower().StartsWith("https://"))
             {
-           
+                if (ALTrayIcon.Visible)
+                {
                     this.Invoke(() =>
                     {
                         ALTrayIcon.ShowBalloonTip(10000, "Adding links", "Adding links to All Legit!", ToolTipIcon.None);
                     });
 
+                }
                 try
                 {
                     pasted = pasted.Trim();
@@ -927,7 +926,7 @@ DoAsyncConversion()
                     string linkpasss = "";
                     int linknotsup = 0;
                     string linknotsups = "";
-                    Thread t1 = new Thread(() =>
+                    Thread t1 = new Thread(async () =>
                     {
 
                         foreach (string s in output)
@@ -1080,21 +1079,19 @@ DoAsyncConversion()
                 }
                 if (!String.IsNullOrWhiteSpace(linkstoget))
                 {
-
                     Clipboard.SetText(linkstoget);
                     DoAsyncConversion();
                     linkstoget = "";
+                    filecryptinprog = false;
+                }
 
-                }
-                if (Properties.Settings.Default.AutoDL)
-                {
-                    object sender = null;
-                    EventArgs e = new EventArgs();
-                    startDownloads_Click(sender, e);
-                }
             }
-            filecryptinprog = false;
-            DownloadedOnce = false;
+            if (Properties.Settings.Default.AutoDL)
+            {
+                object sender = null;
+                EventArgs e = new EventArgs();
+                startDownloads_Click(sender, e);
+            }
         }
 
 
@@ -1105,42 +1102,49 @@ DoAsyncConversion()
         {
             if (keyData == (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V))
             {
- 
-                
+                if (!isConverting && !isDownloading)
+                {
                     DoAsyncConversion();
-                
+                }
+                else
+                {
+                    MessageBox.Show("Please allow current conversions/downloads to finish.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    return false;
+                }
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
         public static bool isDownloading = false;
-        public static bool isExtracting = false;
         private async void startDownloads_Click(object sender, EventArgs e)
         {
-
-
-            string DLList = "";
-            CancelButton.Visible = true;
-
-            if (listView1.CheckedItems.Count > 0)
+            if (isDownloading || isConverting)
             {
-                foreach (ListViewItem item in listView1.CheckedItems)
+                return;
+            }
+            else
+            {
+                string DLList = "";
+                isDownloading = true;
+                CancelButton.Visible = true;
+
+                if (listView1.CheckedItems.Count > 0)
                 {
-
-                    DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
-                    isDownloading = true;
-                    await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text);
-                    isDownloading = false;
-                    if (AutoExtract.Checked)
+                    foreach (ListViewItem item in listView1.CheckedItems)
                     {
-                        DLList += $"{item.SubItems[0].Text};{item.SubItems[2].Text}\n";
+
+                        DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
+                        await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text);
+                        if (AutoExtract.Checked)
+                        {
+                            DLList += $"{item.SubItems[0].Text};{item.SubItems[2].Text}\n";
+                        }
+
+
                     }
-
-
-                }
-                overwrite = false;
-                if (AutoExtract.Checked)
+                    overwrite = false;
+                    if (AutoExtract.Checked)
                     {
                         this.Invoke(() =>
                         {
@@ -1192,9 +1196,7 @@ DoAsyncConversion()
                                         {
                                             Directory.CreateDirectory(ArchiveDIR);
                                         }
-                                        isExtracting = true;
                                         Utilities.ExtractFile(DL, ArchiveDIR);
-                                        isExtracting = false;
                                     }
                                     Extract = false;
                                 }
@@ -1212,10 +1214,10 @@ DoAsyncConversion()
                 {
                     MessageBox.Show("Please select items to download first.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 }
-    
+                isDownloading = false;
                 CancelButton.Visible = false;
 
-            
+            }
         }
 
         private void CopyLinks_Click(object sender, EventArgs e)
@@ -1257,7 +1259,6 @@ DoAsyncConversion()
 
         private void ClearButton_Click(object sender, EventArgs e)
         {
-
             listView1.Items.Clear();
             listView1.Update();
         }
@@ -1298,19 +1299,31 @@ DoAsyncConversion()
 
         private void PasteButton_Click(object sender, EventArgs e)
         {
-
-            DoAsyncConversion();
-
+            if (!isConverting && !isDownloading)
+            {
+                DoAsyncConversion();
+            }
+            else
+            {
+                this.Invoke(() =>
+                {
+                    MessageBox.Show("Please allow current conversions/downloads to finish.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                });
+            }
         }
 
 
 
         public void listView1_MouseDoubleClick(object sender, EventArgs e)
         {
-
-
-            DoAsyncConversion();
-
+            if (!isConverting && !isDownloading)
+            {
+                DoAsyncConversion();
+            }
+            else
+            {
+                MessageBox.Show("Please allow current conversions/downloads to finish.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+            }
         }
 
         private void StayOnTopCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -1435,9 +1448,14 @@ DoAsyncConversion()
 
         private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-
-            DoAsyncConversion();
-
+            if (!isConverting && !isDownloading)
+            {
+                DoAsyncConversion();
+            }
+            else
+            {
+                MessageBox.Show("Please allow current conversions/downloads to finish.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+            }
         }
 
         private void PWBox_Click(object sender, EventArgs e)
@@ -1485,15 +1503,16 @@ DoAsyncConversion()
             Properties.Settings.Default.AutoOverwrite = AutoDelete.Checked;
             Properties.Settings.Default.Save();
         }
-        public static bool DownloadedOnce = false;
+
 
         public static Random random = new Random();
         public static int randomNumber = random.Next(0, 99999);
         public static int CurrentDLC = 0;
 
-
         private void MainWindow_Resize_1(object sender, EventArgs e)
         {
+
+
 
             //if the form is minimized  
             //hide it from the task bar  
@@ -1518,7 +1537,7 @@ DoAsyncConversion()
         }
 
 
-        public static bool exitpromptedonce = false;
+
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (Properties.Settings.Default.Close2Tray)
@@ -1530,36 +1549,10 @@ DoAsyncConversion()
                     e.Cancel = true;
                 }
             }
-            else if (!exitpromptedonce)
-            {
-                exitpromptedonce = true;
-                DialogResult Answer = MessageBox.Show("Are you sure you want to exit All Legit? If you have any downloads/conversions/etc going" +
-                    "they will be CANCELED if you select YES." +
-                    ".\n\nClick Yes to cancel all jobs and exit All Legit\nNo to shrink All Legit to system tray." +
-                    "\nCancel to return to the app." +
-                    "finish.", "Are you sure?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3, MessageBoxOptions.DefaultDesktopOnly);
 
-                if (Answer == DialogResult.Yes)
-                {
-                    Application.Exit();
-   
-                }
-                else if (Answer == DialogResult.No)
-                {
-                    exitpromptedonce = false;
-                   Hide();
-                    e.Cancel = true;
-                  
-                }
-                if (Answer == DialogResult.Cancel)
-                {
-                    exitpromptedonce = false;
-                    e.Cancel = true;
-                }
-
-            }
         }
-            private void Min2Tray_CheckedChanged(object sender, EventArgs e)
+
+        private void Min2Tray_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.Min2Tray = Close2Tray.Checked;
             Properties.Settings.Default.Save();
@@ -1581,23 +1574,16 @@ DoAsyncConversion()
 
             Show();
             this.WindowState = FormWindowState.Normal;
+            ALTrayIcon.Visible = false;
 
         }
 
         private void ALTrayIcon_MouseClick(object sender, MouseEventArgs e)
         {
 
-            Show();
-            this.WindowState = FormWindowState.Normal;
         }
 
         private void findDLC_Click(object sender, EventArgs e)
-        {
-            SplashText.Visible = false;
-            Utilities.DecryptDLC(this);
-        }
-
-        private void c(object sender, EventArgs e)
         {
 
         }

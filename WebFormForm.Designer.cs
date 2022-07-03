@@ -97,6 +97,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WebFormForm";
             this.Text = "AllLegit: Solve Captcha";
+            this.Load += new System.EventHandler(this.WebFormForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

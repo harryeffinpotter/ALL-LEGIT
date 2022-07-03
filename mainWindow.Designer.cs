@@ -292,7 +292,6 @@
             this.SplashText.Text = "ALL LEGIT 1.0\r\n\r\nCTRL+V/Paste Links button to convert Magnets or Links.\r\n\r\nSepera" +
     "te multiples by\r\nsemi-colon, comma, or new line.";
             this.SplashText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.SplashText.Click += new System.EventHandler(this.c);
             // 
             // AutoExtract
             // 

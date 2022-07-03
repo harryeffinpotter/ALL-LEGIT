@@ -15,6 +15,7 @@ namespace ALL_LEGIT
     class Utilities
     {
 
+
         public static void ExtractFile(string sourceArchive, string destination)
         {
             try
@@ -76,14 +77,14 @@ namespace ALL_LEGIT
             }
         }
 
-        public static void DecryptDLC(MainWindow mainWindow)
+        public static void DecryptDLC()
         {     
 
             string[] files = Directory.GetFiles(Environment.CurrentDirectory, "*.dlc", SearchOption.AllDirectories);
             string[] files2 = Directory.GetFiles(MainWindow.GetDownloadsPath(), "*.dlc",SearchOption.AllDirectories);
             string[] joinedResult = files.Concatenate(files2);
-            mainWindow.Text = "";
-        
+      
+      
             foreach (string file in joinedResult)
             {
                 int DLCNumber = MainWindow.randomNumber;
