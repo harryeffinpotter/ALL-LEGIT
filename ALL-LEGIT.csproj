@@ -3659,8 +3659,8 @@
     <Content Include="_bin\node_modules\npm\node_modules\hosted-git-info\lib\git-host.js" />
     <Content Include="_bin\node_modules\npm\node_modules\hosted-git-info\lib\index.js" />
     <Content Include="_bin\node_modules\npm\node_modules\http-cache-semantics\index.js" />
-    <Content Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\agent.js" />
-    <Content Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\index.js" />
+    <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\agent.js" />
+    <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\index.js" />
     <Content Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\agent.js" />
     <Content Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\index.js" />
     <Content Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\parse-proxy-response.js" />
@@ -4224,8 +4224,8 @@
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\env-paths\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\fastest-levenshtein\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\has-flag\index.d.ts" />
-    <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\agent.d.ts" />
-    <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\index.d.ts" />
+    <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\agent.d.ts" />
+    <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\agent.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\parse-proxy-response.d.ts" />

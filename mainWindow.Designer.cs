@@ -47,19 +47,18 @@
             this.StayOnTopCheckbox = new System.Windows.Forms.CheckBox();
             this.SplashText = new System.Windows.Forms.Label();
             this.AutoExtract = new System.Windows.Forms.CheckBox();
-            this.PWBox = new System.Windows.Forms.TextBox();
+            this.qww = new System.Windows.Forms.TextBox();
             this.HotKeyBox = new System.Windows.Forms.TextBox();
             this.AutoDLBox = new System.Windows.Forms.CheckBox();
             this.AutoOverwrite = new System.Windows.Forms.CheckBox();
             this.ALTrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.settingsP = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.Close2Tray = new System.Windows.Forms.CheckBox();
-            this.Min2Tray = new System.Windows.Forms.CheckBox();
             this.autoDelZips = new System.Windows.Forms.CheckBox();
             this.RemDL = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.HotKeyBtn = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.settingsP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -278,7 +277,7 @@
             this.SplashText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
             this.SplashText.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SplashText.ForeColor = System.Drawing.Color.White;
-            this.SplashText.Location = new System.Drawing.Point(180, 94);
+            this.SplashText.Location = new System.Drawing.Point(171, 90);
             this.SplashText.Name = "SplashText";
             this.SplashText.Size = new System.Drawing.Size(460, 483);
             this.SplashText.TabIndex = 4;
@@ -294,34 +293,33 @@
             this.AutoExtract.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.AutoExtract.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.AutoExtract.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.AutoExtract.Location = new System.Drawing.Point(25, 210);
+            this.AutoExtract.Location = new System.Drawing.Point(25, 183);
             this.AutoExtract.Name = "AutoExtract";
             this.AutoExtract.Padding = new System.Windows.Forms.Padding(0, 0, 20, 10);
-            this.AutoExtract.Size = new System.Drawing.Size(476, 36);
+            this.AutoExtract.Size = new System.Drawing.Size(457, 36);
             this.AutoExtract.TabIndex = 0;
             this.AutoExtract.Text = "Extract finished downloads";
             this.AutoExtract.UseVisualStyleBackColor = false;
             this.AutoExtract.CheckedChanged += new System.EventHandler(this.AutoExtract_CheckedChanged);
             this.AutoExtract.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
             // 
-            // PWBox
+            // qww
             // 
-            this.PWBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
-            this.PWBox.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.PWBox.Enabled = false;
-            this.PWBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PWBox.ForeColor = System.Drawing.Color.White;
-            this.PWBox.Location = new System.Drawing.Point(25, 246);
-            this.PWBox.Name = "PWBox";
-            this.PWBox.Size = new System.Drawing.Size(476, 22);
-            this.PWBox.TabIndex = 4;
-            this.PWBox.Text = "your;common;zip;passwords";
-            this.PWBox.Click += new System.EventHandler(this.PWBox_Enter);
-            this.PWBox.Enter += new System.EventHandler(this.PWBox_Enter);
-            this.PWBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PWBox_KeyPress);
-            this.PWBox.Leave += new System.EventHandler(this.PWBox_Leave);
-            this.PWBox.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
-            this.PWBox.MouseHover += new System.EventHandler(this.showSettings_MouseHover);
+            this.qww.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            this.qww.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.qww.Enabled = false;
+            this.qww.ForeColor = System.Drawing.Color.White;
+            this.qww.Location = new System.Drawing.Point(25, 219);
+            this.qww.Name = "qww";
+            this.qww.Size = new System.Drawing.Size(457, 26);
+            this.qww.TabIndex = 4;
+            this.qww.Text = "Your;Commonly;Used;Zip;passwords";
+            this.qww.Click += new System.EventHandler(this.PWBox_Enter);
+            this.qww.Enter += new System.EventHandler(this.PWBox_Enter);
+            this.qww.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PWBox_KeyPress);
+            this.qww.Leave += new System.EventHandler(this.PWBox_Leave);
+            this.qww.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            this.qww.MouseHover += new System.EventHandler(this.showSettings_MouseHover);
             // 
             // HotKeyBox
             // 
@@ -347,7 +345,7 @@
             this.AutoDLBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.AutoDLBox.Location = new System.Drawing.Point(25, 81);
             this.AutoDLBox.Name = "AutoDLBox";
-            this.AutoDLBox.Size = new System.Drawing.Size(476, 26);
+            this.AutoDLBox.Size = new System.Drawing.Size(457, 26);
             this.AutoDLBox.TabIndex = 0;
             this.AutoDLBox.Text = "Auto download added items";
             this.AutoDLBox.UseVisualStyleBackColor = false;
@@ -362,7 +360,7 @@
             this.AutoOverwrite.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.AutoOverwrite.Location = new System.Drawing.Point(25, 133);
             this.AutoOverwrite.Name = "AutoOverwrite";
-            this.AutoOverwrite.Size = new System.Drawing.Size(476, 26);
+            this.AutoOverwrite.Size = new System.Drawing.Size(457, 26);
             this.AutoOverwrite.TabIndex = 0;
             this.AutoOverwrite.Text = "Re-download/Overwrite existing files";
             this.AutoOverwrite.UseVisualStyleBackColor = false;
@@ -386,9 +384,8 @@
             this.settingsP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.settingsP.Controls.Add(this.label1);
             this.settingsP.Controls.Add(this.Close2Tray);
-            this.settingsP.Controls.Add(this.Min2Tray);
             this.settingsP.Controls.Add(this.AutoExtract);
-            this.settingsP.Controls.Add(this.PWBox);
+            this.settingsP.Controls.Add(this.qww);
             this.settingsP.Controls.Add(this.AutoOverwrite);
             this.settingsP.Controls.Add(this.autoDelZips);
             this.settingsP.Controls.Add(this.AutoDLBox);
@@ -397,11 +394,24 @@
             this.settingsP.Location = new System.Drawing.Point(279, 4);
             this.settingsP.Name = "settingsP";
             this.settingsP.Padding = new System.Windows.Forms.Padding(25, 55, 25, 25);
-            this.settingsP.Size = new System.Drawing.Size(530, 297);
+            this.settingsP.Size = new System.Drawing.Size(511, 274);
             this.settingsP.TabIndex = 13;
             this.settingsP.Visible = false;
             this.settingsP.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
             this.settingsP.MouseHover += new System.EventHandler(this.showSettings_MouseHover);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.label1.ForeColor = System.Drawing.Color.PaleTurquoise;
+            this.label1.Location = new System.Drawing.Point(21, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(470, 22);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "All Legit Settings (These save automatically).";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label1.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
             // 
             // Close2Tray
             // 
@@ -410,28 +420,13 @@
             this.Close2Tray.Dock = System.Windows.Forms.DockStyle.Top;
             this.Close2Tray.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.Close2Tray.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.Close2Tray.Location = new System.Drawing.Point(25, 185);
+            this.Close2Tray.Location = new System.Drawing.Point(25, 159);
             this.Close2Tray.Name = "Close2Tray";
-            this.Close2Tray.Size = new System.Drawing.Size(476, 26);
+            this.Close2Tray.Size = new System.Drawing.Size(457, 26);
             this.Close2Tray.TabIndex = 7;
             this.Close2Tray.Text = "Close to system tray";
             this.Close2Tray.UseVisualStyleBackColor = false;
             this.Close2Tray.CheckedChanged += new System.EventHandler(this.Close2Tray_CheckedChanged);
-            // 
-            // Min2Tray
-            // 
-            this.Min2Tray.AutoSize = true;
-            this.Min2Tray.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
-            this.Min2Tray.Dock = System.Windows.Forms.DockStyle.Top;
-            this.Min2Tray.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.Min2Tray.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.Min2Tray.Location = new System.Drawing.Point(25, 159);
-            this.Min2Tray.Name = "Min2Tray";
-            this.Min2Tray.Size = new System.Drawing.Size(476, 26);
-            this.Min2Tray.TabIndex = 8;
-            this.Min2Tray.Text = "Minimize to system tray";
-            this.Min2Tray.UseVisualStyleBackColor = false;
-            this.Min2Tray.CheckedChanged += new System.EventHandler(this.Min2Tray_CheckedChanged);
             // 
             // autoDelZips
             // 
@@ -442,7 +437,7 @@
             this.autoDelZips.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.autoDelZips.Location = new System.Drawing.Point(25, 107);
             this.autoDelZips.Name = "autoDelZips";
-            this.autoDelZips.Size = new System.Drawing.Size(476, 26);
+            this.autoDelZips.Size = new System.Drawing.Size(457, 26);
             this.autoDelZips.TabIndex = 0;
             this.autoDelZips.Text = "Delete zips after successful extraction";
             this.autoDelZips.UseVisualStyleBackColor = false;
@@ -457,7 +452,7 @@
             this.RemDL.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.RemDL.Location = new System.Drawing.Point(25, 55);
             this.RemDL.Name = "RemDL";
-            this.RemDL.Size = new System.Drawing.Size(476, 26);
+            this.RemDL.Size = new System.Drawing.Size(457, 26);
             this.RemDL.TabIndex = 6;
             this.RemDL.Text = "Clear Finished";
             this.RemDL.UseVisualStyleBackColor = true;
@@ -492,18 +487,6 @@
             this.HotKeyBtn.Text = "Global Hotkey";
             this.HotKeyBtn.UseVisualStyleBackColor = false;
             this.HotKeyBtn.Click += new System.EventHandler(this.HotKeyBtn_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.label1.Location = new System.Drawing.Point(58, 19);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(423, 19);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "All Legit Settings (These save automatically).";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label1.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
             // 
             // MainWindow
             // 
@@ -566,7 +549,7 @@
         private System.Windows.Forms.CheckBox StayOnTopCheckbox;
         private System.Windows.Forms.Label SplashText;
         private System.Windows.Forms.CheckBox AutoExtract;
-        private System.Windows.Forms.TextBox PWBox;
+        private System.Windows.Forms.TextBox qww;
         private new System.Windows.Forms.ColumnHeader Size;
         private System.Windows.Forms.TextBox HotKeyBox;
         private System.Windows.Forms.CheckBox AutoDLBox;
@@ -577,7 +560,6 @@
         private System.Windows.Forms.CheckBox autoDelZips;
         private System.Windows.Forms.CheckBox RemDL;
         private System.Windows.Forms.CheckBox Close2Tray;
-        private System.Windows.Forms.CheckBox Min2Tray;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button HotKeyBtn;
         private System.Windows.Forms.Label label1;

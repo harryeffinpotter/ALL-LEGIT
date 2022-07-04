@@ -133,17 +133,12 @@ namespace ALL_LEGIT
             var appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             Microsoft.Win32.Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
                   appName, 11000, Microsoft.Win32.RegistryValueKind.DWord);
-
-
             try
             {
                 Hook.GlobalEvents().KeyDown += async (sender, e) =>
                 {
-
-
                     if (waitingforkey)
                     {
-
                         if (e.KeyData.ToString().Equals("LControlKey"))
                         {
                             HotKeyBox.Text = e.KeyData.ToString().Replace("LControlKey", "Control +");
@@ -152,7 +147,6 @@ namespace ALL_LEGIT
                         {
                             HotKeyBox.Text = "Control +";
                         }
-
                         HotKeyBox.Text = e.KeyData.ToString().Replace(",", " +");
                         if (HotKeyBox.Text.Contains("Control") && !HotKeyBox.Text.Contains("+") && !HotKeyBox.Text.Contains("LControlKey") || HotKeyBox.Text.Contains("LControlKey"))
                         {
@@ -161,42 +155,33 @@ namespace ALL_LEGIT
                         if (e.KeyData.ToString().Contains("LControlKey, Control") || e.KeyData.ToString().Contains("Control") && !e.KeyData.ToString().Contains(" ") || e.KeyData.ToString().Contains("LControlKey") && !e.KeyData.ToString().Contains(" "))
                         {
                             return;
-
                         }
                         else
                         {
                             hotkeyset = e.KeyData;
-
                         }
-                        Hook.GlobalEvents().KeyUp += (sendeee, eee) =>
+                        if (hotkeyset.Equals(System.Windows.Forms.Keys.Control) || hotkeyset.Equals(System.Windows.Forms.Keys.ControlKey) || hotkeyset.Equals(System.Windows.Forms.Keys.LControlKey) || hotkeyset.ToString().Equals("LControlKey, Control"))
                         {
-                            if (hotkeyset.Equals(System.Windows.Forms.Keys.Control) || hotkeyset.Equals(System.Windows.Forms.Keys.ControlKey) || hotkeyset.Equals(System.Windows.Forms.Keys.LControlKey) || hotkeyset.ToString().Equals("LControlKey, Control"))
-                            {
-                                waitingforkey = false;
-                                return;
-                            }
-                            else
-                            {
-                                Properties.Settings.Default.HotKeyKeyData = hotkeyset;
-                                Properties.Settings.Default.Save();
-                                HotKeyBox.Text = Properties.Settings.Default.HotKeyKeyData.ToString().Replace(",", " +");
-                                waitingforkey = false;
-                            }
-
-
-                        };
-
+                            waitingforkey = false;
+                            return;
+                        }
+                        else
+                        {
+                            Properties.Settings.Default.HotKeyKeyData = hotkeyset;
+                            Properties.Settings.Default.Save();
+                            HotKeyBox.Text = Properties.Settings.Default.HotKeyKeyData.ToString().Replace(",", " +");
+                            waitingforkey = false;
+                        }
                     }
-
                     else
                     {
                         if (e.KeyData == Properties.Settings.Default.HotKeyKeyData)
                         {
-                         DoAsyncConversion();
-                                isConverting = false;
-                                isDownloading = false;
-                          
-                   
+                            DoAsyncConversion();
+                            isConverting = false;
+                            isDownloading = false;
+
+
                         }
                     }
 
@@ -211,7 +196,6 @@ namespace ALL_LEGIT
         private async void MainWindow_Load(object sender, EventArgs e)
         {
             Close2Tray.Checked = Properties.Settings.Default.Close2Tray;
-            Min2Tray.Checked = Properties.Settings.Default.Min2Tray;
             RemDL.Checked = Properties.Settings.Default.RemDL;
             AutoOverwrite.Checked = Properties.Settings.Default.AutoOverwrite;
             AutoDLBox.Checked = Properties.Settings.Default.AutoDL;
@@ -220,8 +204,8 @@ namespace ALL_LEGIT
             AutoExtract.Checked = Properties.Settings.Default.AutoExtract;
             if (!String.IsNullOrEmpty(Properties.Settings.Default.ZipPWS))
             {
-                PWBox.Text = Properties.Settings.Default.ZipPWS;
-                PWLIST = PWBox.Text;
+                qww.Text = Properties.Settings.Default.ZipPWS;
+                PWLIST = qww.Text;
             }
             StayOnTopCheckbox.Checked = Properties.Settings.Default.TopMost;
             this.Invoke(() =>
@@ -357,10 +341,17 @@ namespace ALL_LEGIT
 
 
         }
+        public static bool warnedthisbatch = false;
         public static bool overwrite = false;
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
-
+            while (midRun)
+            {
+                await Task.Delay(200);
+            }
+            isDownloading = true;
+            midRun = true;
+            warnedthisbatch = false;
             Stopwatch sw = new Stopwatch(); // The stopwatch which we will be using to calculate the download speed
             string DIR = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".");
             if (!Directory.Exists(DIR))
@@ -374,16 +365,19 @@ namespace ALL_LEGIT
                 {
                     overwrite = true;
                 }
-                if (!overwrite)
+                if (!overwrite || !warnedthisbatch)
                 {
+
                     DialogResult Overwrite1 = MessageBox.Show("Files found, do you want to overwrite?", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     if (Overwrite1 == DialogResult.Yes)
                     {
                         overwrite = true;
-
+                        warnedthisbatch = true;
                     }
                     else
                     {
+                        warnedthisbatch = true;
+                        overwrite = false;
                         return;
                     }
                 }
@@ -401,6 +395,7 @@ namespace ALL_LEGIT
                     return;
                 }
             }
+
             WebClient webClient = new WebClient();
             webClient.DownloadProgressChanged += (s, e) =>
             {
@@ -417,7 +412,7 @@ namespace ALL_LEGIT
                 if (cancel)
                 {
                     webClient.Dispose();
-                    cancel = false;
+
                 }
             };
 
@@ -453,6 +448,7 @@ namespace ALL_LEGIT
                 {
                     dlProg.Value = 0;
                 });
+                midRun = false;
             };
             await webClient.DownloadFileTaskAsync(new Uri(URL),
                 $"{DL}");
@@ -869,7 +865,7 @@ namespace ALL_LEGIT
                     Form WebFormForm = new WebFormForm();
                     WebFormForm.ShowDialog();
 
-      
+
                     filecryptinprog = true;
 
                     Utilities.DecryptDLC();
@@ -980,7 +976,7 @@ namespace ALL_LEGIT
                                 {
                                     foreach (ListViewItem item in listView1.Items)
                                     {
-                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Equals(FileNameNoExt))
+                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Text.Equals(FileNameNoExt))
                                         {
                                             skip = true;
                                         }
@@ -1055,8 +1051,6 @@ namespace ALL_LEGIT
 
             this.Invoke(() =>
             {
-                CancelButton.Visible = false;
-                DownloadingText.Text = $"";
                 listView1.Update();
             });
 
@@ -1092,167 +1086,159 @@ namespace ALL_LEGIT
             {
                 object sender = null;
                 EventArgs e = new EventArgs();
-                startDownloads_Click(sender, e);
+                    startDownloads_Click(sender, e);
             }
         }
-
-
-
-
 
         protected override bool ProcessCmdKey(ref Message msg, System.Windows.Forms.Keys keyData)
         {
             if (keyData == (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V))
             {
-             
-                    DoAsyncConversion();
-              
-             
+                DoAsyncConversion();
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
         public static string dlsPara = "";
-
+        public static bool midRun = false;
         public static bool isDownloading = false;
         private async void startDownloads_Click(object sender, EventArgs e)
-        
-          {
+        {
+   
+            string DLList = "";
+            isDownloading = true;
+            CancelButton.Visible = true;
+            if (listView1.CheckedItems.Count > 0)
             {
-                string DLList = "";
-                isDownloading = true;
-                CancelButton.Visible = true;
-
-                if (listView1.CheckedItems.Count > 0)
+                foreach (ListViewItem item in listView1.CheckedItems)
                 {
-                    foreach (ListViewItem item in listView1.CheckedItems)
-                    {
-                        this.Invoke(() =>
-                        {
-                            this.Text = $"Downloading {item.SubItems[0].Text}...";
-                            DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
-                        });
-                        try
-                        {
-                            await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text);
-                        } 
-                        catch (System.Net.WebException Ex) 
-                        {
-                            if (Ex.Message.Contains("The remote server returne"))
-                            {
-                                this.Invoke(() =>
-                                {
-                                    this.Text = $"Issue with the server such as the file was removed or your internet is acting up.... try again later!";
-                                });
-                            }
-                        }
-      
-                        
-                        if (AutoExtract.Checked)
-                        {
-                            dlsPara += $"{Properties.Settings.Default.DownloadDir}\\{Utilities.RemoveEverythingAfterLast(item.SubItems[2].Text, ".")}\\{item.SubItems[0].Text}";
-                            DLList += $"{item.SubItems[0].Text};{Utilities.RemoveEverythingAfterLast(item.SubItems[2].Text, ".")}\n";
-
-                        }
-
-
-                    }
-                    overwrite = false;
-                    if (AutoExtract.Checked)
-                    {
-                        this.Invoke(async () =>
-                        {
-                            string[] SplitDLList = DLList.Split('\n');
-                            foreach (string FullDL in SplitDLList)
-                            {
-
-                                if (!String.IsNullOrWhiteSpace(FullDL))
-                                {
-
-                                    string[] DLS = FullDL.Split(';');
-                                    bool Extract = false;
-                                    if (DLS[0].ToString().ToLower().EndsWith(".rar"))
-                                    {
-                                 
-                                            using (var archive = RarArchive.Open(Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString() + "\\" + DLS[0].ToString()))
-                                            {
-                                                if (archive.IsMultipartVolume())
-                                                {
-                                                    if (!archive.IsFirstVolume())
-                                                    {
-                                                        Extract = false;
-                                                        continue;
-                                                    }
-                                                    else
-                                                    {
-                                                        Extract = true;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    Extract = true;
-
-                                                }
-                                                archive.Dispose();
-                                            }
-                                        }
-                             
-                                 
-                                    else if (DLS[0].ToString().Contains(".001") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().Contains(".01") && DLS[0].ToString().Contains("7z") 
-                                    || DLS[0].ToString().EndsWith(".7z") || DLS[0].ToString().EndsWith(".zip") || DLS[0].ToString().EndsWith(".rar"))
-                                    {
-                                        Extract = true;
-                                    }
-                                    if (Extract)
-                                    {
-                                        this.Invoke(() =>
-                                        {
-                                            this.Text = $"Extracting archives...";
-                                            DownloadingText.Text = $"Extracting archives...";
-                                        });
-
-                                        string DLDir = Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString();
-                                        string DL = DLDir + "\\" + DLS[0].ToString();
-                                        if (!Directory.Exists(DLDir))
-                                        {
-                                            Directory.CreateDirectory(DLDir);
-                                        }
-    
-                                        string ArchiveDIR = DLDir;
-                                        if (!Directory.Exists(ArchiveDIR))
-                                        {
-                                            Directory.CreateDirectory(ArchiveDIR);
-                                        }
-                                        Utilities.ExtractFile(DL, ArchiveDIR);
-                                        Extract = false;
-
-                                    }
-
-        
-                                }
-                            }
-
-                        });
-
-
-                    }
                     this.Invoke(() =>
                     {
-                        dlProg.Value = 0;
-                        DownloadingText.Text = "";
+                        this.Text = $"Downloading {item.SubItems[0].Text}...";
+                        DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
                     });
-                    overwrite = false;
+                    try
+                    {
+                        await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text);
+                    }
+                    catch (System.Net.WebException Ex)
+                    {
+                        if (Ex.Message.Contains("The remote server returne"))
+                        {
+                            this.Invoke(() =>
+                            {
+                                this.Text = $"Issue with the server such as the file was removed or your internet is acting up.... try again later!";
+                            });
+                        }
+                    }
+
+
+                    if (AutoExtract.Checked)
+                    {
+                        dlsPara += $"{Properties.Settings.Default.DownloadDir}\\{Utilities.RemoveEverythingAfterLast(item.SubItems[2].Text, ".")}\\{item.SubItems[0].Text}";
+                        DLList += $"{item.SubItems[0].Text};{Utilities.RemoveEverythingAfterLast(item.SubItems[2].Text, ".")}\n";
+
+                    }
+
+
                 }
-                else if (listView1.Items.Count > 0 && !filecryptinprog)
+                overwrite = false;
+                if (AutoExtract.Checked)
+                {
+                    this.Invoke(async () =>
+                    {
+                        string[] SplitDLList = DLList.Split('\n');
+                        foreach (string FullDL in SplitDLList)
+                        {
+
+                            if (!String.IsNullOrWhiteSpace(FullDL))
+                            {
+
+                                string[] DLS = FullDL.Split(';');
+                                bool Extract = false;
+                                if (DLS[0].ToString().ToLower().EndsWith(".rar"))
+                                {
+
+                                    using (var archive = RarArchive.Open(Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString() + "\\" + DLS[0].ToString()))
+                                    {
+                                        if (archive.IsMultipartVolume())
+                                        {
+                                            if (!archive.IsFirstVolume())
+                                            {
+                                                Extract = false;
+                                                continue;
+                                            }
+                                            else
+                                            {
+                                                Extract = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Extract = true;
+
+                                        }
+                                        archive.Dispose();
+                                    }
+                                }
+
+
+                                else if (DLS[0].ToString().Contains(".001") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().Contains(".01") && DLS[0].ToString().Contains("7z")
+                                || DLS[0].ToString().EndsWith(".7z") || DLS[0].ToString().EndsWith(".zip") || DLS[0].ToString().EndsWith(".rar"))
+                                {
+                                    Extract = true;
+                                }
+                                if (Extract)
+                                {
+                                    this.Invoke(() =>
+                                    {
+                                        this.Text = $"Extracting archives...";
+                                        DownloadingText.Text = $"Extracting archives...";
+                                    });
+
+                                    string DLDir = Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString();
+                                    string DL = DLDir + "\\" + DLS[0].ToString();
+                                    if (!Directory.Exists(DLDir))
+                                    {
+                                        Directory.CreateDirectory(DLDir);
+                                    }
+
+                                    string ArchiveDIR = DLDir;
+                                    if (!Directory.Exists(ArchiveDIR))
+                                    {
+                                        Directory.CreateDirectory(ArchiveDIR);
+                                    }
+                                    Utilities.ExtractFile(DL, ArchiveDIR);
+                                    Extract = false;
+
+                                }
+
+
+                            }
+                        }
+
+                    });
+                    await Task.Delay(100);
+
+                }
+                this.Invoke(() =>
+                {
+                    dlProg.Value = 0;
+                    DownloadingText.Text = "";
+                });
+                overwrite = false;
+
+                if (listView1.Items.Count > 0 && !filecryptinprog)
                 {
                     MessageBox.Show("Please select items to download first.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 }
 
-        
+
                 isDownloading = false;
                 CancelButton.Visible = false;
-
             }
+
+
             string[] para = dlsPara.Split(';');
             foreach (string file in para)
             {
@@ -1350,21 +1336,21 @@ namespace ALL_LEGIT
 
         private void PasteButton_Click(object sender, EventArgs e)
         {
-  
-                DoAsyncConversion();
 
-    
+            DoAsyncConversion();
+
+
         }
 
 
 
         public void listView1_MouseDoubleClick(object sender, EventArgs e)
         {
-        
-                DoAsyncConversion();
-     
-          
-      
+
+            DoAsyncConversion();
+
+
+
         }
 
         private void StayOnTopCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -1408,38 +1394,38 @@ namespace ALL_LEGIT
 
         private void PWBox_Enter(object sender, EventArgs e)
         {
-            if (PWBox.Text == "your;common;zip;passwords")
+            if (qww.Text == "your;common;zip;passwords")
             {
-                PWBox.Text = "";
+                qww.Text = "";
             }
             else
             {
-                PWBox.Text = Properties.Settings.Default.ZipPWS;
+                qww.Text = Properties.Settings.Default.ZipPWS;
             }
         }
 
         private void PWBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)System.Windows.Forms.Keys.Enter && PWBox.Text.Length > 0 && !PWBox.Text.Equals("your;commonly;used;zip;passwords"))
+            if (e.KeyChar == (char)System.Windows.Forms.Keys.Enter && qww.Text.Length > 0 && !qww.Text.Equals("your;commonly;used;zip;passwords"))
             {
-                if (PWBox.Text.Length > 0)
+                if (qww.Text.Length > 0)
                 {
-                    Properties.Settings.Default.ZipPWS = PWBox.Text;
+                    Properties.Settings.Default.ZipPWS = qww.Text;
                     Properties.Settings.Default.Save();
-                    PWLIST = PWBox.Text;
+                    PWLIST = qww.Text;
                 }
                 else
                 {
-                    PWBox.Text = "your;common;zip;passwords";
+                    qww.Text = "your;common;zip;passwords";
                     listView1.Focus();
                 }
-                if (PWBox.Text == "")
+                if (qww.Text == "")
                 {
                     if (String.IsNullOrWhiteSpace(Properties.Settings.Default.ZipPWS))
                     {
 
 
-                        PWBox.Text = "your;common;zip;passwords";
+                        qww.Text = "your;common;zip;passwords";
                     }
 
                 }
@@ -1451,26 +1437,26 @@ namespace ALL_LEGIT
         private void PWBox_Leave(object sender, EventArgs e)
         {
 
-            if (PWBox.Text == "")
+            if (qww.Text == "")
             {
                 if (!String.IsNullOrWhiteSpace(Properties.Settings.Default.ZipPWS))
                 {
-                    PWBox.Text = Properties.Settings.Default.ZipPWS;
+                    qww.Text = Properties.Settings.Default.ZipPWS;
                 }
                 else
                 {
-                    PWBox.Text = "your;common;zip;passwords";
+                    qww.Text = "your;common;zip;passwords";
                 }
 
             }
-            else if (!PWBox.Text.Equals("your;commonly;used;zip;passwords") && PWBox.Text.Length > 0)
+            else if (!qww.Text.Equals("your;commonly;used;zip;passwords") && qww.Text.Length > 0)
             {
 
-                Properties.Settings.Default.ZipPWS = PWBox.Text;
+                Properties.Settings.Default.ZipPWS = qww.Text;
                 Properties.Settings.Default.Save();
-                PWLIST = PWBox.Text;
+                PWLIST = qww.Text;
             }
-            PWBox.Update();
+            qww.Update();
 
             listView1.Focus();
         }
@@ -1481,11 +1467,11 @@ namespace ALL_LEGIT
             Properties.Settings.Default.Save();
             if (AutoExtract.Checked)
             {
-                PWBox.Enabled = true;
+                qww.Enabled = true;
             }
             else
             {
-                PWBox.Enabled = false;
+                qww.Enabled = false;
             }
             if (AutoExtract.Checked)
             {
@@ -1499,16 +1485,16 @@ namespace ALL_LEGIT
 
         private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-          
-                DoAsyncConversion();
-       
+
+            DoAsyncConversion();
+
         }
 
         private void PWBox_Click(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(Properties.Settings.Default.ZipPWS))
             {
-                PWBox.Text = "your;common;zip;passwords";
+                qww.Text = "your;common;zip;passwords";
             }
         }
 
@@ -1578,16 +1564,7 @@ namespace ALL_LEGIT
             //if the form is minimized  
             //hide it from the task bar  
             //and show the system tray icon (represented by the NotifyIcon control)  
-            if (Min2Tray.Checked)
-            {
 
-                if (this.WindowState == FormWindowState.Minimized)
-                {
-                    Hide();
-                    ALTrayIcon.Visible = true;
-                }
-
-            }
             if (listView1.Items.Count == 0)
             {
                 return;
@@ -1611,20 +1588,6 @@ namespace ALL_LEGIT
                 }
             }
 
-        }
-
-        private void Min2Tray_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.Min2Tray = Close2Tray.Checked;
-            Properties.Settings.Default.Save();
-            if (Min2Tray.Checked)
-            {
-                Min2Tray.ForeColor = Color.FromArgb(192, 255, 192);
-            }
-            else
-            {
-                Min2Tray.ForeColor = Color.FromArgb(0, 100, 80);
-            }
         }
 
         private void Close2Tray_CheckedChanged(object sender, EventArgs e)
