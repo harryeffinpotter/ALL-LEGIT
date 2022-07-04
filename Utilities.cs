@@ -30,7 +30,18 @@ public static void ExtractFile(string sourceArchive, string destination)
                 ProcessStartInfo pro = new ProcessStartInfo();
                 pro.WindowStyle = ProcessWindowStyle.Hidden;
                 pro.FileName = $"{Environment.CurrentDirectory}\\7z.exe";
-                pro.Arguments = string.Format("x \"{0}\" -y -o\"{1}\"", sourceArchive, destination);
+                destination = Path.GetDirectoryName(sourceArchive);
+                pro.WorkingDirectory = destination;
+                string parent = System.IO.Directory.GetParent(destination).FullName;
+                if (parent.Equals(Properties.Settings.Default.DownloadDir))
+                {
+                    pro.Arguments = string.Format("x \"{0}\" -y -o\"{1}\"", sourceArchive, destination);
+                }
+                else
+                {
+                    pro.Arguments = string.Format("x \"{0}\" -y -o\".\\..\\\"", sourceArchive);
+                }
+
                 Process x = Process.Start(pro);
                 if (!x.HasExited)
                     x.WaitForExit();

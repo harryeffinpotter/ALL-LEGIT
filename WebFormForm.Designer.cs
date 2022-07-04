@@ -64,11 +64,12 @@
             this.closeBrowser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.closeBrowser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.closeBrowser.ForeColor = System.Drawing.Color.White;
-            this.closeBrowser.Location = new System.Drawing.Point(171, 719);
+            this.closeBrowser.Location = new System.Drawing.Point(85, 736);
             this.closeBrowser.Name = "closeBrowser";
-            this.closeBrowser.Size = new System.Drawing.Size(667, 41);
+            this.closeBrowser.Size = new System.Drawing.Size(839, 41);
             this.closeBrowser.TabIndex = 16;
-            this.closeBrowser.Text = "I can\'t solve this captcha..";
+            this.closeBrowser.Text = "CAPTCHA NOT LOADING/BLANK??? CLICK HERE TO LOAD IN NEW WINDOW (THIS USUALLY FIXES" +
+    " IT)";
             this.closeBrowser.UseVisualStyleBackColor = false;
             this.closeBrowser.Click += new System.EventHandler(this.closeBrowser_Click);
             // 
@@ -77,7 +78,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(83, 762);
+            this.label2.Location = new System.Drawing.Point(83, 717);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(843, 16);
             this.label2.TabIndex = 15;
@@ -90,8 +91,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
             this.ClientSize = new System.Drawing.Size(1008, 784);
-            this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.closeBrowser);
+            this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

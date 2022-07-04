@@ -192,17 +192,11 @@ namespace ALL_LEGIT
                     {
                         if (e.KeyData == Properties.Settings.Default.HotKeyKeyData)
                         {
-                            if (!isConverting && !isDownloading)
-                            {
-                                DoAsyncConversion();
+                         DoAsyncConversion();
                                 isConverting = false;
                                 isDownloading = false;
-                            }
-                            else
-                            {
-                                MessageBox.Show("Please allow current conversions/downloads to finish.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                                return;
-                            }
+                          
+                   
                         }
                     }
 
@@ -368,12 +362,12 @@ namespace ALL_LEGIT
         {
 
             Stopwatch sw = new Stopwatch(); // The stopwatch which we will be using to calculate the download speed
-            string DIR = Properties.Settings.Default.DownloadDir + "\\" + MagnetNAME;
+            string DIR = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".");
             if (!Directory.Exists(DIR))
             {
                 Directory.CreateDirectory(DIR);
             }
-            string DL = Properties.Settings.Default.DownloadDir + "\\" + MagnetNAME + "\\" + FILENAME;
+            string DL = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".") + "\\" + FILENAME;
             if (File.Exists(DL))
             {
                 if (Properties.Settings.Default.AutoOverwrite)
@@ -396,7 +390,11 @@ namespace ALL_LEGIT
 
                 if (overwrite)
                 {
-                    File.Delete(DL);
+                    try
+                    {
+                        File.Delete(DL);
+                    }
+                    catch { }
                 }
                 else
                 {
@@ -1106,15 +1104,10 @@ namespace ALL_LEGIT
         {
             if (keyData == (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V))
             {
-                if (!isConverting && !isDownloading)
-                {
+             
                     DoAsyncConversion();
-                }
-                else
-                {
-                    MessageBox.Show("Please allow current conversions/downloads to finish.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                    return false;
-                }
+              
+             
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
@@ -1136,14 +1129,29 @@ namespace ALL_LEGIT
                     {
                         this.Invoke(() =>
                         {
+                            this.Text = $"Downloading {item.SubItems[0].Text}...";
                             DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
                         });
-
-                        await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text);
+                        try
+                        {
+                            await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text);
+                        } 
+                        catch (System.Net.WebException Ex) 
+                        {
+                            if (Ex.Message.Contains("The remote server returne"))
+                            {
+                                this.Invoke(() =>
+                                {
+                                    this.Text = $"Issue with the server such as the file was removed or your internet is acting up.... try again later!";
+                                });
+                            }
+                        }
+      
+                        
                         if (AutoExtract.Checked)
                         {
-                            dlsPara += $"{Properties.Settings.Default.DownloadDir}\\{item.SubItems[2].Text}\\{item.SubItems[0].Text};";
-                            DLList += $"{item.SubItems[0].Text};{item.SubItems[2].Text}\n";
+                            dlsPara += $"{Properties.Settings.Default.DownloadDir}\\{Utilities.RemoveEverythingAfterLast(item.SubItems[2].Text, ".")}\\{item.SubItems[0].Text}";
+                            DLList += $"{item.SubItems[0].Text};{Utilities.RemoveEverythingAfterLast(item.SubItems[2].Text, ".")}\n";
 
                         }
 
@@ -1165,39 +1173,51 @@ namespace ALL_LEGIT
                                     bool Extract = false;
                                     if (DLS[0].ToString().ToLower().EndsWith(".rar"))
                                     {
-                                        var archive = RarArchive.Open(Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString() + "\\" + DLS[0].ToString());
-                                        if (archive.IsMultipartVolume())
-                                        {
-                                            if (!archive.IsFirstVolume())
+                                 
+                                            using (var archive = RarArchive.Open(Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString() + "\\" + DLS[0].ToString()))
                                             {
-                                                Extract = false;
-                                                continue;
-                                            }
-                                            else
-                                            {
-                                                Extract = true;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Extract = true;
+                                                if (archive.IsMultipartVolume())
+                                                {
+                                                    if (!archive.IsFirstVolume())
+                                                    {
+                                                        Extract = false;
+                                                        continue;
+                                                    }
+                                                    else
+                                                    {
+                                                        Extract = true;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    Extract = true;
 
+                                                }
+                                                archive.Dispose();
+                                            }
                                         }
-                                    }
-                                    else if (DLS[0].ToString().Contains(".001") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().Contains(".01") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().EndsWith(".7z") || DLS[0].ToString().EndsWith(".zip"))
+                             
+                                 
+                                    else if (DLS[0].ToString().Contains(".001") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().Contains(".01") && DLS[0].ToString().Contains("7z") 
+                                    || DLS[0].ToString().EndsWith(".7z") || DLS[0].ToString().EndsWith(".zip") || DLS[0].ToString().EndsWith(".rar"))
                                     {
                                         Extract = true;
                                     }
                                     if (Extract)
                                     {
-                                        DownloadingText.Text = "Extracting archives...";
+                                        this.Invoke(() =>
+                                        {
+                                            this.Text = $"Extracting archives...";
+                                            DownloadingText.Text = $"Extracting archives...";
+                                        });
+
                                         string DLDir = Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString();
-                                        string DL = Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString() + "\\" + DLS[0].ToString();
+                                        string DL = DLDir + "\\" + DLS[0].ToString();
                                         if (!Directory.Exists(DLDir))
                                         {
                                             Directory.CreateDirectory(DLDir);
                                         }
-                                        string FileName = Path.GetFileNameWithoutExtension(DL);
+    
                                         string ArchiveDIR = DLDir;
                                         if (!Directory.Exists(ArchiveDIR))
                                         {
@@ -1211,6 +1231,7 @@ namespace ALL_LEGIT
         
                                 }
                             }
+
                         });
 
 
@@ -1237,8 +1258,6 @@ namespace ALL_LEGIT
             {
                 if (File.Exists(file))
                 {
-                    System.GC.Collect();
-                    System.GC.WaitForPendingFinalizers();
                     File.Delete(file);
                 }
             }
@@ -1331,31 +1350,21 @@ namespace ALL_LEGIT
 
         private void PasteButton_Click(object sender, EventArgs e)
         {
-            if (!isConverting && !isDownloading)
-            {
+  
                 DoAsyncConversion();
-            }
-            else
-            {
-                this.Invoke(() =>
-                {
-                    MessageBox.Show("Please allow current conversions/downloads to finish.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                });
-            }
+
+    
         }
 
 
 
         public void listView1_MouseDoubleClick(object sender, EventArgs e)
         {
-            if (!isConverting && !isDownloading)
-            {
+        
                 DoAsyncConversion();
-            }
-            else
-            {
-                MessageBox.Show("Please allow current conversions/downloads to finish.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-            }
+     
+          
+      
         }
 
         private void StayOnTopCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -1490,14 +1499,9 @@ namespace ALL_LEGIT
 
         private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (!isConverting && !isDownloading)
-            {
+          
                 DoAsyncConversion();
-            }
-            else
-            {
-                MessageBox.Show("Please allow current conversions/downloads to finish.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-            }
+       
         }
 
         private void PWBox_Click(object sender, EventArgs e)
