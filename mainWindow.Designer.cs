@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.listView1 = new System.Windows.Forms.ListView();
+            MainWindow.listView1 = new System.Windows.Forms.ListView();
             this.FileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.URL = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Group = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -65,32 +65,32 @@
             // 
             // listView1
             // 
-            this.listView1.AllowColumnReorder = true;
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            MainWindow.listView1.AllowColumnReorder = true;
+            MainWindow.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
-            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listView1.CheckBoxes = true;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            MainWindow.listView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            MainWindow.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            MainWindow.listView1.CheckBoxes = true;
+            MainWindow.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.FileName,
             this.URL,
             this.Group,
             this.Size});
-            this.listView1.ForeColor = System.Drawing.Color.White;
-            this.listView1.FullRowSelect = true;
-            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listView1.HideSelection = false;
-            this.listView1.ImeMode = System.Windows.Forms.ImeMode.On;
-            this.listView1.Location = new System.Drawing.Point(12, 56);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(797, 550);
-            this.listView1.TabIndex = 1;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.DoubleClick += new System.EventHandler(this.listView1_MouseDoubleClick);
-            this.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseDoubleClick);
-            this.listView1.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
+            MainWindow.listView1.ForeColor = System.Drawing.Color.White;
+            MainWindow.listView1.FullRowSelect = true;
+            MainWindow.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            MainWindow.listView1.HideSelection = false;
+            MainWindow.listView1.ImeMode = System.Windows.Forms.ImeMode.On;
+            MainWindow.listView1.Location = new System.Drawing.Point(12, 56);
+            MainWindow.listView1.Name = "listView1";
+            MainWindow.listView1.Size = new System.Drawing.Size(797, 550);
+            MainWindow.listView1.TabIndex = 1;
+            MainWindow.listView1.UseCompatibleStateImageBehavior = false;
+            MainWindow.listView1.View = System.Windows.Forms.View.Details;
+            MainWindow.listView1.DoubleClick += new System.EventHandler(listView1_MouseDoubleClick);
+            MainWindow.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(listView1_MouseDoubleClick);
+            MainWindow.listView1.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
             // FileName
             // 
@@ -510,7 +510,7 @@
             this.Controls.Add(this.PasteButton);
             this.Controls.Add(this.CopyLinks);
             this.Controls.Add(this.startDownloads);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(MainWindow.listView1);
             this.Controls.Add(this.DownloadingText);
             this.ForeColor = System.Drawing.Color.NavajoWhite;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -534,7 +534,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader FileName;
         private System.Windows.Forms.ColumnHeader URL;
         private System.Windows.Forms.Button startDownloads;
@@ -563,6 +562,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button HotKeyBtn;
         private System.Windows.Forms.Label label1;
+        public static System.Windows.Forms.ListView listView1;
     }
 }
 

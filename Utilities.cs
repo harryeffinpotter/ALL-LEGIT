@@ -14,10 +14,10 @@ using SharpCompress;
 
 namespace ALL_LEGIT
 {
-    class Utilities
+    public class Utilities
     {
 
-        public static void ExtractFile(string sourceArchive, string destination)
+        public void ExtractFile(string sourceArchive, string destination)
         {
             string basename = "";
             bool rar = false;
@@ -71,8 +71,8 @@ namespace ALL_LEGIT
                         {
                             File.Delete(sourceArchive);
                         }
-                        string[] files = Directory.GetFiles(destination); 
-                            MainWindow.listView1.BeginUpdate();
+                        string[] files = Directory.GetFiles(destination);
+                        MainWindow.listView1.BeginUpdate();
                         foreach (string file in files)
                         {
                             if (file.Contains(basename) && !String.IsNullOrEmpty(basename))
