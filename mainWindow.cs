@@ -1,35 +1,18 @@
-﻿using Newtonsoft.Json;
+﻿using Gma.System.MouseKeyHook;
+using Newtonsoft.Json;
 using RestSharp;
+using SharpCompress.Archives.Rar;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.Threading;
-using System.Collections;
-using SevenZip;
-using SharpCompress;
 using Timer = System.Windows.Forms.Timer;
-using Gma.System.MouseKeyHook;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SharpCompress.Archives.Rar;
-using SharpCompress.Archives.SevenZip;
-using SharpCompress.Archives.Zip;
-using SharpCompress.Archives.Tar;
-using SharpCompress.Archives.GZip;
-using Microsoft.AspNetCore.Mvc;
-using HtmlAgilityPack;
-using DocumentFormat.OpenXml.Bibliography;
-using System.Runtime.InteropServices;
 
 
 namespace ALL_LEGIT
@@ -154,7 +137,7 @@ namespace ALL_LEGIT
                         }
                         if (e.KeyData.ToString().Contains("LControlKey, Control") || e.KeyData.ToString().Contains("Control") && !e.KeyData.ToString().Contains(" ") || e.KeyData.ToString().Contains("LControlKey") && !e.KeyData.ToString().Contains(" "))
                         {
-                            return;
+                            return;  
                         }
                         else
                         {
@@ -178,8 +161,7 @@ namespace ALL_LEGIT
                         if (e.KeyData == Properties.Settings.Default.HotKeyKeyData)
                         {
                             DoAsyncConversion();
-                            isConverting = false;
-                            isDownloading = false;
+
 
 
                         }
@@ -364,6 +346,7 @@ namespace ALL_LEGIT
                 if (Properties.Settings.Default.AutoOverwrite)
                 {
                     overwrite = true;
+                    warnedthisbatch = true;
                 }
                 if (!overwrite || !warnedthisbatch)
                 {
@@ -378,22 +361,13 @@ namespace ALL_LEGIT
                     {
                         warnedthisbatch = true;
                         overwrite = false;
+                        isConverting = false;
+                        midRun = false;
                         return;
                     }
                 }
 
-                if (overwrite)
-                {
-                    try
-                    {
-                        File.Delete(DL);
-                    }
-                    catch { }
-                }
-                else
-                {
-                    return;
-                }
+     
             }
 
             WebClient webClient = new WebClient();
@@ -422,7 +396,7 @@ namespace ALL_LEGIT
                 {
                     DownloadingText.Text = $"Download finished...";
                 });
-
+                midRun = false;
                 sw.Stop();
                 if (RemDL.Checked)
                 {
@@ -448,7 +422,7 @@ namespace ALL_LEGIT
                 {
                     dlProg.Value = 0;
                 });
-                midRun = false;
+           
             };
             await webClient.DownloadFileTaskAsync(new Uri(URL),
                 $"{DL}");
@@ -502,12 +476,13 @@ namespace ALL_LEGIT
         }
         public async void DoAsyncConversion()
         {
+            if (isConverting) return;
 
+            isConverting = true;
             cancel = false;
             SplashText.Visible = false;
             string pasted = Clipboard.GetText();
 
-            isConverting = true;
             if (pasted.ToLower().StartsWith("magnet".ToLower()))
             {
                 if (ALTrayIcon.Visible)
@@ -869,7 +844,7 @@ namespace ALL_LEGIT
                     filecryptinprog = true;
 
                     Utilities.DecryptDLC();
-
+                    DownloadingText.Text = "";
 
                 }
             }
@@ -1088,6 +1063,7 @@ namespace ALL_LEGIT
                 EventArgs e = new EventArgs();
                     startDownloads_Click(sender, e);
             }
+            isConverting = false;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, System.Windows.Forms.Keys keyData)
@@ -1158,32 +1134,41 @@ namespace ALL_LEGIT
                                 bool Extract = false;
                                 if (DLS[0].ToString().ToLower().EndsWith(".rar"))
                                 {
-
-                                    using (var archive = RarArchive.Open(Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString() + "\\" + DLS[0].ToString()))
+                                    try
                                     {
-                                        if (archive.IsMultipartVolume())
+
+                                        using (var archive = RarArchive.Open(Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString() + "\\" + DLS[0].ToString()))
                                         {
-                                            if (!archive.IsFirstVolume())
+                                            if (archive.IsMultipartVolume())
                                             {
-                                                Extract = false;
-                                                continue;
+                                                if (!archive.IsFirstVolume())
+                                                {
+                                                    Extract = false;
+                                                    continue;
+                                                }
+                                                else
+                                                {
+                                                    Extract = true;
+                                                }
                                             }
                                             else
                                             {
                                                 Extract = true;
+
                                             }
-                                        }
-                                        else
-                                        {
-                                            Extract = true;
 
                                         }
-                                        archive.Dispose();
+                                    }
+                                    catch {
+
+                                        Extract = true;
+
                                     }
                                 }
+                            
 
 
-                                else if (DLS[0].ToString().Contains(".001") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().Contains(".01") && DLS[0].ToString().Contains("7z")
+                            else if (DLS[0].ToString().Contains(".001") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().Contains(".01") && DLS[0].ToString().Contains("7z")
                                 || DLS[0].ToString().EndsWith(".7z") || DLS[0].ToString().EndsWith(".zip") || DLS[0].ToString().EndsWith(".rar"))
                                 {
                                     Extract = true;
@@ -1192,7 +1177,7 @@ namespace ALL_LEGIT
                                 {
                                     this.Invoke(() =>
                                     {
-                                        this.Text = $"Extracting archives...";
+
                                         DownloadingText.Text = $"Extracting archives...";
                                     });
 
@@ -1223,28 +1208,32 @@ namespace ALL_LEGIT
                 }
                 this.Invoke(() =>
                 {
+                    this.Text = "";
                     dlProg.Value = 0;
                     DownloadingText.Text = "";
                 });
                 overwrite = false;
-
-                if (listView1.Items.Count > 0 && !filecryptinprog)
-                {
-                    MessageBox.Show("Please select items to download first.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                }
 
 
                 isDownloading = false;
                 CancelButton.Visible = false;
             }
 
-
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
             string[] para = dlsPara.Split(';');
             foreach (string file in para)
             {
                 if (File.Exists(file))
                 {
-                    File.Delete(file);
+                    try
+                    {
+                        File.Delete(file);
+                    }
+                    catch
+                    {
+
+                    }
                 }
             }
         }

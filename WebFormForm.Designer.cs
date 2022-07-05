@@ -37,11 +37,11 @@
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(12, 12);
+            this.webBrowser1.Location = new System.Drawing.Point(12, 11);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.ScriptErrorsSuppressed = true;
-            this.webBrowser1.Size = new System.Drawing.Size(984, 700);
+            this.webBrowser1.Size = new System.Drawing.Size(1124, 625);
             this.webBrowser1.TabIndex = 14;
             this.webBrowser1.Url = new System.Uri("", System.UriKind.Relative);
             this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
@@ -64,33 +64,32 @@
             this.closeBrowser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.closeBrowser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.closeBrowser.ForeColor = System.Drawing.Color.White;
-            this.closeBrowser.Location = new System.Drawing.Point(85, 736);
+            this.closeBrowser.Location = new System.Drawing.Point(319, 646);
             this.closeBrowser.Name = "closeBrowser";
-            this.closeBrowser.Size = new System.Drawing.Size(839, 41);
+            this.closeBrowser.Size = new System.Drawing.Size(511, 41);
             this.closeBrowser.TabIndex = 16;
-            this.closeBrowser.Text = "CAPTCHA NOT LOADING/BLANK??? CLICK HERE TO LOAD IN NEW WINDOW (THIS USUALLY FIXES" +
-    " IT)";
+            this.closeBrowser.Text = "CLICK THIS BUTTON IF THE CAPTCHA DOES NOT LOAD PROPERLY ";
             this.closeBrowser.UseVisualStyleBackColor = false;
             this.closeBrowser.Click += new System.EventHandler(this.closeBrowser_Click);
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(83, 717);
+            this.label2.Location = new System.Drawing.Point(36, 690);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(843, 16);
+            this.label2.Size = new System.Drawing.Size(1076, 166);
             this.label2.TabIndex = 15;
-            this.label2.Text = " (Browser should close automatically after solving captcha use this if it is stuc" +
-    "k to solve it manually in your defaul browser)";
+            this.label2.Text = resources.GetString("label2.Text");
+            this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // WebFormForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
-            this.ClientSize = new System.Drawing.Size(1008, 784);
+            this.ClientSize = new System.Drawing.Size(1148, 795);
             this.Controls.Add(this.closeBrowser);
             this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.label2);

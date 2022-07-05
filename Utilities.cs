@@ -4,10 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SevenZip;
 using SharpCompress;
 
 namespace ALL_LEGIT
@@ -15,89 +17,111 @@ namespace ALL_LEGIT
     class Utilities
     {
 
-
-    
-public static void ExtractFile(string sourceArchive, string destination)
+        public static void ExtractFile(string sourceArchive, string destination)
         {
-            try
+            string basename = "";
+            bool rar = false;
+            if (sourceArchive.EndsWith(".rar"))
             {
-                if (!File.Exists(Environment.CurrentDirectory + "\\7z.exe") || !File.Exists(Environment.CurrentDirectory + "\\7z.dll"))
-                {
-                    WebClient client = new WebClient();
-                    client.DownloadFile("https://github.com/harryeffinpotter/-Loader/raw/main/7z.exe", "7z.exe");
-                    client.DownloadFile("https://github.com/harryeffinpotter/-Loader/raw/main/7z.dll", "7z.dll");
-                }
-                ProcessStartInfo pro = new ProcessStartInfo();
-                pro.WindowStyle = ProcessWindowStyle.Hidden;
-                pro.FileName = $"{Environment.CurrentDirectory}\\7z.exe";
-                destination = Path.GetDirectoryName(sourceArchive);
-                pro.WorkingDirectory = destination;
-                string parent = System.IO.Directory.GetParent(destination).FullName;
-                if (parent.Equals(Properties.Settings.Default.DownloadDir))
-                {
-                    pro.Arguments = string.Format("x \"{0}\" -y -o\"{1}\"", sourceArchive, destination);
-                }
-                else
-                {
-                    pro.Arguments = string.Format("x \"{0}\" -y -o\".\\..\\\"", sourceArchive);
-                }
-
-                Process x = Process.Start(pro);
-                if (!x.HasExited)
-                    x.WaitForExit();
-      
+                basename = Path.GetFileNameWithoutExtension(sourceArchive);
+                basename = Path.GetFileNameWithoutExtension(basename);
+            } 
+            else
+            {
+                basename = Path.GetFileNameWithoutExtension(sourceArchive);
             }
-            catch (Exception ex)
+         
+
+            ProcessStartInfo pro = new ProcessStartInfo();
+            pro.WindowStyle = ProcessWindowStyle.Hidden;
+            pro.UseShellExecute = false;
+            pro.CreateNoWindow = true;
+            pro.RedirectStandardError = true;
+            pro.RedirectStandardOutput = true;
+            pro.FileName = $"{Environment.CurrentDirectory}\\7z.exe";
+
+            if (!String.IsNullOrEmpty(Properties.Settings.Default.ZipPWS))
             {
-                if (ex.ToString().Contains("assword"))
+                string[] PWArray = MainWindow.PWLIST.Split(';');
+                int PWArrCount = PWArray.Length;
+                int fails = 0;
+                foreach (string PW in PWArray)
                 {
-                    if (!String.IsNullOrEmpty(Properties.Settings.Default.ZipPWS))
+                    bool success = false;
+                    try
                     {
-                        string[] PWArray = MainWindow.PWLIST.Split(';');
-                        int PWArrCount = PWArray.Length;
-                        int fails = 0;
-                        foreach (string PW in PWArray)
+
+                        pro.Arguments = string.Format("x \"{0}\" -y -o\"{1}\"", sourceArchive, destination) + $" -p\"{PW}\"";
+                        Process x2 = Process.Start(pro);
+                        if (!x2.HasExited)
+                            x2.WaitForExit();
+                        success = true;
+                    }
+                    catch (Exception ex2)
+                    {
+                        if (ex2.Message.Contains("Data Error in encrypted file. Wrong password?"))
                         {
-                            try
+                            success = false;
+                            fails++;
+                        }
+                    }
+                    if (success && Properties.Settings.Default.DelZips)
+                    {
+                        if (File.Exists(sourceArchive))
+                        {
+                            File.Delete(sourceArchive);
+                        }
+                        string[] files = Directory.GetFiles(destination); 
+                            MainWindow.listView1.BeginUpdate();
+                        foreach (string file in files)
+                        {
+                            if (file.Contains(basename) && !String.IsNullOrEmpty(basename))
                             {
-                                ProcessStartInfo pro = new ProcessStartInfo();
-                                pro.WindowStyle = ProcessWindowStyle.Hidden;
-                                pro.FileName = $"{Environment.CurrentDirectory}\\7z.exe";
-                                pro.Arguments = string.Format("x \"{0}\" -y -o\"{1}\"", sourceArchive, destination) + $"-p\"{PW}\"";
-                                Process x = Process.Start(pro);
-                                if (!x.HasExited)
-                                    x.WaitForExit();
-                            }
-                            catch (Exception ex2)
-                            {
-                               if (ex2.Message.Contains("assword"))
+                                if (File.Exists(file))
                                 {
-                                    fails++;
+                                    File.Delete(file);
+                                }
+                            }
+                            foreach (ListViewItem item in MainWindow.listView1.Items)
+                            {
+                                if (file.Contains(item.SubItems[0].Text))
+                                { 
+                                    MainWindow.listView1.Items.Remove(item);
+
                                 }
                             }
                         }
-                        if (fails == PWArrCount)
-                        {
-                            MessageBox.Show("Archive is passworded and supplied passwords(if any) did not work.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Archive is password protected, add correct password to PW box to fix this.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-
+                        MainWindow.listView1.EndUpdate();
                     }
                 }
+                if (fails == PWArrCount)
+                {
+                    MessageBox.Show("Archive is passworded and supplied passwords(if any) did not work.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Archive is password protected, add correct password to PW box to fix this.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+
             }
         }
 
+
+
+
+
+
+
+
+
         public static void DecryptDLC()
-        {     
+        {
 
             string[] files = Directory.GetFiles(Environment.CurrentDirectory, "*.dlc", SearchOption.AllDirectories);
-            string[] files2 = Directory.GetFiles(MainWindow.GetDownloadsPath(), "*.dlc",SearchOption.AllDirectories);
+            string[] files2 = Directory.GetFiles(MainWindow.GetDownloadsPath(), "*.dlc", SearchOption.AllDirectories);
             string[] joinedResult = files.Concatenate(files2);
             string currentDLCfile = "";
-      
+
             foreach (string file in joinedResult)
             {
                 string parentpath = System.IO.Directory.GetParent(file).FullName;
@@ -119,13 +143,13 @@ public static void ExtractFile(string sourceArchive, string destination)
                 pro.FileName = $"cmd.exe";
                 pro.WorkingDirectory = $"{Environment.CurrentDirectory}\\_bin";
                 pro.Arguments = $"/c decrypt-dlc.cmd \"{currentDLCfile}\" -o \"{Environment.CurrentDirectory}\\_bin\\{DLCNumber}.txt\"";
-               Process  x = Process.Start(pro);
+                Process x = Process.Start(pro);
                 x.WaitForExit();
                 try
                 {
                     File.Delete(currentDLCfile);
                 }
-                 catch
+                catch
                 {
 
                 }
