@@ -1416,6 +1416,7 @@ public async void DoAsyncConversion()
 
         private void PWBox_Enter(object sender, EventArgs e)
         {
+ 
             if (PWBox.Text == "your;common;zip;passwords")
             {
                 PWBox.Text = "";
@@ -1428,6 +1429,10 @@ public async void DoAsyncConversion()
 
         private void PWBox_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if (e.KeyChar == (char)Keys.Enter || e.KeyChar == (char)Keys.Escape)
+            {
+                settingsP.Focus();
+            }
             if (e.KeyChar == (char)System.Windows.Forms.Keys.Enter && PWBox.Text.Length > 0 && !PWBox.Text.Equals("your;commonly;used;zip;passwords"))
             {
                 if (PWBox.Text.Length > 0)
@@ -1573,6 +1578,11 @@ public async void DoAsyncConversion()
                 if (e.CloseReason == CloseReason.UserClosing)
                 {
                     ALTrayIcon.Visible = true;
+                    ALTrayIcon.BalloonTipTitle = "Balls?";
+                    ALTrayIcon.BalloonTipText = "uhhhhh penis?";
+                    ALTrayIcon.BalloonTipIcon = ToolTipIcon.Info;
+  
+                    ALTrayIcon.ShowBalloonTip(30000);
                     this.Hide();
                     e.Cancel = true;
                 }
@@ -1580,11 +1590,14 @@ public async void DoAsyncConversion()
 
         }
 
+        void Form1_Click(object sender, EventArgs e)
+        {
 
+        }
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
-
+         
         }
 
         private void ALTrayIcon_MouseDoubleClick_1(object sender, MouseEventArgs e)
@@ -1622,8 +1635,10 @@ public async void DoAsyncConversion()
         public Stopwatch stopwatch = Stopwatch.StartNew();
         public async void settingsP_MouseLeave(object sender, EventArgs e)
         {
-      
+            if (PWBox.Focused) return;
+            if (stopwatch.IsRunning) return;
             stopwatch.Restart();
+            while (stopwatch.ElapsedMilliseconds < 500)
             {
                 await Task.Delay(100);
             }

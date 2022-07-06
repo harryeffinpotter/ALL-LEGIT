@@ -284,7 +284,8 @@
             this.ALTrayIcon.BalloonTipText = "All Legit moved to tray.";
             this.ALTrayIcon.BalloonTipTitle = "All Legit";
             this.ALTrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("ALTrayIcon.Icon")));
-            this.ALTrayIcon.Text = "All Legit";
+            this.ALTrayIcon.Tag = "FaDASDASD";
+            this.ALTrayIcon.Text = "All LegitASDASD";
             this.ALTrayIcon.Visible = true;
             this.ALTrayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ALTrayIcon_MouseClick);
             this.ALTrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ALTrayIcon_MouseDoubleClick_1);
