@@ -109,7 +109,7 @@ namespace ALL_LEGIT
             // The Text property sets the text that will be displayed,
             // in a tooltip, when the mouse hovers over the systray icon.
             ALTrayIcon.Text = "All Legit";
-            ALTrayIcon.Visible = false;
+            ALTrayIcon.Visible = true;
 
             // Handle the DoubleClick event to activate the form.
 
@@ -510,12 +510,12 @@ public async void DoAsyncConversion()
 
             if (pasted.ToLower().StartsWith("magnet".ToLower()))
             {
-                if (ALTrayIcon.Visible)
+                if (!Program.form.Focused)
                 {
 
                     this.Invoke(() =>
                     {
-                        ALTrayIcon.ShowBalloonTip(10000, "Adding FileCrypt links", "Adding FileCrypt links to All Legit!", ToolTipIcon.None);
+                        ALTrayIcon.ShowBalloonTip(5000, "Adding FileCrypt links...", "All Legit", ToolTipIcon.None);
                     });
                 }
                 Thread t1 = new Thread(() =>
@@ -621,8 +621,13 @@ public async void DoAsyncConversion()
                                         {
                                             if (!alertedonce)
                                             {
-                                                MessageBox.Show($"{magnetName} not cached, now converting!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                                                alertedonce = true;
+                                                if (Program.form.Focused)
+                                                {
+                                                    this.Invoke(() =>
+                                                    {
+                                                        ALTrayIcon.ShowBalloonTip(5000, $"{magnetName} not cached, now converting!", "Torrent converting...", ToolTipIcon.None);
+                                                    });
+                                                }
                                             }
                                             MagnetStatus = key.status.ToString();
                                             if (MagnetStatus.Equals("In Queue"))
@@ -704,11 +709,18 @@ public async void DoAsyncConversion()
                                     }
                                     if (ready)
                                     {
-                                        this.Invoke(() =>
+                                        if (Program.form.Focused)
                                         {
-                                            DownloadingText.Text = $"Adding links...";
-                                        });
-
+                                            this.Invoke(() =>
+                                            {
+                                                ALTrayIcon.ShowBalloonTip(5000, $"Magnet conversion finished!", "Conversion finished.", ToolTipIcon.None);
+                                            });
+                                        }
+                                        else
+                                            this.Invoke(() =>
+                                            {
+                                                DownloadingText.Text = "Magnet conversion finished!";
+                                            });
                                         foreach (var key2 in key.links)
                                         {
                                             bool skip = false;
@@ -784,15 +796,38 @@ public async void DoAsyncConversion()
                     {
                         if (a > 0)
                         {
+                            if (Program.form.Focused)
+                            {
+                                this.Invoke(() =>
+                                {
+                                    ALTrayIcon.ShowBalloonTip(5000, $"Magnet(s) not valid.", "Invalid magnet.", ToolTipIcon.Error) ;
+                                });
+                            }
+                            else
                             MessageBox.Show($"{a1}\nMagnet(s) not valid.", "Invalid magnet.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
 
                         }
                         if (b > 0)
                         {
+                            if (Program.form.Focused)
+                            {
+                                this.Invoke(() =>
+                                {
+                                    ALTrayIcon.ShowBalloonTip(5000, $"Already have maximum allowed active magnets (30)", "All Legit", ToolTipIcon.Error);
+                                });
+                            }
+                            else
                             MessageBox.Show($"{b1}\nAlready have maximum allowed active magnets (30).", "Cannot add over 30 torrents.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         }
                         if (c > 0)
                         {
+                            if (Program.form.Focused)
+                            {
+                                this.Invoke(() =>
+                                {
+                                    ALTrayIcon.ShowBalloonTip(5000, $"Server are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN", "Invalid magnet.", ToolTipIcon.Error);
+                                });
+                            }
                             MessageBox.Show($"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "Server error.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
 
                         }
@@ -820,16 +855,19 @@ public async void DoAsyncConversion()
             if (pasted.ToLower().StartsWith("https://filecrypt.".ToLower()) || pasted.ToLower().StartsWith("https://www.filecrypt.".ToLower()))
             {
 
-                DownloadingText.Text = "Decrypting Filecrypt.cc DLC file...";
-
 
                 if (ALTrayIcon.Visible)
                 {
                     this.Invoke(() =>
                     {
-                        ALTrayIcon.ShowBalloonTip(10000, "Adding FileCrypt links", "Adding FileCrypt links to All Legit!", ToolTipIcon.None);
+                        ALTrayIcon.ShowBalloonTip(10000, "Adding FileCrypt links.", "All Debrid", ToolTipIcon.None);
                     });
                 }
+                else
+                    this.Invoke(() =>
+                    {
+                        DownloadingText.Text = "Decrypting Filecrypt.cc DLC file...";
+                    });
 
                 CurrentDLC = randomNumber;
                 pasted = pasted.Trim();
@@ -878,10 +916,14 @@ public async void DoAsyncConversion()
                 {
                     this.Invoke(() =>
                     {
-                        ALTrayIcon.ShowBalloonTip(10000, "Adding links", "Adding links to All Legit!", ToolTipIcon.None);
+                        ALTrayIcon.ShowBalloonTip(10000, "Attempting to add links.", "All Legit", ToolTipIcon.None);
                     });
-
                 }
+                else
+                    this.Invoke(() =>
+                    {
+                        DownloadingText.Text = "Attempting to add links.";
+                    });
                 try
                 {
                     pasted = pasted.Trim();
@@ -1007,19 +1049,57 @@ public async void DoAsyncConversion()
                         {
                             if (linkdown > 0)
                             {
-                                MessageBox.Show($"{linkdowns}\nLink(s) have been taken down from the filehoster's website.\n\nNot adding!", "Link has been taken down.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                if (ALTrayIcon.Visible)
+                                {
+                                    this.Invoke(() =>
+                                    {
+                                        ALTrayIcon.ShowBalloonTip(5000, $"Link(s) have been taken down from the filehoster's website.\n\nNot adding!", "All Legit", ToolTipIcon.None);
+                                    });
+
+                                }
+                                else
+                                    MessageBox.Show($"{linkdowns}\nLink(s) have been taken down from the filehoster's website.\n\nNot adding!", "Link has been taken down.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             }
                             if (linkmissing > 0)
                             {
-                                MessageBox.Show($"{linkmissings}\nNo magnets or links found in what you pasted.\n\nNot adding!", "No links found!", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                
+                                    if (ALTrayIcon.Visible)
+                                    {
+                                        this.Invoke(() =>
+                                        {
+                                            ALTrayIcon.ShowBalloonTip(5000, $"No magnets or links found in what you pasted.\n\nNot adding!", "All Legit", ToolTipIcon.None);
+                                        });
+
+                                    }
+                                    else
+                                        MessageBox.Show($"{linkmissings}\nNo magnets or links found in what you pasted.\n\nNot adding!", "No links found!", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             }
                             if (linkpass > 0)
                             {
-                                MessageBox.Show($"{linkpasss}\nLink(s) are password protected on the filehost's website.\n\nNot adding!", "Password protected!", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                               
+                                    if (ALTrayIcon.Visible)
+                                    {
+                                        this.Invoke(() =>
+                                        {
+                                            ALTrayIcon.ShowBalloonTip(5000, $"Link(s) are password protected on the filehost's website.\n\nNot adding!", "All Legit", ToolTipIcon.None);
+                                        });
+
+                                    }
+                                    else
+                                        MessageBox.Show($"{linkpasss}\nLink(s) are password protected on the filehost's website.\n\nNot adding!", "Password protected!", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             }
                             if (linknotsup > 0)
                             {
-                                MessageBox.Show($"{linknotsups}\nLink(s) are from an unsupported host.\n\nPlease check this link for a list of supported filehosters:\nhttps://alldebrid.com/hosts/", "Unsupported host!", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                if (ALTrayIcon.Visible)
+                                {
+                                    this.Invoke(() =>
+                                    {
+                                        ALTrayIcon.ShowBalloonTip(5000, $"Link(s) are from an unsupported host.\n\nPlease check this link for a list of supported filehosters:\nhttps://alldebrid.com/hosts/", "All Legit", ToolTipIcon.None);
+                                    });
+
+                                }
+                                else
+                                    MessageBox.Show($"{linknotsups}\nLink(s) are from an unsupported host.\n\nPlease check this link for a list of supported filehosters:\nhttps://alldebrid.com/hosts/", "Unsupported host!", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             }
                         }
 
@@ -1103,7 +1183,7 @@ public async void DoAsyncConversion()
         public static string dlsPara = "";
         public static bool midRun = false;
         public static bool isDownloading = false;
-        private async void startDownloads_Click(object sender, EventArgs e)
+       public async void startDownloads_Click(object sender, EventArgs e)
         {
 
             string DLList = "";
