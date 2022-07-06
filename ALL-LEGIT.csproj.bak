@@ -417,430 +417,148 @@
     <EmbeddedResource Include="WebFormForm.resx">
       <DependentUpon>WebFormForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="_bin\CHANGELOG.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\corepack">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\corepack.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\decrypt-dlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\decrypt-dlc.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\decrypt-dlc.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\install_tools.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\nodevars.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_etw_provider.man">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\%40types\node\LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\%40types\node\package.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\%40types\node\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\.package-lock.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\LICENSE.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\package.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\corepack">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\corepack.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\corepack.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\corepack">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\corepack.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\corepack.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\npm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\npm.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\npm.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\npx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\npx.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\npx.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\pnpm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\pnpm.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\pnpm.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\pnpx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\pnpx.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\pnpx.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\vcc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\vcc.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\vcc.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\yarn">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\yarn.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\yarn.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\yarnpkg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\yarnpkg.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\nodewin\yarnpkg.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\npm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\npm.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\npm.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\npx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\npx.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\npx.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\pnpm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\pnpm.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\pnpm.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\pnpx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\pnpx.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\pnpx.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\yarn">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\yarn.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\yarn.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\yarnpkg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\yarnpkg.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\corepack\shims\yarnpkg.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="_bin\CHANGELOG.md" />
+    <None Include="_bin\corepack" />
+    <None Include="_bin\corepack.cmd" />
+    <None Include="_bin\decrypt-dlc" />
+    <None Include="_bin\decrypt-dlc.cmd" />
+    <None Include="_bin\decrypt-dlc.ps1" />
+    <None Include="_bin\install_tools.bat" />
+    <None Include="_bin\LICENSE" />
+    <None Include="_bin\nodevars.bat" />
+    <None Include="_bin\node_etw_provider.man" />
+    <None Include="_bin\node_modules\%40types\node\LICENSE" />
+    <None Include="_bin\node_modules\%40types\node\package.json" />
+    <None Include="_bin\node_modules\%40types\node\README.md" />
+    <None Include="_bin\node_modules\.package-lock.json" />
+    <None Include="_bin\node_modules\corepack\LICENSE.md" />
+    <None Include="_bin\node_modules\corepack\package.json" />
+    <None Include="_bin\node_modules\corepack\README.md" />
+    <None Include="_bin\node_modules\corepack\shims\corepack" />
+    <None Include="_bin\node_modules\corepack\shims\corepack.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\corepack.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\corepack" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\corepack.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\corepack.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\npm" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\npm.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\npm.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\npx" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\npx.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\npx.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\pnpm" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\pnpm.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\pnpm.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\pnpx" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\pnpx.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\pnpx.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\vcc" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\vcc.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\vcc.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\yarn" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\yarn.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\yarn.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\yarnpkg" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\yarnpkg.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\nodewin\yarnpkg.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\npm" />
+    <None Include="_bin\node_modules\corepack\shims\npm.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\npm.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\npx" />
+    <None Include="_bin\node_modules\corepack\shims\npx.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\npx.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\pnpm" />
+    <None Include="_bin\node_modules\corepack\shims\pnpm.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\pnpm.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\pnpx" />
+    <None Include="_bin\node_modules\corepack\shims\pnpx.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\pnpx.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\yarn" />
+    <None Include="_bin\node_modules\corepack\shims\yarn.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\yarn.ps1" />
+    <None Include="_bin\node_modules\corepack\shims\yarnpkg" />
+    <None Include="_bin\node_modules\corepack\shims\yarnpkg.cmd" />
+    <None Include="_bin\node_modules\corepack\shims\yarnpkg.ps1" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\.eslintrc" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\bin\decrypt-dlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-conv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-conv.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-conv.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-sign">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-sign.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-sign.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-verify">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-verify.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-verify.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\uuid">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\uuid.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\uuid.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\dist\ajv.min.js.map">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\allOf.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\anyOf.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\comment.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\const.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\contains.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\custom.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\dependencies.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\enum.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\format.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\if.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\items.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\multipleOf.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\not.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\oneOf.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\pattern.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\properties.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\propertyNames.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\ref.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\required.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\uniqueItems.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\validate.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\_limit.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\_limitItems.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\_limitLength.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\_limitProperties.jst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\refs\data.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\refs\json-schema-draft-04.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\refs\json-schema-draft-06.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\refs\json-schema-draft-07.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\refs\json-schema-secure.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\package.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\.eslintrc.yml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\info">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\prepare-tests">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\publish-built-version">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\travis-gh-pages">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ansi-styles\license">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ansi-styles\package.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ansi-styles\readme.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\Jenkinsfile">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\package.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\assert-plus\AUTHORS">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\assert-plus\CHANGES.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\assert-plus\package.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\assert-plus\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\package.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws-sign2\LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws-sign2\package.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws-sign2\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\.github\FUNDING.yml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\.travis.yml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\package.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\bcrypt-pbkdf\CONTRIBUTING.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\bcrypt-pbkdf\LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\bcrypt-pbkdf\package.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\bcrypt-pbkdf\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\bin\decrypt-dlc" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-conv" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-conv.cmd" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-conv.ps1" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-sign" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-sign.cmd" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-sign.ps1" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-verify" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-verify.cmd" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\sshpk-verify.ps1" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\uuid" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\uuid.cmd" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\.bin\uuid.ps1" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\dist\ajv.min.js.map" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\README.md" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\allOf.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\anyOf.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\comment.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\const.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\contains.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\custom.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\dependencies.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\enum.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\format.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\if.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\items.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\multipleOf.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\not.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\oneOf.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\pattern.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\properties.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\propertyNames.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\ref.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\required.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\uniqueItems.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\validate.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\_limit.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\_limitItems.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\_limitLength.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\_limitProperties.jst" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\refs\data.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\refs\json-schema-draft-04.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\refs\json-schema-draft-06.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\refs\json-schema-draft-07.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\refs\json-schema-secure.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\LICENSE" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\package.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\README.md" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\.eslintrc.yml" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\info" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\prepare-tests" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\publish-built-version" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\travis-gh-pages" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ansi-styles\license" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ansi-styles\package.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ansi-styles\readme.md" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\Jenkinsfile" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\LICENSE" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\package.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\README.md" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\assert-plus\AUTHORS" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\assert-plus\CHANGES.md" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\assert-plus\package.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\assert-plus\README.md" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\LICENSE" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\package.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\README.md" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws-sign2\LICENSE" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws-sign2\package.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws-sign2\README.md" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\.github\FUNDING.yml" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\.travis.yml" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\LICENSE" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\package.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\README.md" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\bcrypt-pbkdf\CONTRIBUTING.md" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\bcrypt-pbkdf\LICENSE" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\bcrypt-pbkdf\package.json" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\bcrypt-pbkdf\README.md" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\caseless\LICENSE" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\caseless\package.json" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\caseless\README.md" />
@@ -876,6 +594,8 @@
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\.eslintrc" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\package.json" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\README.md" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\test\test.dlc" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\test\test_corrupted.dlc" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\delayed-stream\.npmignore" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\delayed-stream\License" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\delayed-stream\Makefile" />
@@ -1199,9 +919,9 @@
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\verror\README.md" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\package.json" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\README.md" />
-    <None Include="_bin\node_modules\npm\.npmrc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\test\test.dlc" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\test\test_corrupted.dlc" />
+    <None Include="_bin\node_modules\npm\.npmrc" />
     <None Include="_bin\node_modules\npm\bin\node-gyp-bin\node-gyp" />
     <None Include="_bin\node_modules\npm\bin\node-gyp-bin\node-gyp.cmd" />
     <None Include="_bin\node_modules\npm\bin\npm" />
@@ -1289,9 +1009,7 @@
     <None Include="_bin\node_modules\npm\docs\content\using-npm\scripts.md" />
     <None Include="_bin\node_modules\npm\docs\content\using-npm\workspaces.md" />
     <None Include="_bin\node_modules\npm\lib\utils\completion.sh" />
-    <None Include="_bin\node_modules\npm\LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="_bin\node_modules\npm\LICENSE" />
     <None Include="_bin\node_modules\npm\man\man1\npm-access.1" />
     <None Include="_bin\node_modules\npm\man\man1\npm-adduser.1" />
     <None Include="_bin\node_modules\npm\man\man1\npm-audit.1" />
@@ -1552,11 +1270,7 @@
     <None Include="_bin\node_modules\npm\node_modules\hosted-git-info\package.json" />
     <None Include="_bin\node_modules\npm\node_modules\http-cache-semantics\LICENSE" />
     <None Include="_bin\node_modules\npm\node_modules\http-cache-semantics\package.json" />
-    <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\agent.d.ts" />
-    <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\agent.js" />
     <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\agent.js.map" />
-    <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\index.d.ts" />
-    <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\index.js" />
     <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\index.js.map" />
     <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\package.json" />
     <None Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\agent.js.map" />
@@ -1935,33 +1649,15 @@
     <None Include="_bin\node_modules\npm\node_modules\write-file-atomic\package.json" />
     <None Include="_bin\node_modules\npm\node_modules\yallist\LICENSE" />
     <None Include="_bin\node_modules\npm\node_modules\yallist\package.json" />
-    <None Include="_bin\node_modules\npm\package.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\node_modules\npm\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\npm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\npm.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\npx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\npx.cmd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\package-lock.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\package.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_bin\README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="_bin\node_modules\npm\package.json" />
+    <None Include="_bin\node_modules\npm\README.md" />
+    <None Include="_bin\npm" />
+    <None Include="_bin\npm.cmd" />
+    <None Include="_bin\npx" />
+    <None Include="_bin\npx.cmd" />
+    <None Include="_bin\package-lock.json" />
+    <None Include="_bin\package.json" />
+    <None Include="_bin\README.md" />
     <Resource Include="App.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\Gma.System.MouseKeyHook.Combination.datasource" />
@@ -2037,285 +1733,119 @@
     <EmbeddedResource Include="System.Web.Http.WebHost.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="x64\7z.dll">
+    <EmbeddedResource Include="7z-86\7z.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="7z-64\7z.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="7z-64\7z.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="7z-86\7z.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="x86\7z.dll">
+    <EmbeddedResource Include="7z.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
+    <EmbeddedResource Include="7z.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="AL.ico" />
+    <EmbeddedResource Include="FodyWeavers.xml" />
     <Content Include="_bin\AL.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="_bin\mom.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\corepack\dist\corepack.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\corepack\dist\npm.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\corepack\dist\npx.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\corepack\dist\pnpm.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\corepack\dist\pnpx.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\corepack\dist\vcc.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\corepack\dist\yarn.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\corepack\dist\yarnpkg.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\.tonic_example.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\dist\ajv.bundle.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\dist\ajv.min.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\ajv.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\cache.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\async.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\equal.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\error_classes.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\formats.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\index.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\resolve.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\rules.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\schema_obj.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\ucs2length.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\util.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\data.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\definition_schema.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\allOf.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\anyOf.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\comment.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\const.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\contains.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\custom.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\dependencies.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\enum.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\format.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\if.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\index.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\items.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\multipleOf.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\not.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\oneOf.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\pattern.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\properties.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\propertyNames.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\ref.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\required.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\uniqueItems.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\validate.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\_limit.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\_limitItems.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\_limitLength.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\_limitProperties.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\coerce.def">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\defaults.def">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\definitions.def">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\errors.def">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\missing.def">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\keyword.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\bundle.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\compile-dots.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ansi-styles\index.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\lib\ber\errors.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\lib\ber\index.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\lib\ber\reader.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\lib\ber\types.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\lib\ber\writer.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\lib\index.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\assert-plus\assert.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\bench.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\index.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\abort.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\async.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\defer.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\iterate.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\readable_asynckit.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\readable_parallel.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\readable_serial.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\readable_serial_ordered.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\state.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\streamify.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\terminator.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\parallel.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\serial.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\serialOrdered.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\stream.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws-sign2\index.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\aws4.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\lru.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\bcrypt-pbkdf\index.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="_bin\mom.txt" />
+    <Content Include="_bin\node.exe" />
+    <Content Include="_bin\node_modules\corepack\dist\corepack.js" />
+    <Content Include="_bin\node_modules\corepack\dist\npm.js" />
+    <Content Include="_bin\node_modules\corepack\dist\npx.js" />
+    <Content Include="_bin\node_modules\corepack\dist\pnpm.js" />
+    <Content Include="_bin\node_modules\corepack\dist\pnpx.js" />
+    <Content Include="_bin\node_modules\corepack\dist\vcc.js" />
+    <Content Include="_bin\node_modules\corepack\dist\yarn.js" />
+    <Content Include="_bin\node_modules\corepack\dist\yarnpkg.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\.tonic_example.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\dist\ajv.bundle.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\dist\ajv.min.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\ajv.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\cache.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\async.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\equal.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\error_classes.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\formats.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\index.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\resolve.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\rules.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\schema_obj.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\ucs2length.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\compile\util.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\data.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\definition_schema.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\allOf.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\anyOf.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\comment.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\const.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\contains.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\custom.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\dependencies.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\enum.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\format.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\if.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\index.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\items.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\multipleOf.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\not.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\oneOf.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\pattern.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\properties.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\propertyNames.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\ref.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\required.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\uniqueItems.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\validate.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\_limit.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\_limitItems.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\_limitLength.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dotjs\_limitProperties.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\coerce.def" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\defaults.def" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\definitions.def" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\errors.def" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\dot\missing.def" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\keyword.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\bundle.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\scripts\compile-dots.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ansi-styles\index.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\lib\ber\errors.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\lib\ber\index.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\lib\ber\reader.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\lib\ber\types.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\lib\ber\writer.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asn1\lib\index.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\assert-plus\assert.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\bench.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\index.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\abort.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\async.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\defer.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\iterate.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\readable_asynckit.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\readable_parallel.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\readable_serial.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\readable_serial_ordered.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\state.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\streamify.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\lib\terminator.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\parallel.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\serial.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\serialOrdered.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\asynckit\stream.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws-sign2\index.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\aws4.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\aws4\lru.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\bcrypt-pbkdf\index.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\caseless\index.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\caseless\test.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\chalk\index.js" />
@@ -3691,9 +3221,7 @@
     <Content Include="_bin\node_modules\npm\docs\output\using-npm\scope.html" />
     <Content Include="_bin\node_modules\npm\docs\output\using-npm\scripts.html" />
     <Content Include="_bin\node_modules\npm\docs\output\using-npm\workspaces.html" />
-    <Content Include="_bin\node_modules\npm\index.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="_bin\node_modules\npm\index.js" />
     <Content Include="_bin\node_modules\npm\lib\arborist-cmd.js" />
     <Content Include="_bin\node_modules\npm\lib\auth\legacy.js" />
     <Content Include="_bin\node_modules\npm\lib\auth\oauth.js" />
@@ -4130,6 +3658,8 @@
     <Content Include="_bin\node_modules\npm\node_modules\hosted-git-info\lib\git-host.js" />
     <Content Include="_bin\node_modules\npm\node_modules\hosted-git-info\lib\index.js" />
     <Content Include="_bin\node_modules\npm\node_modules\http-cache-semantics\index.js" />
+    <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\agent.js" />
+    <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\index.js" />
     <Content Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\agent.js" />
     <Content Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\index.js" />
     <Content Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\parse-proxy-response.js" />
@@ -4586,26 +4116,6 @@
     <Content Include="_bin\node_modules\npm\node_modules\write-file-atomic\lib\index.js" />
     <Content Include="_bin\node_modules\npm\node_modules\yallist\iterator.js" />
     <Content Include="_bin\node_modules\npm\node_modules\yallist\yallist.js" />
-    <EmbeddedResource Include="7z-86\7z.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="7z-64\7z.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="7z-64\7z.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <Content Include="7z-86\7z.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <EmbeddedResource Include="7z.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="7z.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <Content Include="AL.ico" />
-    <EmbeddedResource Include="FodyWeavers.xml" />
     <EmbeddedResource Include="Gma.System.MouseKeyHook.dll" />
     <Content Include="HTMLPage1.html" />
     <EmbeddedResource Include="SevenZipSharp.dll" />
@@ -4613,165 +4123,59 @@
     <None Include="Fody.dll" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\assert.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\assert\strict.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\async_hooks.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\buffer.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\child_process.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\cluster.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\console.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\constants.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\crypto.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\dgram.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\diagnostics_channel.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\dns.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\dns\promises.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\domain.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\events.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\fs.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\fs\promises.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\globals.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\globals.global.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\http.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\http2.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\https.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\index.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\inspector.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\module.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\net.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\os.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\path.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\perf_hooks.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\process.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\punycode.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\querystring.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\readline.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\repl.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\stream.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\stream\consumers.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\stream\promises.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\stream\web.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\string_decoder.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\test.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\timers.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\timers\promises.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\tls.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\trace_events.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\tty.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\url.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\util.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\v8.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\vm.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\wasi.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\worker_threads.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\%40types\node\zlib.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\ajv.d.ts">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </TypeScriptCompile>
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\assert.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\assert\strict.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\async_hooks.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\buffer.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\child_process.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\cluster.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\console.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\constants.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\crypto.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\dgram.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\diagnostics_channel.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\dns.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\dns\promises.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\domain.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\events.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\fs.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\fs\promises.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\globals.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\globals.global.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\http.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\http2.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\https.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\index.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\inspector.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\module.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\net.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\os.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\path.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\perf_hooks.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\process.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\punycode.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\querystring.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\readline.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\repl.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\stream.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\stream\consumers.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\stream\promises.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\stream\web.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\string_decoder.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\test.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\timers.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\timers\promises.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\tls.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\trace_events.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\tty.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\url.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\util.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\v8.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\vm.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\wasi.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\worker_threads.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\%40types\node\zlib.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ajv\lib\ajv.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\chalk\types\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\commander\typings\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\fast-deep-equal\es6\index.d.ts" />
@@ -4819,6 +4223,8 @@
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\env-paths\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\fastest-levenshtein\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\has-flag\index.d.ts" />
+    <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\agent.d.ts" />
+    <None Include="_bin\node_modules\npm\node_modules\http-proxy-agent\dist\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\agent.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\https-proxy-agent\dist\parse-proxy-response.d.ts" />
@@ -4844,6 +4250,9 @@
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\socks\typings\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\string-width\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\strip-ansi\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="packages\AWSSDK.CloudWatchEvents.3.7.4.120\analyzers\dotnet\cs\AWSSDK.CloudWatchEvents.CodeAnalysis.dll" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="_bin\node_modules\.bin\" />
