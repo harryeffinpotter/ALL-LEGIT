@@ -14,24 +14,21 @@ using SharpCompress;
 
 namespace ALL_LEGIT
 {
-    public class Utilities
+    class Utilities
     {
-
-        public void ExtractFile(string sourceArchive, string destination)
+         public static void ExtractFile(string sourceArchive, string destination)
         {
+            string[] files = Directory.GetFiles(destination);
             string basename = "";
-            bool rar = false;
             if (sourceArchive.EndsWith(".rar"))
             {
                 basename = Path.GetFileNameWithoutExtension(sourceArchive);
                 basename = Path.GetFileNameWithoutExtension(basename);
-            } 
+            }
             else
             {
                 basename = Path.GetFileNameWithoutExtension(sourceArchive);
             }
-         
-
             ProcessStartInfo pro = new ProcessStartInfo();
             pro.WindowStyle = ProcessWindowStyle.Hidden;
             pro.UseShellExecute = false;
@@ -39,81 +36,58 @@ namespace ALL_LEGIT
             pro.RedirectStandardError = true;
             pro.RedirectStandardOutput = true;
             pro.FileName = $"{Environment.CurrentDirectory}\\7z.exe";
-
-            if (!String.IsNullOrEmpty(Properties.Settings.Default.ZipPWS))
+            string[] PWArray = MainWindow.PWLIST.Split(';');
+            int PWArrCount = PWArray.Length;
+            int fails = 0;
+            foreach (string PW in PWArray)
             {
-                string[] PWArray = MainWindow.PWLIST.Split(';');
-                int PWArrCount = PWArray.Length;
-                int fails = 0;
-                foreach (string PW in PWArray)
+                bool success = false;
+                try
                 {
-                    bool success = false;
-                    try
+                    pro.Arguments = string.Format("x \"{0}\" -aoa -o\"{1}\"", sourceArchive, destination) + $" -p\"{PW}\"";
+                    Process x2 = Process.Start(pro);
+                    if (!x2.HasExited)
+                        x2.WaitForExit();
+                    success = true;
+                }
+                catch (Exception ex2)
+                {
+                    if (ex2.Message.Contains("Data Error in encrypted file. Wrong password?"))
                     {
-
-                        pro.Arguments = string.Format("x \"{0}\" -y -o\"{1}\"", sourceArchive, destination) + $" -p\"{PW}\"";
-                        Process x2 = Process.Start(pro);
-                        if (!x2.HasExited)
-                            x2.WaitForExit();
-                        success = true;
+                        success = false;
+                        fails++;
                     }
-                    catch (Exception ex2)
+                }
+                if (success && Properties.Settings.Default.DelZips)
+                {
+                    Program.form.listView1.BeginUpdate();
+                    foreach (string file in files)
                     {
-                        if (ex2.Message.Contains("Data Error in encrypted file. Wrong password?"))
+                        string filenopath = Path.GetFileName(file);
+                        if (file.Contains(".7z.") || file.Contains(".rar.") || file.EndsWith(".7z")
+                                || file.EndsWith(".rar") || file.EndsWith(".zip") || file.StartsWith(filenopath) || file.Contains(".part"))
                         {
-                            success = false;
-                            fails++;
-                        }
-                    }
-                    if (success && Properties.Settings.Default.DelZips)
-                    {
-                        if (File.Exists(sourceArchive))
-                        {
-                            File.Delete(sourceArchive);
-                        }
-                        string[] files = Directory.GetFiles(destination);
-                        MainWindow.listView1.BeginUpdate();
-                        foreach (string file in files)
-                        {
-                            if (file.Contains(basename) && !String.IsNullOrEmpty(basename))
+                            if (File.Exists(file))
                             {
-                                if (File.Exists(file))
-                                {
-                                    File.Delete(file);
-                                }
+                                File.Delete(file);
                             }
-                            foreach (ListViewItem item in MainWindow.listView1.Items)
+                            foreach (ListViewItem item in Program.form.listView1.Items)
                             {
                                 if (file.Contains(item.SubItems[0].Text))
-                                { 
-                                    MainWindow.listView1.Items.Remove(item);
-
+                                {
+                                    Program.form.listView1.Items.Remove(item);
                                 }
                             }
                         }
-                        MainWindow.listView1.EndUpdate();
                     }
-                }
-                if (fails == PWArrCount)
-                {
-                    MessageBox.Show("Archive is passworded and supplied passwords(if any) did not work.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    Program.form.listView1.EndUpdate();
                 }
             }
-            else
+            if (fails == PWArrCount)
             {
-                MessageBox.Show("Archive is password protected, add correct password to PW box to fix this.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-
+                MessageBox.Show("Archive is passworded and supplied passwords(if any) did not work.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
         }
-
-
-
-
-
-
-
-
-
         public static void DecryptDLC()
         {
 
@@ -136,7 +110,6 @@ namespace ALL_LEGIT
                 {
                     currentDLCfile = file;
                 }
-
                 int DLCNumber = MainWindow.randomNumber;
                 ProcessStartInfo pro = new ProcessStartInfo();
                 pro.WindowStyle = ProcessWindowStyle.Hidden;
@@ -151,14 +124,9 @@ namespace ALL_LEGIT
                 }
                 catch
                 {
-
                 }
             }
-
-
-
         }
-
         public static string RemoveEverythingAfterFirst(string s, string removeMe)
         {
             int index = s.IndexOf(removeMe);
@@ -205,8 +173,6 @@ namespace ALL_LEGIT
             return s;
         }
     }
-
-
 }
 public static class Extension
 {

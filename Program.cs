@@ -12,6 +12,7 @@ namespace ALL_LEGIT
 {
     internal static class Program
     {
+        public static MainWindow form;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -24,7 +25,8 @@ namespace ALL_LEGIT
 
                 // Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MainWindow());
+                form = new MainWindow();
+                Application.Run(form);
                 Application.Exit();
 
             }

@@ -118,7 +118,7 @@ namespace ALL_LEGIT
                   appName, 11000, Microsoft.Win32.RegistryValueKind.DWord);
             try
             {
-                Hook.GlobalEvents().KeyDown += async (sender, e) =>
+                Hook.GlobalEvents().KeyDown += (sender, e) =>
                 {
                     if (waitingforkey)
                     {
@@ -137,7 +137,7 @@ namespace ALL_LEGIT
                         }
                         if (e.KeyData.ToString().Contains("LControlKey, Control") || e.KeyData.ToString().Contains("Control") && !e.KeyData.ToString().Contains(" ") || e.KeyData.ToString().Contains("LControlKey") && !e.KeyData.ToString().Contains(" "))
                         {
-                            return;  
+                            return;
                         }
                         else
                         {
@@ -186,8 +186,8 @@ namespace ALL_LEGIT
             AutoExtract.Checked = Properties.Settings.Default.AutoExtract;
             if (!String.IsNullOrEmpty(Properties.Settings.Default.ZipPWS))
             {
-                qww.Text = Properties.Settings.Default.ZipPWS;
-                PWLIST = qww.Text;
+                PWBox.Text = Properties.Settings.Default.ZipPWS;
+                PWLIST = PWBox.Text;
             }
             StayOnTopCheckbox.Checked = Properties.Settings.Default.TopMost;
             this.Invoke(() =>
@@ -325,6 +325,9 @@ namespace ALL_LEGIT
         }
         public static bool warnedthisbatch = false;
         public static bool overwrite = false;
+        public static string MagnetSubName = "";
+        public static bool NoNamesPresent = false;
+        string currentGroup = "";
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
             while (midRun)
@@ -335,6 +338,21 @@ namespace ALL_LEGIT
             midRun = true;
             warnedthisbatch = false;
             Stopwatch sw = new Stopwatch(); // The stopwatch which we will be using to calculate the download speed
+            if (NoNamesPresent && !MagnetNAME.Equals("noname"))
+            {
+                MagnetSubName = "";
+                NoNamesPresent = false;
+            }
+
+            if (MagnetNAME.Equals("noname"))
+            {
+                NoNamesPresent = true;
+                if (String.IsNullOrEmpty(MagnetSubName))
+                {
+                    MagnetSubName = Utilities.RemoveEverythingAfterLast(FILENAME, ".");
+                }
+                FILENAME = MagnetSubName;
+            }
             string DIR = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".");
             if (!Directory.Exists(DIR))
             {
@@ -343,31 +361,28 @@ namespace ALL_LEGIT
             string DL = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".") + "\\" + FILENAME;
             if (File.Exists(DL))
             {
-                if (Properties.Settings.Default.AutoOverwrite)
-                {
-                    overwrite = true;
-                    warnedthisbatch = true;
-                }
-                if (!overwrite || !warnedthisbatch)
+  
+                if (!overwrite && !currentGroup.Contains(MagnetNAME))
                 {
 
-                    DialogResult Overwrite1 = MessageBox.Show("Files found, do you want to overwrite?", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    DialogResult Overwrite1 = MessageBox.Show($"Files found, do you want to overwrite all files from this batch of links({Utilities.RemoveEverythingAfterLast(MagnetNAME, ".")})", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     if (Overwrite1 == DialogResult.Yes)
                     {
+                        currentGroup = MagnetNAME;
                         overwrite = true;
                         warnedthisbatch = true;
                     }
                     else
                     {
-                        warnedthisbatch = true;
                         overwrite = false;
                         isConverting = false;
                         midRun = false;
+                        currentGroup = "";
                         return;
                     }
                 }
 
-     
+
             }
 
             WebClient webClient = new WebClient();
@@ -422,10 +437,13 @@ namespace ALL_LEGIT
                 {
                     dlProg.Value = 0;
                 });
-           
+
             };
             await webClient.DownloadFileTaskAsync(new Uri(URL),
                 $"{DL}");
+            overwrite = false;
+            isConverting = false;
+            midRun = false;
 
 
         }
@@ -474,14 +492,21 @@ namespace ALL_LEGIT
             URLDownloadToFile(null, url, destinationFullPathWithName, 0, IntPtr.Zero);
             return new FileInfo(destinationFullPathWithName);
         }
-        public async void DoAsyncConversion()
+        public static string PastedThisRun = "";
+public async void DoAsyncConversion()
         {
-            if (isConverting) return;
+
 
             isConverting = true;
             cancel = false;
             SplashText.Visible = false;
             string pasted = Clipboard.GetText();
+            if (PastedThisRun.Contains(pasted))
+            {
+                return;
+            }
+            PastedThisRun += pasted + "\n";
+            
 
             if (pasted.ToLower().StartsWith("magnet".ToLower()))
             {
@@ -493,8 +518,7 @@ namespace ALL_LEGIT
                         ALTrayIcon.ShowBalloonTip(10000, "Adding FileCrypt links", "Adding FileCrypt links to All Legit!", ToolTipIcon.None);
                     });
                 }
-
-                Thread t1 = new Thread(async () =>
+                Thread t1 = new Thread(() =>
                 {
                     pasted = pasted.Trim();
                     string[] output = new string[] { pasted };
@@ -893,7 +917,7 @@ namespace ALL_LEGIT
                     string linkpasss = "";
                     int linknotsup = 0;
                     string linknotsups = "";
-                    Thread t1 = new Thread(async () =>
+                    Thread t1 = new Thread(() =>
                     {
 
                         foreach (string s in output)
@@ -1061,9 +1085,10 @@ namespace ALL_LEGIT
             {
                 object sender = null;
                 EventArgs e = new EventArgs();
-                    startDownloads_Click(sender, e);
+                startDownloads_Click(sender, e);
             }
             isConverting = false;
+            PastedThisRun = "";
         }
 
         protected override bool ProcessCmdKey(ref Message msg, System.Windows.Forms.Keys keyData)
@@ -1080,14 +1105,25 @@ namespace ALL_LEGIT
         public static bool isDownloading = false;
         private async void startDownloads_Click(object sender, EventArgs e)
         {
-   
+
             string DLList = "";
             isDownloading = true;
             CancelButton.Visible = true;
             if (listView1.CheckedItems.Count > 0)
             {
+                if (Properties.Settings.Default.AutoOverwrite)
+                {
+                    overwrite = true;
+
+                }
                 foreach (ListViewItem item in listView1.CheckedItems)
                 {
+        
+                    if (!string.IsNullOrEmpty(currentGroup))
+                    {
+                        currentGroup = item.SubItems[2].Text;
+                    }
+
                     this.Invoke(() =>
                     {
                         this.Text = $"Downloading {item.SubItems[0].Text}...";
@@ -1095,7 +1131,13 @@ namespace ALL_LEGIT
                     });
                     try
                     {
+                        //
+                        //HERES WHERE IT ADDS THEM TO THE LIST
+                        //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
                         await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text);
+                        //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        //HERES WHERE IT ADDS THEM TO THE LIST
+                        //
                     }
                     catch (System.Net.WebException Ex)
                     {
@@ -1118,10 +1160,10 @@ namespace ALL_LEGIT
 
 
                 }
-                overwrite = false;
+
                 if (AutoExtract.Checked)
                 {
-                    this.Invoke(async () =>
+                    this.Invoke(() =>
                     {
                         string[] SplitDLList = DLList.Split('\n');
                         foreach (string FullDL in SplitDLList)
@@ -1159,17 +1201,18 @@ namespace ALL_LEGIT
 
                                         }
                                     }
-                                    catch {
+                                    catch
+                                    {
 
                                         Extract = true;
 
                                     }
                                 }
-                            
 
 
-                            else if (DLS[0].ToString().Contains(".001") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().Contains(".01") && DLS[0].ToString().Contains("7z")
-                                || DLS[0].ToString().EndsWith(".7z") || DLS[0].ToString().EndsWith(".zip") || DLS[0].ToString().EndsWith(".rar"))
+
+                                else if (DLS[0].ToString().Contains(".001") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().Contains(".01") && DLS[0].ToString().Contains("7z")
+                                    || DLS[0].ToString().EndsWith(".7z") || DLS[0].ToString().EndsWith(".zip") || DLS[0].ToString().EndsWith(".rar"))
                                 {
                                     Extract = true;
                                 }
@@ -1193,7 +1236,7 @@ namespace ALL_LEGIT
                                     {
                                         Directory.CreateDirectory(ArchiveDIR);
                                     }
-                                    Utilities.ExtractFile(DL, ArchiveDIR);
+                                   Utilities.ExtractFile(DL, ArchiveDIR);
                                     Extract = false;
 
                                 }
@@ -1212,8 +1255,6 @@ namespace ALL_LEGIT
                     dlProg.Value = 0;
                     DownloadingText.Text = "";
                 });
-                overwrite = false;
-
 
                 isDownloading = false;
                 CancelButton.Visible = false;
@@ -1236,6 +1277,19 @@ namespace ALL_LEGIT
                     }
                 }
             }
+            if (!string.IsNullOrEmpty(currentGroup))
+            {
+                currentGroup = "";
+                if (!Properties.Settings.Default.AutoOverwrite)
+                {
+                    overwrite = false;
+                }
+
+                isConverting = false;
+                midRun = false;
+                return;
+            }
+
         }
 
         private void CopyLinks_Click(object sender, EventArgs e)
@@ -1342,28 +1396,7 @@ namespace ALL_LEGIT
 
         }
 
-        private void StayOnTopCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.TopMost = StayOnTopCheckbox.Checked;
-            Properties.Settings.Default.Save();
 
-            if (StayOnTopCheckbox.Checked)
-            {
-                this.TopMost = true;
-            }
-            else
-            {
-                this.TopMost = false;
-            }
-            if (StayOnTopCheckbox.Checked)
-            {
-                StayOnTopCheckbox.ForeColor = Color.FromArgb(192, 255, 192);
-            }
-            else
-            {
-                StayOnTopCheckbox.ForeColor = Color.FromArgb(0, 100, 80);
-            }
-        }
         private void DownloadDir_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)System.Windows.Forms.Keys.Enter)
@@ -1383,38 +1416,38 @@ namespace ALL_LEGIT
 
         private void PWBox_Enter(object sender, EventArgs e)
         {
-            if (qww.Text == "your;common;zip;passwords")
+            if (PWBox.Text == "your;common;zip;passwords")
             {
-                qww.Text = "";
+                PWBox.Text = "";
             }
             else
             {
-                qww.Text = Properties.Settings.Default.ZipPWS;
+                PWBox.Text = Properties.Settings.Default.ZipPWS;
             }
         }
 
         private void PWBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)System.Windows.Forms.Keys.Enter && qww.Text.Length > 0 && !qww.Text.Equals("your;commonly;used;zip;passwords"))
+            if (e.KeyChar == (char)System.Windows.Forms.Keys.Enter && PWBox.Text.Length > 0 && !PWBox.Text.Equals("your;commonly;used;zip;passwords"))
             {
-                if (qww.Text.Length > 0)
+                if (PWBox.Text.Length > 0)
                 {
-                    Properties.Settings.Default.ZipPWS = qww.Text;
+                    Properties.Settings.Default.ZipPWS = PWBox.Text;
                     Properties.Settings.Default.Save();
-                    PWLIST = qww.Text;
+                    PWLIST = PWBox.Text;
                 }
                 else
                 {
-                    qww.Text = "your;common;zip;passwords";
+                    PWBox.Text = "your;common;zip;passwords";
                     listView1.Focus();
                 }
-                if (qww.Text == "")
+                if (PWBox.Text == "")
                 {
                     if (String.IsNullOrWhiteSpace(Properties.Settings.Default.ZipPWS))
                     {
 
 
-                        qww.Text = "your;common;zip;passwords";
+                        PWBox.Text = "your;common;zip;passwords";
                     }
 
                 }
@@ -1426,26 +1459,26 @@ namespace ALL_LEGIT
         private void PWBox_Leave(object sender, EventArgs e)
         {
 
-            if (qww.Text == "")
+            if (PWBox.Text == "")
             {
                 if (!String.IsNullOrWhiteSpace(Properties.Settings.Default.ZipPWS))
                 {
-                    qww.Text = Properties.Settings.Default.ZipPWS;
+                    PWBox.Text = Properties.Settings.Default.ZipPWS;
                 }
                 else
                 {
-                    qww.Text = "your;common;zip;passwords";
+                    PWBox.Text = "your;common;zip;passwords";
                 }
 
             }
-            else if (!qww.Text.Equals("your;commonly;used;zip;passwords") && qww.Text.Length > 0)
+            else if (!PWBox.Text.Equals("your;commonly;used;zip;passwords") && PWBox.Text.Length > 0)
             {
 
-                Properties.Settings.Default.ZipPWS = qww.Text;
+                Properties.Settings.Default.ZipPWS = PWBox.Text;
                 Properties.Settings.Default.Save();
-                PWLIST = qww.Text;
+                PWLIST = PWBox.Text;
             }
-            qww.Update();
+            PWBox.Update();
 
             listView1.Focus();
         }
@@ -1456,11 +1489,11 @@ namespace ALL_LEGIT
             Properties.Settings.Default.Save();
             if (AutoExtract.Checked)
             {
-                qww.Enabled = true;
+                PWBox.Enabled = true;
             }
             else
             {
-                qww.Enabled = false;
+                PWBox.Enabled = false;
             }
             if (AutoExtract.Checked)
             {
@@ -1479,13 +1512,7 @@ namespace ALL_LEGIT
 
         }
 
-        private void PWBox_Click(object sender, EventArgs e)
-        {
-            if (String.IsNullOrWhiteSpace(Properties.Settings.Default.ZipPWS))
-            {
-                qww.Text = "your;common;zip;passwords";
-            }
-        }
+
 
         private void DownloadDir_Leave(object sender, EventArgs e)
         {
@@ -1512,33 +1539,7 @@ namespace ALL_LEGIT
             HotKeyBox.Text = "Press desired hotkey...";
         }
 
-        private void AutoDLBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.AutoDL = AutoDLBox.Checked;
-            Properties.Settings.Default.Save();
-            if (AutoDLBox.Checked)
-            {
-                AutoDLBox.ForeColor = Color.FromArgb(192, 255, 192);
-            }
-            else
-            {
-                AutoDLBox.ForeColor = Color.FromArgb(0, 100, 80);
-            }
-        }
 
-        private void AutoDelete_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.AutoOverwrite = AutoOverwrite.Checked;
-            Properties.Settings.Default.Save();
-            if (AutoOverwrite.Checked)
-            {
-                AutoOverwrite.ForeColor = Color.FromArgb(192, 255, 192);
-            }
-            else
-            {
-                AutoOverwrite.ForeColor = Color.FromArgb(0, 100, 80);
-            }
-        }
 
 
         public static Random random = new Random();
@@ -1579,19 +1580,7 @@ namespace ALL_LEGIT
 
         }
 
-        private void Close2Tray_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.Close2Tray = Close2Tray.Checked;
-            Properties.Settings.Default.Save();
-            if (Close2Tray.Checked)
-            {
-                Close2Tray.ForeColor = Color.FromArgb(192, 255, 192);
-            }
-            else
-            {
-                Close2Tray.ForeColor = Color.FromArgb(0, 100, 80);
-            }
-        }
+
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -1623,13 +1612,23 @@ namespace ALL_LEGIT
 
         private void showSettings_MouseEnter(object sender, EventArgs e)
         {
+            stopwatch.Stop();
             settingsP.Visible = true;
+            settingsP.BringToFront();
         }
+
         public static bool InSettings = false;
         public static bool InSettingsP = false;
-
-        private void settingsP_MouseLeave(object sender, EventArgs e)
+        public Stopwatch stopwatch = Stopwatch.StartNew();
+        public async void settingsP_MouseLeave(object sender, EventArgs e)
         {
+      
+            stopwatch.Restart();
+            {
+                await Task.Delay(100);
+            }
+            stopwatch.Stop();
+            stopwatch.Reset();
             settingsP.Visible = false;
         }
 
@@ -1643,25 +1642,7 @@ namespace ALL_LEGIT
             settingsP.Visible = true;
         }
 
-        private void StayOnTopCheckbox_Click(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.TopMost = StayOnTopCheckbox.Checked;
-            Properties.Settings.Default.Save();
-        }
 
-        private void autoDelZips_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.DelZips = autoDelZips.Checked;
-            Properties.Settings.Default.Save();
-            if (autoDelZips.Checked)
-            {
-                autoDelZips.ForeColor = Color.FromArgb(192, 255, 192);
-            }
-            else
-            {
-                autoDelZips.ForeColor = Color.FromArgb(0, 100, 80);
-            }
-        }
 
         private void StayOnTopCheckbox_CheckedChanged_1(object sender, EventArgs e)
         {
@@ -1675,10 +1656,71 @@ namespace ALL_LEGIT
             }
 
         }
+
+        private void Close2Tray_CheckedChanged_1(object sender, EventArgs e)
+        {
+          
+            Properties.Settings.Default.Close2Tray = Close2Tray.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void AutoExtract_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (AutoExtract.Checked)
+            {
+                AutoExtract.ForeColor = Color.FromArgb(192, 255, 192);
+                PWBox.Enabled = true;
+            }
+            else
+            {
+                AutoExtract.ForeColor = Color.FromArgb(0, 100, 80);
+                PWBox.Enabled = false;
+
+            }
+
+        }
+
+        private void autoDelZips_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (autoDelZips.Checked)
+            {
+                autoDelZips.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                autoDelZips.ForeColor = Color.FromArgb(0, 100, 80);
+            }
+
+        }
+                private void AutoDLBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AutoDL = AutoDLBox.Checked;
+            Properties.Settings.Default.Save();
+            if (AutoDLBox.Checked)
+            {
+                AutoDLBox.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                AutoDLBox.ForeColor = Color.FromArgb(0, 100, 80);
+            }
+        }
+
+        private void AutoDelete_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AutoOverwrite = AutoOverwrite.Checked;
+            Properties.Settings.Default.Save();
+            if (AutoOverwrite.Checked)
+            {
+                AutoOverwrite.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                AutoOverwrite.ForeColor = Color.FromArgb(0, 100, 80);
+            }
+        }
     }
 }
-
-
 
 public static class ControlExtensions
 {
