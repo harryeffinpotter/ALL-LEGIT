@@ -359,8 +359,9 @@ namespace ALL_LEGIT
         public static bool NoNamesPresent = false;
         public WebClient webClient = new WebClient();
         string currentGroup = "";
-        private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
+        public async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
+            if (URL.EndsWith("url")) return;
             midRun = true;
             warnedthisbatch = false;
             Stopwatch sw = new Stopwatch(); // The stopwatch which we will be using to calculate the download speed
@@ -427,11 +428,11 @@ namespace ALL_LEGIT
             }
 
             //DOWNLOAD AREA
-            isDownloading = true;
+
 
             webClient.DownloadProgressChanged += (s, e) =>
             {
-                sw.Start();
+                sw.Restart();
                 string DLS;
                 DLS = string.Format("{0:0.00}", (e.BytesReceived / 1024 / 1024 / sw.Elapsed.TotalSeconds).ToString("0.00"));
 
@@ -1246,10 +1247,9 @@ namespace ALL_LEGIT
         {
             while (isDownloading)
             {
-                await Task.Delay(100);
+                await Task.Delay(50);
             }
             string DLList = "";
-            isDownloading = true;
             CancelButton.Visible = true;
             if (listView1.CheckedItems.Count > 0)
             {
@@ -1273,6 +1273,7 @@ namespace ALL_LEGIT
                     });
                     try
                     {
+                        isDownloading = true;
                         //
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
@@ -1280,6 +1281,7 @@ namespace ALL_LEGIT
                         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //
+                        isDownloading = false;
                     }
                     catch (System.Net.WebException Ex)
                     {
