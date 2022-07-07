@@ -214,5 +214,17 @@ namespace ALL_LEGIT.Properties {
                 this["DelZips"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DisableNotifies {
+            get {
+                return ((bool)(this["DisableNotifies"]));
+            }
+            set {
+                this["DisableNotifies"] = value;
+            }
+        }
     }
 }

@@ -56,7 +56,7 @@ namespace ALL_LEGIT
             URLDownloadToFile(null, url, destinationFullPathWithName, 0, IntPtr.Zero);
             return new FileInfo(destinationFullPathWithName);
         }
-        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        public void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             var links = webBrowser1.Document.GetElementsByTagName("button");
 
@@ -91,13 +91,13 @@ namespace ALL_LEGIT
 
 
 
-        private void WebFormForm_Load(object sender, EventArgs e)
+        public void WebFormForm_Load(object sender, EventArgs e)
         {
             webBrowser1.ScriptErrorsSuppressed = true;
             webBrowser1.Navigate(MainWindow.FilecryptURL);
         }
 
-        private async void closeBrowser_Click(object sender, EventArgs e)
+        public async void closeBrowser_Click(object sender, EventArgs e)
         {
             bool GotDLC = false;
 
@@ -109,7 +109,7 @@ namespace ALL_LEGIT
                 }
             };
             process.Start();
-            process.WaitForExit();
+
 
             while (!GotDLC)
             {
@@ -124,7 +124,7 @@ namespace ALL_LEGIT
                 Utilities.DecryptDLC();
                 this.Close();
             }
-
+            process.WaitForExit();
 
 
 

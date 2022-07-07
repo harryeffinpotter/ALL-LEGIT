@@ -74,6 +74,7 @@ namespace ALL_LEGIT
         }
         private System.Windows.Forms.ContextMenu contextMenu1;
         private System.Windows.Forms.MenuItem menuItem1;
+        private System.Windows.Forms.MenuItem menuItem2;
         public static string APIKEY;
         public static string apiNAME;
         public static bool waitingforkey = false;
@@ -86,15 +87,29 @@ namespace ALL_LEGIT
             this.components = new System.ComponentModel.Container();
             this.contextMenu1 = new System.Windows.Forms.ContextMenu();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
-
+            this.menuItem2 = new System.Windows.Forms.MenuItem();
             // Initialize contextMenu1
             this.contextMenu1.MenuItems.AddRange(
-                        new System.Windows.Forms.MenuItem[] { this.menuItem1 });
+                       new System.Windows.Forms.MenuItem[] { this.menuItem1, this.menuItem2 });
 
             // Initialize menuItem1
             this.menuItem1.Index = 0;
             this.menuItem1.Text = "E&xit";
             this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
+            // Initialize menuItem1
+            this.menuItem2.Index = 1;
+            this.menuItem2.Text = "Diable notifications";
+            this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
+
+            if (Properties.Settings.Default.DisableNotifies)
+            {
+                menuItem2.Checked = true;
+            }
+            else
+            {
+                menuItem2.Checked = false;
+            }
+
 
 
             // Create the NotifyIcon.
@@ -105,6 +120,7 @@ namespace ALL_LEGIT
             // The ContextMenu property sets the menu that will
             // appear when the systray icon is right clicked.
             ALTrayIcon.ContextMenu = this.contextMenu1;
+
 
             // The Text property sets the text that will be displayed,
             // in a tooltip, when the mouse hovers over the systray icon.
@@ -174,7 +190,21 @@ namespace ALL_LEGIT
 
 
         }
+        private void menuItem2_Click(object Sender, EventArgs e)
+        {
+            if (menuItem2.Checked)
+            {
+                menuItem2.Checked = false;
+                Properties.Settings.Default.DisableNotifies = false;
+            }
+            else
+            {
+                menuItem2.Checked = true;
+                Properties.Settings.Default.DisableNotifies = true;
+            }
+            Properties.Settings.Default.Save();
 
+        }
         private async void MainWindow_Load(object sender, EventArgs e)
         {
             Close2Tray.Checked = Properties.Settings.Default.Close2Tray;
@@ -327,126 +357,138 @@ namespace ALL_LEGIT
         public static bool overwrite = false;
         public static string MagnetSubName = "";
         public static bool NoNamesPresent = false;
+        public WebClient webClient = new WebClient();
         string currentGroup = "";
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
-            while (midRun)
-            {
-                await Task.Delay(200);
-            }
-            isDownloading = true;
             midRun = true;
-            warnedthisbatch = false;
-            Stopwatch sw = new Stopwatch(); // The stopwatch which we will be using to calculate the download speed
-            if (NoNamesPresent && !MagnetNAME.Equals("noname"))
-            {
-                MagnetSubName = "";
-                NoNamesPresent = false;
-            }
-
-            if (MagnetNAME.Equals("noname"))
-            {
-                NoNamesPresent = true;
-                if (String.IsNullOrEmpty(MagnetSubName))
+                warnedthisbatch = false;
+                Stopwatch sw = new Stopwatch(); // The stopwatch which we will be using to calculate the download speed
+                if (NoNamesPresent && !MagnetNAME.Equals("noname"))
                 {
-                    MagnetSubName = Utilities.RemoveEverythingAfterLast(FILENAME, ".");
+                    MagnetSubName = "";
+                    NoNamesPresent = false;
                 }
-                FILENAME = MagnetSubName;
-            }
-            string DIR = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".");
-            if (!Directory.Exists(DIR))
-            {
-                Directory.CreateDirectory(DIR);
-            }
-            string DL = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".") + "\\" + FILENAME;
-            if (File.Exists(DL))
-            {
-  
-                if (!overwrite && !currentGroup.Contains(MagnetNAME))
+
+                if (MagnetNAME.Equals("noname"))
+                {
+                    NoNamesPresent = true;
+                    if (string.IsNullOrEmpty(MagnetSubName))
+                    {
+                        MagnetSubName = Utilities.RemoveEverythingAfterLast(FILENAME, ".");
+                    }
+                    FILENAME = MagnetSubName;
+                }
+                string DIR = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".");
+                if (!Directory.Exists(DIR))
+                {
+                    Directory.CreateDirectory(DIR);
+                }
+                string DL = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".") + "\\" + FILENAME;
+                if (File.Exists(DL))
                 {
 
-                    DialogResult Overwrite1 = MessageBox.Show($"Files found, do you want to overwrite all files from this batch of links({Utilities.RemoveEverythingAfterLast(MagnetNAME, ".")})", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                    if (Overwrite1 == DialogResult.Yes)
+                    if (!currentGroup.Contains(MagnetNAME) || !Properties.Settings.Default.AutoOverwrite)
                     {
                         currentGroup = MagnetNAME;
-                        overwrite = true;
-                        warnedthisbatch = true;
-                    }
-                    else
-                    {
-                        overwrite = false;
-                        isConverting = false;
-                        midRun = false;
-                        currentGroup = "";
-                        return;
-                    }
-                }
-
-
-            }
-
-            WebClient webClient = new WebClient();
-            webClient.DownloadProgressChanged += (s, e) =>
-            {
-                sw.Start();
-                string DLS;
-                DLS = String.Format("{0:0.00}", (e.BytesReceived / 1024 / 1024 / sw.Elapsed.TotalSeconds).ToString("0.00"));
-
-                this.Invoke(() =>
-                {
-                    DownloadingText.Text = $"Downloading: {FILENAME}. {e.ProgressPercentage}% complete. Speed:{DLS}MB\\s";
-                    dlProg.Value = e.ProgressPercentage;
-                });
-
-                if (cancel)
-                {
-                    webClient.Dispose();
-
-                }
-            };
-
-            webClient.DownloadFileCompleted += (s, e) =>
-            {
-                this.Invoke(() =>
-                {
-                    DownloadingText.Text = $"Download finished...";
-                });
-                midRun = false;
-                sw.Stop();
-                if (RemDL.Checked)
-                {
-                    this.Invoke(() =>
-                    {
-                        listView1.BeginUpdate();
-
-                        foreach (ListViewItem item in listView1.Items)
+                        DialogResult Overwrite1 = MessageBox.Show($"Files found, do you want to overwrite all files from this batch of links({Utilities.RemoveEverythingAfterLast(MagnetNAME, ".")})", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        if (Overwrite1 == DialogResult.Yes)
                         {
-                            if (item.SubItems[1].Text.Equals(URL))
+                            overwrite = true;
+                        }
+                        else
+                        {
+                            overwrite = false;
+                            midRun = false;
+                        }
+                    }
+                    if (overwrite)
+                    {
+                        if (File.Exists(DL))
+                        {
+                            File.Delete(DL);
+                        }
+                    }
+                    else if (!overwrite)
+                    {
+                        midRun = false;
+                        listView1.BeginUpdate();
+                        foreach (ListViewItem itemmm in listView1.Items)
+                        {
+                            if (itemmm.SubItems[2].Text.Contains(MagnetNAME) && itemmm.Checked)
                             {
-                                listView1.Items.Remove(item);
-
+                                listView1.Items.Remove(itemmm);
                             }
                         }
                         listView1.EndUpdate();
-                    });
+         
+                }
 
                 }
 
-
-                this.Invoke(() =>
+                //DOWNLOAD AREA
+                isDownloading = true;
+   
+                webClient.DownloadProgressChanged += (s, e) =>
                 {
-                    dlProg.Value = 0;
-                });
+                    sw.Start();
+                    string DLS;
+                    DLS = string.Format("{0:0.00}", (e.BytesReceived / 1024 / 1024 / sw.Elapsed.TotalSeconds).ToString("0.00"));
 
-            };
-            await webClient.DownloadFileTaskAsync(new Uri(URL),
-                $"{DL}");
-            overwrite = false;
-            isConverting = false;
-            midRun = false;
+                    this.Invoke(() =>
+                    {
 
+                        dlProg.Value = e.ProgressPercentage;
+                        DownloadingText.Text = $"Downloading: {FILENAME}. {e.ProgressPercentage}% complete. Speed:{DLS}MB\\s";
+                    });
+
+                    if (cancel)
+                    {
+                        webClient.Dispose();
+
+                    }
+                };
+
+                webClient.DownloadFileCompleted += (s, e) =>
+                {
+                    this.Invoke(() =>
+                    {
+                        DownloadingText.Text = $"Download finished...";
+                    });
+                    midRun = false;
+                    sw.Stop();
+                    if (RemDL.Checked)
+                    {
+                        this.Invoke(() =>
+                        {
+                            listView1.BeginUpdate();
+
+                            foreach (ListViewItem item in listView1.Items)
+                            {
+                                if (item.SubItems[1].Text.Equals(URL))
+                                {
+                                    listView1.Items.Remove(item);
+
+                                }
+                            }
+                            listView1.EndUpdate();
+                        });
+
+                    }
+
+
+                    this.Invoke(() =>
+                    {
+                        dlProg.Value = 0;
+                    });
+
+                };
+              await webClient.DownloadFileTaskAsync(new Uri(URL), $"{DL}");
+                isConverting = false;
+                midRun = false;
 
         }
+
         public static bool notdone = true;
         public static long total = 0;
         public static long DLsofar = 0;
@@ -493,7 +535,7 @@ namespace ALL_LEGIT
             return new FileInfo(destinationFullPathWithName);
         }
         public static string PastedThisRun = "";
-public async void DoAsyncConversion()
+        public async void DoAsyncConversion()
         {
 
 
@@ -510,12 +552,12 @@ public async void DoAsyncConversion()
 
             if (pasted.ToLower().StartsWith("magnet".ToLower()))
             {
-                if (!Program.form.Focused)
+                if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                 {
 
                     this.Invoke(() =>
                     {
-                        ALTrayIcon.ShowBalloonTip(5000, "Adding magnet links...", "All Legit!", ToolTipIcon.None);
+                        ALTrayIcon.ShowBalloonTip(2000, "", "Adding magnet links..." , ToolTipIcon.None);
                     });
                 }
                 else
@@ -632,9 +674,9 @@ public async void DoAsyncConversion()
                                             {
                                                 this.Invoke(() =>
                                                 {
-                                                    if (!Program.form.Focused)
+                                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                                                     {
-                                                        ALTrayIcon.ShowBalloonTip(5000, $"{magnetName} not cached, now converting!", "All Legit!", ToolTipIcon.None);
+                                                        ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} not cached, now converting!", ToolTipIcon.None);
 
                                                     }
                                                     else
@@ -648,12 +690,12 @@ public async void DoAsyncConversion()
                                                 {
                                                     this.Invoke(() =>
                                                     {
-                                                        if (!Program.form.Focused)
-                                                    {
-                                                            ALTrayIcon.ShowBalloonTip(5000, $"{magnetName} added to Queue!", "All Legit!", ToolTipIcon.None);
-                                                    }
-                                                    else
-                                                    {
+                                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                                        {
+                                                            ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} added to Queue!",  ToolTipIcon.None);
+                                                        }
+                                                        else
+                                                        {
                                                             DownloadingText.Text = $"Torrent added to queue...";
                                                         }
 
@@ -695,17 +737,17 @@ public async void DoAsyncConversion()
                                                 {
                                                     this.Invoke(() =>
                                                     {
-                                                    if (!Program.form.Focused)
-                                                    {
-                                             
-                                                            ALTrayIcon.ShowBalloonTip(5000, $"{magnetName} finished downloadint torrent, now uploading to DDL links...", "All Legit!", ToolTipIcon.None);
-                                                      
-                                                    }
-                                                    else
-                                                    {
-                                                   
+                                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                                        {
+
+                                                            ALTrayIcon.ShowBalloonTip(3000, "", $"{magnetName} finished downloading torrent, now uploading to DDL links...", ToolTipIcon.None);
+
+                                                        }
+                                                        else
+                                                        {
+
                                                             DownloadingText.Text = $"{magnetName} finshed downloading!";
-                                                    }
+                                                        }
                                                     });
 
                                                 }
@@ -749,13 +791,6 @@ public async void DoAsyncConversion()
                                         {
                                             this.Invoke(() =>
                                             {
-                                                if (!Program.form.Focused)
-                                                {
-
-                                                    ALTrayIcon.ShowBalloonTip(5000, $"Magnet conversion finished!", "All Legit.", ToolTipIcon.None);
-
-                                                }
-                                                else
 
                                                     DownloadingText.Text = "Magnet conversion finished!";
                                             });
@@ -787,10 +822,11 @@ public async void DoAsyncConversion()
                                                             {
                                                                 skip = true;
 
+                                                                if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
 
-                                                                this.Invoke(() =>
+                                                                    this.Invoke(() =>
                                                                 {
-                                                                    ALTrayIcon.ShowBalloonTip(5000, $"Already in queue!", "All Legit!", ToolTipIcon.None);
+                                                                    ALTrayIcon.ShowBalloonTip(2000, "", $"Already in queue!", ToolTipIcon.None);
                                                                 });
                                                             }
                                                             else
@@ -849,18 +885,18 @@ public async void DoAsyncConversion()
                             {
                                 if (a > 0)
                                 {
-                                    if (!Program.form.Focused)
+                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                                     {
-                                        ALTrayIcon.ShowBalloonTip(5000, $"Magnet(s) not valid.", "All Legit!", ToolTipIcon.Error);
+                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Magnet(s) not valid.", ToolTipIcon.Error);
                                     }
                                     else
                                         MessageBox.Show($"{a1}\nMagnet(s) not valid.", "Invalid magnet.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                                 }
                                 if (b > 0)
                                 {
-                                    if (!Program.form.Focused)
+                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                                     {
-                                        ALTrayIcon.ShowBalloonTip(5000, $"Already have maximum allowed active magnets (30)", "All Legit!", ToolTipIcon.Error);
+                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Already have maximum allowed active magnets (30)",ToolTipIcon.Error);
                                     }
                                     else
                                         MessageBox.Show($"{b1}\nAlready have maximum allowed active magnets (30).", "Cannot add over 30 torrents.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
@@ -868,12 +904,12 @@ public async void DoAsyncConversion()
                                 }
                                 if (c > 0)
                                 {
-                                    if (!Program.form.Focused)
+                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                                     {
-                                        ALTrayIcon.ShowBalloonTip(5000, $"Server are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN", "All Legit!", ToolTipIcon.Error);
+                                        ALTrayIcon.ShowBalloonTip(2000, "",$"Server are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN", ToolTipIcon.Error);
                                     }
                                     else
-                                        MessageBox.Show($"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "All Legit!", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                        MessageBox.Show($"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "LServer not allowed", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                                 }
                             });
                             isConverting = false;
@@ -899,18 +935,14 @@ public async void DoAsyncConversion()
 
             if (pasted.ToLower().StartsWith("https://filecrypt.".ToLower()) || pasted.ToLower().StartsWith("https://www.filecrypt.".ToLower()))
             {
-                if (!Program.form.Focused)
+                this.Invoke(() =>
                 {
-                    this.Invoke(() =>
-                        {
-                            ALTrayIcon.ShowBalloonTip(5000, $"Adding FileCrypt links...", "All Debrid", ToolTipIcon.None);
-                        });
-                    }
+                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                        ALTrayIcon.ShowBalloonTip(2000, "", $"Adding FileCrypt links...", ToolTipIcon.None);
+
                     else
-                        this.Invoke(() =>
-                        {
-                            DownloadingText.Text = "Adding FileCrypt links...";
-                        });
+                      DownloadingText.Text = "Adding FileCrypt links...";
+                });
 
                 CurrentDLC = randomNumber;
                 pasted = pasted.Trim();
@@ -955,19 +987,16 @@ public async void DoAsyncConversion()
             }
             else if (pasted.ToLower().StartsWith("https://".ToLower()))
             {
-                if (!Program.form.Focused)
+                this.Invoke(() =>
                 {
-                    this.Invoke(() =>
+                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                     {
-                        ALTrayIcon.ShowBalloonTip(10000, "Attempting to add links.", "All Legit", ToolTipIcon.None);
-                    });
-                }
-                else
-                    this.Invoke(() =>
-                    {
-                        DownloadingText.Text = "Attempting to add links.";
-                    });
-                try
+
+                        ALTrayIcon.ShowBalloonTip(1000, "", "Attempting to add links.", ToolTipIcon.None);
+                    }
+                    DownloadingText.Text = "Attempting to add links.";
+                });   
+               try
                 {
                     pasted = pasted.Trim();
                     string[] output = new string[] { pasted };
@@ -1090,65 +1119,47 @@ public async void DoAsyncConversion()
                         }
                         if (isErrors)
                         {
-                            if (linkdown > 0)
+                            this.Invoke(() =>
                             {
-                                if (!Program.form.Focused)
-                                { 
-                                    this.Invoke(() =>
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(5000, $"Link(s) have been taken down from the filehoster's website.\n\nNot adding!", "All Legit", ToolTipIcon.None);
-                                    });
-
-                                }
-                                else
-                                    MessageBox.Show($"{linkdowns}\nLink(s) have been taken down from the filehoster's website.\n\nNot adding!", "Link has been taken down.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                            }
-                            if (linkmissing > 0)
-                            {
-
-                                if (!Program.form.Focused)
+                                if (linkdown > 0)
                                 {
-                                        this.Invoke(() =>
-                                        {
-                                            ALTrayIcon.ShowBalloonTip(5000, $"No magnets or links found in what you pasted.\n\nNot adding!", "All Legit", ToolTipIcon.None);
-                                        });
+                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                    {
+                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) have been taken down from the filehoster's website.\n\nNot adding!", ToolTipIcon.None);
+                                    }
+                                    else
+                                        MessageBox.Show($"{linkdowns}\nLink(s) have been taken down from the filehoster's website.\n\nNot adding!", "Link has been taken down.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                }
+                                if (linkmissing > 0)
+                                {
+                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                    {
+                                        ALTrayIcon.ShowBalloonTip(2000, "", $"No magnets or links found in what you pasted.\n\nNot adding!", ToolTipIcon.None);
 
                                     }
                                     else
                                         MessageBox.Show($"{linkmissings}\nNo magnets or links found in what you pasted.\n\nNot adding!", "No links found!", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                            }
-                            if (linkpass > 0)
-                            {
-
-                                if (!Program.form.Focused)
+                                }
+                                if (linkpass > 0)
                                 {
-                                        this.Invoke(() =>
-                                        {
-                                            ALTrayIcon.ShowBalloonTip(5000, $"Link(s) are password protected on the filehost's website.\n\nNot adding!", "All Legit", ToolTipIcon.None);
-                                        });
-
+                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                    {
+                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) are password protected on the filehost's website.\n\nNot adding!", ToolTipIcon.None);
                                     }
                                     else
                                         MessageBox.Show($"{linkpasss}\nLink(s) are password protected on the filehost's website.\n\nNot adding!", "Password protected!", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                            }
-                            if (linknotsup > 0)
-                            {
-                                if (!Program.form.Focused)
-                                {
-                                    this.Invoke(() =>
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(5000, $"Link(s) are from an unsupported host.\n\nPlease check this link for a list of supported filehosters:\nhttps://alldebrid.com/hosts/", "All Legit", ToolTipIcon.None);
-                                    });
-
                                 }
-                                else
-                                    MessageBox.Show($"{linknotsups}\nLink(s) are from an unsupported host.\n\nPlease check this link for a list of supported filehosters:\nhttps://alldebrid.com/hosts/", "Unsupported host!", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                            }
+                                if (linknotsup > 0)
+                                {
+                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                    {
+                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) are from an unsupported host.\n\nPlease check this link for a list of supported filehosters:\nhttps://alldebrid.com/hosts/", ToolTipIcon.None);
+                                    }
+                                    else
+                                        MessageBox.Show($"{linknotsups}\nLink(s) are from an unsupported host.\n\nPlease check this link for a list of supported filehosters:\nhttps://alldebrid.com/hosts/", "Unsupported host!", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                }
+                            });
                         }
-
-
-
-
                     });
                     t1.Start();
                     t1.IsBackground = true;
@@ -1164,11 +1175,12 @@ public async void DoAsyncConversion()
                 }
                 catch (Exception ex)
                 {
-                    if (Program.form.Focused)
+                    MessageBox.Show(ex.ToString());
+                  if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                     {
 
                     }
-MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pasted:{pasted}", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pasted:{pasted}", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 }
 
             }
@@ -1192,7 +1204,12 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
                         string[] list = File.ReadAllLines(file);
                         foreach (string line in list)
                         {
-                            linkstoget += line + "\n";
+                            if (!line.Contains("Urls stored"))
+                            {
+                                       linkstoget += line + "\n";
+                            }
+
+                     
                         }
                         File.Delete(file);
                     }
@@ -1229,9 +1246,12 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
         public static string dlsPara = "";
         public static bool midRun = false;
         public static bool isDownloading = false;
-       public async void startDownloads_Click(object sender, EventArgs e)
+        public async void startDownloads_Click(object sender, EventArgs e)
         {
-
+            while (isDownloading)
+            {
+                await Task.Delay(100);
+            }
             string DLList = "";
             isDownloading = true;
             CancelButton.Visible = true;
@@ -1244,7 +1264,7 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
                 }
                 foreach (ListViewItem item in listView1.CheckedItems)
                 {
-        
+
                     if (!string.IsNullOrEmpty(currentGroup))
                     {
                         currentGroup = item.SubItems[2].Text;
@@ -1281,12 +1301,17 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
                     {
                         dlsPara += $"{Properties.Settings.Default.DownloadDir}\\{Utilities.RemoveEverythingAfterLast(item.SubItems[2].Text, ".")}\\{item.SubItems[0].Text}";
                         DLList += $"{item.SubItems[0].Text};{Utilities.RemoveEverythingAfterLast(item.SubItems[2].Text, ".")}\n";
-
                     }
-
-
                 }
-
+                this.Invoke(() =>
+                {
+                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                    {
+                        ALTrayIcon.ShowBalloonTip(5000, "", $"All Downloads finished!", ToolTipIcon.None);
+                    }
+                    else
+                        DownloadingText.Text = $"All Downloads finished!";
+                 });
                 if (AutoExtract.Checked)
                 {
                     this.Invoke(() =>
@@ -1362,7 +1387,7 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
                                     {
                                         Directory.CreateDirectory(ArchiveDIR);
                                     }
-                                   Utilities.ExtractFile(DL, ArchiveDIR);
+                                    Utilities.ExtractFile(DL, ArchiveDIR);
                                     Extract = false;
 
                                 }
@@ -1370,6 +1395,14 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
 
                             }
                         }
+
+                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                        {
+                            ALTrayIcon.ShowBalloonTip(3000, "", $"All Extractions finished!", ToolTipIcon.None);
+                            }
+                            else
+                                DownloadingText.Text = $"All Extractions finished!";
+                 
 
                     });
                     await Task.Delay(100);
@@ -1388,34 +1421,8 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
 
             System.GC.Collect();
             System.GC.WaitForPendingFinalizers();
-            string[] para = dlsPara.Split(';');
-            foreach (string file in para)
-            {
-                if (File.Exists(file))
-                {
-                    try
-                    {
-                        File.Delete(file);
-                    }
-                    catch
-                    {
-
-                    }
-                }
-            }
-            if (!string.IsNullOrEmpty(currentGroup))
-            {
-                currentGroup = "";
-                if (!Properties.Settings.Default.AutoOverwrite)
-                {
-                    overwrite = false;
-                }
-
-                isConverting = false;
-                midRun = false;
-                return;
-            }
-
+          
+             
         }
 
         private void CopyLinks_Click(object sender, EventArgs e)
@@ -1490,15 +1497,15 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
         }
 
         public static bool cancel = false;
-        private void CancelButton_Click(object sender, EventArgs e)
+        public void CancelButton_Click(object sender, EventArgs e)
         {
             cancel = true;
             this.Invoke(() =>
             {
-                DownloadingText.Text = $"";
-            });
-            this.Invoke(() =>
-            {
+                webClient.CancelAsync();
+                webClient.Dispose(); 
+
+                Program.form.DownloadingText.Text = $"";
                 dlProg.Value = 0;
             });
         }
@@ -1542,7 +1549,7 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
 
         private void PWBox_Enter(object sender, EventArgs e)
         {
- 
+
             if (PWBox.Text == "your;common;zip;passwords")
             {
                 PWBox.Text = "";
@@ -1685,7 +1692,14 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
             //if the form is minimized  
             //hide it from the task bar  
             //and show the system tray icon (represented by the NotifyIcon control)  
-
+            if (WindowState == FormWindowState.Minimized)
+            {
+                TrayNotify = true;
+            }
+            else
+            {
+                TrayNotify = false;
+            }
             if (listView1.Items.Count == 0)
             {
                 return;
@@ -1703,12 +1717,13 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
             {
                 if (e.CloseReason == CloseReason.UserClosing)
                 {
-                    ALTrayIcon.Visible = true;
-                    ALTrayIcon.BalloonTipTitle = "Balls?";
-                    ALTrayIcon.BalloonTipText = "uhhhhh penis?";
-                    ALTrayIcon.BalloonTipIcon = ToolTipIcon.Info;
-  
-                    ALTrayIcon.ShowBalloonTip(30000);
+                    ALTrayIcon.BalloonTipText = "All Legit! is still running in your tray.";
+                    ALTrayIcon.BalloonTipIcon = ToolTipIcon.None;
+                    if (!Properties.Settings.Default.DisableNotifies)
+                    {
+                        ALTrayIcon.ShowBalloonTip(2000);
+
+                    }
                     this.Hide();
                     e.Cancel = true;
                 }
@@ -1723,21 +1738,22 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
-         
+
         }
 
         private void ALTrayIcon_MouseDoubleClick_1(object sender, MouseEventArgs e)
         {
 
-            Show();
+            this.Show();
             this.WindowState = FormWindowState.Normal;
-            ALTrayIcon.Visible = false;
+ 
 
         }
 
         private void ALTrayIcon_MouseClick(object sender, MouseEventArgs e)
         {
             this.Show();
+            this.WindowState = FormWindowState.Normal;
         }
 
 
@@ -1758,9 +1774,11 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
 
         public static bool InSettings = false;
         public static bool InSettingsP = false;
+        public static bool TrayNotify = false;
         public Stopwatch stopwatch = Stopwatch.StartNew();
         public async void settingsP_MouseLeave(object sender, EventArgs e)
         {
+            TrayNotify = true;
             if (PWBox.Focused) return;
             if (stopwatch.IsRunning) return;
             stopwatch.Restart();
@@ -1800,7 +1818,7 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
 
         private void Close2Tray_CheckedChanged_1(object sender, EventArgs e)
         {
-          
+
             Properties.Settings.Default.Close2Tray = Close2Tray.Checked;
             Properties.Settings.Default.Save();
         }
@@ -1833,7 +1851,7 @@ MessageBox.Show($"Unsupported link detected, please try another link.\n\nYou pas
             }
 
         }
-                private void AutoDLBox_CheckedChanged(object sender, EventArgs e)
+        private void AutoDLBox_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.AutoDL = AutoDLBox.Checked;
             Properties.Settings.Default.Save();

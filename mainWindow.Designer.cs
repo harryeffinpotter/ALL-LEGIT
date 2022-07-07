@@ -154,7 +154,7 @@
             this.CancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.CancelButton.ForeColor = System.Drawing.Color.White;
-            this.CancelButton.Location = new System.Drawing.Point(12, 641);
+            this.CancelButton.Location = new System.Drawing.Point(12, 642);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(64, 25);
             this.CancelButton.TabIndex = 11;
@@ -166,15 +166,15 @@
             // PasteButton
             // 
             this.PasteButton.AccessibleDescription = "w";
-            this.PasteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PasteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.PasteButton.BackColor = System.Drawing.Color.Transparent;
             this.PasteButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.PasteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PasteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PasteButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.PasteButton.Location = new System.Drawing.Point(740, 612);
+            this.PasteButton.Location = new System.Drawing.Point(748, 612);
             this.PasteButton.Name = "PasteButton";
-            this.PasteButton.Size = new System.Drawing.Size(70, 25);
+            this.PasteButton.Size = new System.Drawing.Size(61, 25);
             this.PasteButton.TabIndex = 2;
             this.PasteButton.Text = "Paste links";
             this.PasteButton.UseVisualStyleBackColor = false;
@@ -219,7 +219,7 @@
             this.PWBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
             this.PWBox.Enabled = false;
             this.PWBox.ForeColor = System.Drawing.Color.White;
-            this.PWBox.Location = new System.Drawing.Point(46, 246);
+            this.PWBox.Location = new System.Drawing.Point(46, 261);
             this.PWBox.Name = "PWBox";
             this.PWBox.Size = new System.Drawing.Size(414, 26);
             this.PWBox.TabIndex = 4;
@@ -280,12 +280,9 @@
             // 
             // ALTrayIcon
             // 
-            this.ALTrayIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.ALTrayIcon.BalloonTipText = "All Legit moved to tray.";
-            this.ALTrayIcon.BalloonTipTitle = "All Legit";
             this.ALTrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("ALTrayIcon.Icon")));
-            this.ALTrayIcon.Tag = "FaDASDASD";
-            this.ALTrayIcon.Text = "All LegitASDASD";
+            this.ALTrayIcon.Tag = "";
+            this.ALTrayIcon.Text = "All Legit";
             this.ALTrayIcon.Visible = true;
             this.ALTrayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ALTrayIcon_MouseClick);
             this.ALTrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ALTrayIcon_MouseDoubleClick_1);
@@ -307,7 +304,7 @@
             this.settingsP.Location = new System.Drawing.Point(302, 5);
             this.settingsP.Name = "settingsP";
             this.settingsP.Padding = new System.Windows.Forms.Padding(45, 65, 45, 45);
-            this.settingsP.Size = new System.Drawing.Size(511, 301);
+            this.settingsP.Size = new System.Drawing.Size(511, 326);
             this.settingsP.TabIndex = 13;
             this.settingsP.Visible = false;
             this.settingsP.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
@@ -350,7 +347,7 @@
             this.zipPWLabel.AutoSize = true;
             this.zipPWLabel.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.zipPWLabel.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.zipPWLabel.Location = new System.Drawing.Point(58, 220);
+            this.zipPWLabel.Location = new System.Drawing.Point(58, 235);
             this.zipPWLabel.Name = "zipPWLabel";
             this.zipPWLabel.Size = new System.Drawing.Size(390, 22);
             this.zipPWLabel.TabIndex = 9;
@@ -394,9 +391,9 @@
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(777, 7);
+            this.pictureBox1.Location = new System.Drawing.Point(768, 7);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(36, 28);
+            this.pictureBox1.Size = new System.Drawing.Size(41, 46);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
@@ -426,9 +423,9 @@
             this.DownloadingText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(28)))));
             this.DownloadingText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DownloadingText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(191)))));
-            this.DownloadingText.Location = new System.Drawing.Point(64, 640);
+            this.DownloadingText.Location = new System.Drawing.Point(82, 640);
             this.DownloadingText.Name = "DownloadingText";
-            this.DownloadingText.Size = new System.Drawing.Size(555, 24);
+            this.DownloadingText.Size = new System.Drawing.Size(514, 24);
             this.DownloadingText.TabIndex = 12;
             this.DownloadingText.Text = "...";
             this.DownloadingText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -442,9 +439,9 @@
             this.startDownloads.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.startDownloads.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.startDownloads.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.startDownloads.Location = new System.Drawing.Point(609, 640);
+            this.startDownloads.Location = new System.Drawing.Point(600, 640);
             this.startDownloads.Name = "startDownloads";
-            this.startDownloads.Size = new System.Drawing.Size(203, 28);
+            this.startDownloads.Size = new System.Drawing.Size(209, 28);
             this.startDownloads.TabIndex = 5;
             this.startDownloads.Text = "Download Selected";
             this.startDownloads.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -459,9 +456,9 @@
             this.CopyLinks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CopyLinks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CopyLinks.ForeColor = System.Drawing.Color.White;
-            this.CopyLinks.Location = new System.Drawing.Point(607, 612);
+            this.CopyLinks.Location = new System.Drawing.Point(600, 612);
             this.CopyLinks.Name = "CopyLinks";
-            this.CopyLinks.Size = new System.Drawing.Size(127, 25);
+            this.CopyLinks.Size = new System.Drawing.Size(145, 25);
             this.CopyLinks.TabIndex = 10;
             this.CopyLinks.Text = "Copy Converted";
             this.CopyLinks.UseVisualStyleBackColor = false;
@@ -491,11 +488,12 @@
             this.dlProg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.dlProg.Location = new System.Drawing.Point(82, 612);
             this.dlProg.Name = "dlProg";
-            this.dlProg.Size = new System.Drawing.Size(519, 25);
+            this.dlProg.Size = new System.Drawing.Size(514, 25);
             this.dlProg.TabIndex = 9;
             // 
             // Close2Tray
             // 
+            this.Close2Tray.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Close2Tray.AutoSize = true;
             this.Close2Tray.BackColor = System.Drawing.Color.Transparent;
             this.Close2Tray.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Bold);
@@ -516,7 +514,6 @@
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(20)))));
             this.ClientSize = new System.Drawing.Size(821, 671);
-            this.Controls.Add(this.settingsP);
             this.Controls.Add(this.Close2Tray);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.StayOnTopCheckbox);
@@ -533,6 +530,7 @@
             this.Controls.Add(this.startDownloads);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.DownloadingText);
+            this.Controls.Add(this.settingsP);
             this.ForeColor = System.Drawing.Color.NavajoWhite;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(723, 508);
@@ -569,7 +567,6 @@
         private System.Windows.Forms.TextBox HotKeyBox;
         private System.Windows.Forms.CheckBox AutoDLBox;
         private System.Windows.Forms.CheckBox AutoOverwrite;
-        private System.Windows.Forms.NotifyIcon ALTrayIcon;
         private System.Windows.Forms.Panel settingsP;
         private System.Windows.Forms.CheckBox RemDL;
         private System.Windows.Forms.PictureBox pictureBox1;
@@ -585,6 +582,7 @@
         private System.Windows.Forms.CheckBox AutoExtract;
         private System.Windows.Forms.Label zipPWLabel;
         private System.Windows.Forms.CheckBox Close2Tray;
+        public System.Windows.Forms.NotifyIcon ALTrayIcon;
     }
 }
 
