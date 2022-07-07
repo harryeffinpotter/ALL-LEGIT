@@ -649,13 +649,14 @@ public async void DoAsyncConversion()
                                                     this.Invoke(() =>
                                                     {
                                                         if (!Program.form.Focused)
-                                                        {
+                                                    {
                                                             ALTrayIcon.ShowBalloonTip(5000, $"{magnetName} added to Queue!", "All Legit!", ToolTipIcon.None);
-                                                        }
-                                                        else
-                                                        {
+                                                    }
+                                                    else
+                                                    {
                                                             DownloadingText.Text = $"Torrent added to queue...";
                                                         }
+
                                                     });
                                                 }
                                                 if (MagnetStatus.Equals("Downloading"))
@@ -694,20 +695,25 @@ public async void DoAsyncConversion()
                                                 {
                                                     this.Invoke(() =>
                                                     {
-                                                        if (!Program.form.Focused)
-                                                        {
+                                                    if (!Program.form.Focused)
+                                                    {
+                                             
                                                             ALTrayIcon.ShowBalloonTip(5000, $"{magnetName} finished downloadint torrent, now uploading to DDL links...", "All Legit!", ToolTipIcon.None);
-                                                        }
-                                                        else
-                                                        {
+                                                      
+                                                    }
+                                                    else
+                                                    {
+                                                   
                                                             DownloadingText.Text = $"{magnetName} finshed downloading!";
-                                                        }
+                                                    }
                                                     });
+
                                                 }
                                                 else if (MagnetStatus.Equals("Uploading"))
                                                 {
                                                     if (!isDownloading)
                                                     {
+
 
                                                         notdone = true;
                                                         UploadSpeed = double.Parse(key.uploadSpeed.ToString());
@@ -750,64 +756,68 @@ public async void DoAsyncConversion()
 
                                                 }
                                                 else
-                                                {
+
                                                     DownloadingText.Text = "Magnet conversion finished!";
-                                                }
-
-                                                foreach (var key2 in key.links)
+                                            });
+                                            foreach (var key2 in key.links)
+                                            {
+                                                bool skip = false;
+                                                var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key2.link.ToString()}");
+                                                try
                                                 {
-                                                    bool skip = false;
-                                                    var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key2.link.ToString()}");
-                                                    try
+                                                    string unlockedLink = result.data.link.ToString();
+                                                    double FileSize = double.Parse(result.data.filesize.ToString());
+                                                    string FileSizeInt = "";
+                                                    if ((FileSize / 1024 / 1024) > 1000)
                                                     {
-                                                        string unlockedLink = result.data.link.ToString();
-                                                        double FileSize = double.Parse(result.data.filesize.ToString());
-                                                        string FileSizeInt = "";
-                                                        if ((FileSize / 1024 / 1024) > 1000)
-                                                        {
-                                                            FileSizeInt = String.Format("{0:0.00}", (FileSize / 1024 / 1024 / 1024).ToString("0.00")) + "GB";
+                                                        FileSizeInt = String.Format("{0:0.00}", (FileSize / 1024 / 1024 / 1024).ToString("0.00")) + "GB";
 
-                                                        }
-                                                        else
-                                                        {
-                                                            FileSizeInt = (String.Format("{0:0.00}", (FileSize / 1024 / 1024).ToString("0.00"))) + "MB";
-                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        FileSizeInt = (String.Format("{0:0.00}", (FileSize / 1024 / 1024).ToString("0.00"))) + "MB";
+                                                    }
 
 
-
+                                                    this.Invoke(() =>
+                                                    {
                                                         foreach (ListViewItem item in listView1.Items)
                                                         {
                                                             if (item.SubItems[0].Text.Equals(key2.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
                                                             {
                                                                 skip = true;
 
-                                                                if (!Program.form.Focused)
+
+                                                                this.Invoke(() =>
                                                                 {
                                                                     ALTrayIcon.ShowBalloonTip(5000, $"Already in queue!", "All Legit!", ToolTipIcon.None);
-
-                                                                }
-                                                                else
+                                                                });
+                                                            }
+                                                            else
+                                                            {
+                                                                this.Invoke(() =>
                                                                 {
                                                                     DownloadingText.Text = $"Already in queue...";
-
-                                                                }
+                                                                });
                                                             }
-
-                                                            if (!skip)
-                                                            {
-
-                                                                listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
-
-                                                            }
-
-                                                            if (listView1.Items.Count == 0)
-                                                            {
-
-                                                                listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
-                                                            }
-
-                                                            skip = false;
                                                         }
+
+                                                        if (!skip)
+                                                        {
+
+                                                            listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
+
+                                                        }
+
+                                                        if (listView1.Items.Count == 0)
+                                                        {
+                                                            this.Invoke(() =>
+                                                            {
+                                                                listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
+                                                            });
+                                                        }
+
+                                                        skip = false;
                                                         foreach (ListViewItem item in listView1.Items)
                                                         {
                                                             if (item.SubItems[2].Text.Equals(magnetName))
@@ -816,14 +826,12 @@ public async void DoAsyncConversion()
 
                                                             }
                                                         }
-
-                                                    }
-
-                                                    catch
-                                                    {
-                                                    }
+                                                    });
                                                 }
-                                            });
+                                                catch
+                                                {
+                                                }
+                                            }
                                             this.Invoke(() =>
                                             {
                                                 dlProg.Value = 0;
@@ -837,52 +845,37 @@ public async void DoAsyncConversion()
                         }
                         if (isErrors)
                         {
-                            if (a > 0)
+                            this.Invoke(() =>
                             {
-                                if (!Program.form.Focused)
+                                if (a > 0)
                                 {
-                                    this.Invoke(() =>
+                                    if (!Program.form.Focused)
                                     {
                                         ALTrayIcon.ShowBalloonTip(5000, $"Magnet(s) not valid.", "All Legit!", ToolTipIcon.Error);
-                                    });
-                                }
-                                else
-                                    this.Invoke(() =>
-                                    {
+                                    }
+                                    else
                                         MessageBox.Show($"{a1}\nMagnet(s) not valid.", "Invalid magnet.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                                    });
-                            }
-                            if (b > 0)
-                            {
-                                if (!Program.form.Focused)
+                                }
+                                if (b > 0)
                                 {
-                                    this.Invoke(() =>
+                                    if (!Program.form.Focused)
                                     {
                                         ALTrayIcon.ShowBalloonTip(5000, $"Already have maximum allowed active magnets (30)", "All Legit!", ToolTipIcon.Error);
-                                    });
-                                }
-                                else
-                                    this.Invoke(() =>
-                                    {
+                                    }
+                                    else
                                         MessageBox.Show($"{b1}\nAlready have maximum allowed active magnets (30).", "Cannot add over 30 torrents.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                                    });
-                            }
-                            if (c > 0)
-                            {
-                                if (!Program.form.Focused)
+
+                                }
+                                if (c > 0)
                                 {
-                                    this.Invoke(() =>
+                                    if (!Program.form.Focused)
                                     {
                                         ALTrayIcon.ShowBalloonTip(5000, $"Server are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN", "All Legit!", ToolTipIcon.Error);
-                                    });
-                                }
-                                else
-                                    this.Invoke(() =>
-                                    {
+                                    }
+                                    else
                                         MessageBox.Show($"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "All Legit!", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                                    });
-
-                            }
+                                }
+                            });
                             isConverting = false;
 
                         }
