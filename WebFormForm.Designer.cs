@@ -64,11 +64,11 @@
             this.closeBrowser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.closeBrowser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.closeBrowser.ForeColor = System.Drawing.Color.White;
-            this.closeBrowser.Location = new System.Drawing.Point(319, 646);
+            this.closeBrowser.Location = new System.Drawing.Point(292, 646);
             this.closeBrowser.Name = "closeBrowser";
-            this.closeBrowser.Size = new System.Drawing.Size(511, 41);
+            this.closeBrowser.Size = new System.Drawing.Size(575, 41);
             this.closeBrowser.TabIndex = 16;
-            this.closeBrowser.Text = "CLICK THIS BUTTON IF THE CAPTCHA DOES NOT LOAD PROPERLY ";
+            this.closeBrowser.Text = "CAPTCHA DIDN\'T LOAD PROPERLY? USE THIS WORKAROUND!";
             this.closeBrowser.UseVisualStyleBackColor = false;
             this.closeBrowser.Click += new System.EventHandler(this.closeBrowser_Click);
             // 
@@ -97,7 +97,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WebFormForm";
             this.Text = "AllLegit: Solve Captcha";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.WebFormForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

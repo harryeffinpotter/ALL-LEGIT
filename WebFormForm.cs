@@ -22,27 +22,27 @@ namespace ALL_LEGIT
             InitializeComponent();
 
         }
-        
-            /// <summary>
-            /// The URLMON library contains this function, URLDownloadToFile, which is a way
-            /// to download files without user prompts.  The ExecWB( _SAVEAS ) function always
-            /// prompts the user, even if _DONTPROMPTUSER parameter is specified, for "internet
-            /// security reasons".  This function gets around those reasons.
-            /// </summary>
-            /// <param name="callerPointer">Pointer to caller object (AX).</param>
-            /// <param name="url">String of the URL.</param>
-            /// <param name="filePathWithName">String of the destination filename/path.</param>
-            /// <param name="reserved">[reserved].</param>
-            /// <param name="callBack">A callback function to monitor progress or abort.</param>
-            /// <returns>0 for okay.</returns>
-            /// source: http://www.pinvoke.net/default.aspx/urlmon/URLDownloadToFile%20.html
-            [DllImport("urlmon.dll", CharSet = CharSet.Auto, SetLastError = true)]
+
+        /// <summary>
+        /// The URLMON library contains this function, URLDownloadToFile, which is a way
+        /// to download files without user prompts.  The ExecWB( _SAVEAS ) function always
+        /// prompts the user, even if _DONTPROMPTUSER parameter is specified, for "internet
+        /// security reasons".  This function gets around those reasons.
+        /// </summary>
+        /// <param name="callerPointer">Pointer to caller object (AX).</param>
+        /// <param name="url">String of the URL.</param>
+        /// <param name="filePathWithName">String of the destination filename/path.</param>
+        /// <param name="reserved">[reserved].</param>
+        /// <param name="callBack">A callback function to monitor progress or abort.</param>
+        /// <returns>0 for okay.</returns>
+        /// source: http://www.pinvoke.net/default.aspx/urlmon/URLDownloadToFile%20.html
+        [DllImport("urlmon.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern Int32 URLDownloadToFile(
-                [MarshalAs(UnmanagedType.IUnknown)] object callerPointer,
-                [MarshalAs(UnmanagedType.LPWStr)] string url,
-                [MarshalAs(UnmanagedType.LPWStr)] string filePathWithName,
-                Int32 reserved,
-                IntPtr callBack);
+            [MarshalAs(UnmanagedType.IUnknown)] object callerPointer,
+            [MarshalAs(UnmanagedType.LPWStr)] string url,
+            [MarshalAs(UnmanagedType.LPWStr)] string filePathWithName,
+            Int32 reserved,
+            IntPtr callBack);
 
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace ALL_LEGIT
             URLDownloadToFile(null, url, destinationFullPathWithName, 0, IntPtr.Zero);
             return new FileInfo(destinationFullPathWithName);
         }
-        public void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             var links = webBrowser1.Document.GetElementsByTagName("button");
 
@@ -91,15 +91,30 @@ namespace ALL_LEGIT
 
 
 
-        public void WebFormForm_Load(object sender, EventArgs e)
+        private void WebFormForm_Load(object sender, EventArgs e)
         {
             webBrowser1.ScriptErrorsSuppressed = true;
             webBrowser1.Navigate(MainWindow.FilecryptURL);
         }
+        public static bool clicked = false;
 
-        public async void closeBrowser_Click(object sender, EventArgs e)
+        private async void closeBrowser_Click(object sender, EventArgs e)
         {
+            if (!clicked)
+            {
+                closeBrowser.Text = "SUBMIT DOWNLOADED DLC FILE.";
+            }
+            if (clicked)
+            {
+                clicked = false;
+                webBrowser1.Stop();
+                Utilities.DecryptDLC();
+                closeBrowser.Text = "CAPTCHA DIDN'T LOAD PROPERLY? USE THIS WORKAROUND!";
+                this.Close();
+                return;
+            }
             bool GotDLC = false;
+            clicked = true;
 
             var process = new Process
             {
@@ -110,13 +125,12 @@ namespace ALL_LEGIT
             };
             process.Start();
 
-
             while (!GotDLC)
             {
 
                 string[] files = System.IO.Directory.GetFiles(Properties.Settings.Default.DownloadDir, "*.dlc", SearchOption.TopDirectoryOnly);
                 if (files.Length > 0) GotDLC = true;
-                await Task.Delay(1000);
+                await Task.Delay(100);
             }
             if (GotDLC)
             {
@@ -124,7 +138,7 @@ namespace ALL_LEGIT
                 Utilities.DecryptDLC();
                 this.Close();
             }
-            process.WaitForExit();
+    
 
 
 

@@ -152,7 +152,7 @@
             this.CancelButton.BackColor = System.Drawing.Color.Transparent;
             this.CancelButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.CancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.CancelButton.ForeColor = System.Drawing.Color.White;
             this.CancelButton.Location = new System.Drawing.Point(12, 642);
             this.CancelButton.Name = "CancelButton";
@@ -168,10 +168,10 @@
             this.PasteButton.AccessibleDescription = "w";
             this.PasteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.PasteButton.BackColor = System.Drawing.Color.Transparent;
-            this.PasteButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.PasteButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.PasteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.PasteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PasteButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.PasteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
+            this.PasteButton.ForeColor = System.Drawing.Color.White;
             this.PasteButton.Location = new System.Drawing.Point(748, 612);
             this.PasteButton.Name = "PasteButton";
             this.PasteButton.Size = new System.Drawing.Size(61, 25);
@@ -391,9 +391,9 @@
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(768, 7);
+            this.pictureBox1.Location = new System.Drawing.Point(773, 4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(41, 46);
+            this.pictureBox1.Size = new System.Drawing.Size(41, 43);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
@@ -423,7 +423,7 @@
             this.DownloadingText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(28)))));
             this.DownloadingText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DownloadingText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(191)))));
-            this.DownloadingText.Location = new System.Drawing.Point(82, 640);
+            this.DownloadingText.Location = new System.Drawing.Point(82, 642);
             this.DownloadingText.Name = "DownloadingText";
             this.DownloadingText.Size = new System.Drawing.Size(514, 24);
             this.DownloadingText.TabIndex = 12;
@@ -435,13 +435,12 @@
             this.startDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.startDownloads.Cursor = System.Windows.Forms.Cursors.Default;
             this.startDownloads.FlatAppearance.BorderColor = System.Drawing.Color.Turquoise;
-            this.startDownloads.FlatAppearance.BorderSize = 2;
             this.startDownloads.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.startDownloads.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.startDownloads.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.startDownloads.Location = new System.Drawing.Point(600, 640);
             this.startDownloads.Name = "startDownloads";
-            this.startDownloads.Size = new System.Drawing.Size(209, 28);
+            this.startDownloads.Size = new System.Drawing.Size(209, 25);
             this.startDownloads.TabIndex = 5;
             this.startDownloads.Text = "Download Selected";
             this.startDownloads.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -454,7 +453,7 @@
             this.CopyLinks.BackColor = System.Drawing.Color.Transparent;
             this.CopyLinks.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.CopyLinks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CopyLinks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CopyLinks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.CopyLinks.ForeColor = System.Drawing.Color.White;
             this.CopyLinks.Location = new System.Drawing.Point(600, 612);
             this.CopyLinks.Name = "CopyLinks";
@@ -470,7 +469,7 @@
             this.ClearButton.BackColor = System.Drawing.Color.Transparent;
             this.ClearButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.ClearButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.ClearButton.ForeColor = System.Drawing.Color.White;
             this.ClearButton.Location = new System.Drawing.Point(12, 612);
             this.ClearButton.Name = "ClearButton";

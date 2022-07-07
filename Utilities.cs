@@ -117,6 +117,7 @@ namespace ALL_LEGIT
                 pro.WorkingDirectory = $"{Environment.CurrentDirectory}\\_bin";
                 pro.Arguments = $"/c decrypt-dlc.cmd \"{currentDLCfile}\" -o \"{Environment.CurrentDirectory}\\_bin\\{DLCNumber}.txt\"";
                 Process x = Process.Start(pro);
+                x.Start();
                 x.WaitForExit();
                 try
                 {
