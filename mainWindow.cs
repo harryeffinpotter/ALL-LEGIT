@@ -357,11 +357,10 @@ namespace ALL_LEGIT
         public static bool overwrite = false;
         public static string MagnetSubName = "";
         public static bool NoNamesPresent = false;
-        public WebClient webClient = new WebClient();
         string currentGroup = "";
-        public async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
+        private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
-            if (URL.EndsWith("url")) return;
+            isDownloading = true;
             midRun = true;
             warnedthisbatch = false;
             Stopwatch sw = new Stopwatch(); // The stopwatch which we will be using to calculate the download speed
@@ -428,30 +427,31 @@ namespace ALL_LEGIT
             }
 
             //DOWNLOAD AREA
+   
 
-
-            webClient.DownloadProgressChanged += (s, e) =>
-            {
-                sw.Restart();
-                string DLS;
-                DLS = string.Format("{0:0.00}", (e.BytesReceived / 1024 / 1024 / sw.Elapsed.TotalSeconds).ToString("0.00"));
-
-                this.Invoke(() =>
+                WebClient webClient = new WebClient();
+                webClient.DownloadProgressChanged += (s, e) =>
                 {
+                    sw.Start();
+                    string DLS;
+                    DLS = String.Format("{0:0.00}", (e.BytesReceived / 1024 / 1024 / sw.Elapsed.TotalSeconds).ToString("0.00"));
 
-                    dlProg.Value = e.ProgressPercentage;
-                    DownloadingText.Text = $"Downloading: {FILENAME}. {e.ProgressPercentage}% complete. Speed:{DLS}MB\\s";
-                });
+                    this.Invoke(() =>
+                    {
+                        DownloadingText.Text = $"Downloading: {FILENAME}. {e.ProgressPercentage}% complete. Speed:{DLS}MB\\s";
+                        dlProg.Value = e.ProgressPercentage;
+                    });
 
-                if (cancel)
+                    if (cancel)
+                    {
+                        webClient.Dispose();
+
+                    }
+                };
+
+                webClient.DownloadFileCompleted += (s, e) =>
                 {
-                    webClient.Dispose();
-
-                }
-            };
-
-            webClient.DownloadFileCompleted += (s, e) =>
-            {
+                isDownloading = false;
                 this.Invoke(() =>
                 {
                     DownloadingText.Text = $"Download finished...";
@@ -1247,9 +1247,10 @@ namespace ALL_LEGIT
         {
             while (isDownloading)
             {
-                await Task.Delay(50);
+                await Task.Delay(100);
             }
             string DLList = "";
+            isDownloading = true;
             CancelButton.Visible = true;
             if (listView1.CheckedItems.Count > 0)
             {
@@ -1273,7 +1274,6 @@ namespace ALL_LEGIT
                     });
                     try
                     {
-                        isDownloading = true;
                         //
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
@@ -1281,7 +1281,6 @@ namespace ALL_LEGIT
                         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //
-                        isDownloading = false;
                     }
                     catch (System.Net.WebException Ex)
                     {
@@ -1500,8 +1499,6 @@ namespace ALL_LEGIT
             cancel = true;
             this.Invoke(() =>
             {
-                webClient.CancelAsync();
-                webClient.Dispose();
 
                 Program.form.DownloadingText.Text = $"";
                 dlProg.Value = 0;
