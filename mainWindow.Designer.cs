@@ -60,8 +60,12 @@
             this.ClearButton = new System.Windows.Forms.Button();
             this.dlProg = new System.Windows.Forms.ProgressBar();
             this.Close2Tray = new System.Windows.Forms.CheckBox();
+            this.UncheckAll = new System.Windows.Forms.PictureBox();
+            this.CheckAll = new System.Windows.Forms.PictureBox();
             this.settingsP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UncheckAll)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckAll)).BeginInit();
             this.SuspendLayout();
             // 
             // listView1
@@ -90,7 +94,9 @@
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listView1_ItemChecked);
             this.listView1.DoubleClick += new System.EventHandler(this.listView1_MouseDoubleClick);
+            this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
             this.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseDoubleClick);
             this.listView1.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
@@ -154,9 +160,9 @@
             this.CancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.CancelButton.ForeColor = System.Drawing.Color.White;
-            this.CancelButton.Location = new System.Drawing.Point(12, 642);
+            this.CancelButton.Location = new System.Drawing.Point(649, 640);
             this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(64, 25);
+            this.CancelButton.Size = new System.Drawing.Size(160, 25);
             this.CancelButton.TabIndex = 11;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = false;
@@ -205,13 +211,14 @@
             this.SplashText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
             this.SplashText.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SplashText.ForeColor = System.Drawing.Color.White;
-            this.SplashText.Location = new System.Drawing.Point(104, 198);
+            this.SplashText.Location = new System.Drawing.Point(104, 196);
             this.SplashText.Name = "SplashText";
             this.SplashText.Size = new System.Drawing.Size(613, 286);
             this.SplashText.TabIndex = 4;
             this.SplashText.Text = "All Legit v1.0.0\r\nby HarryEffinPottter/YSG\r\n\r\nGlobal hot key works everywhere,\r\ne" +
     "ven when app is minimized.\r\n\r\nCTRL+V or Paste button while in app.";
             this.SplashText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.SplashText.Click += new System.EventHandler(this.DOwnlol);
             this.SplashText.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
             // PWBox
@@ -423,9 +430,9 @@
             this.DownloadingText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(28)))));
             this.DownloadingText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DownloadingText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(220)))), ((int)(((byte)(191)))));
-            this.DownloadingText.Location = new System.Drawing.Point(82, 642);
+            this.DownloadingText.Location = new System.Drawing.Point(179, 640);
             this.DownloadingText.Name = "DownloadingText";
-            this.DownloadingText.Size = new System.Drawing.Size(514, 24);
+            this.DownloadingText.Size = new System.Drawing.Size(464, 24);
             this.DownloadingText.TabIndex = 12;
             this.DownloadingText.Text = "...";
             this.DownloadingText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -438,9 +445,9 @@
             this.startDownloads.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.startDownloads.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.startDownloads.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.startDownloads.Location = new System.Drawing.Point(600, 640);
+            this.startDownloads.Location = new System.Drawing.Point(649, 640);
             this.startDownloads.Name = "startDownloads";
-            this.startDownloads.Size = new System.Drawing.Size(209, 25);
+            this.startDownloads.Size = new System.Drawing.Size(160, 25);
             this.startDownloads.TabIndex = 5;
             this.startDownloads.Text = "Download Selected";
             this.startDownloads.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -455,11 +462,11 @@
             this.CopyLinks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CopyLinks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.CopyLinks.ForeColor = System.Drawing.Color.White;
-            this.CopyLinks.Location = new System.Drawing.Point(600, 612);
+            this.CopyLinks.Location = new System.Drawing.Point(649, 612);
             this.CopyLinks.Name = "CopyLinks";
-            this.CopyLinks.Size = new System.Drawing.Size(145, 25);
+            this.CopyLinks.Size = new System.Drawing.Size(96, 25);
             this.CopyLinks.TabIndex = 10;
-            this.CopyLinks.Text = "Copy Converted";
+            this.CopyLinks.Text = "Copy Links";
             this.CopyLinks.UseVisualStyleBackColor = false;
             this.CopyLinks.Click += new System.EventHandler(this.CopyLinks_Click);
             // 
@@ -471,11 +478,11 @@
             this.ClearButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.ClearButton.ForeColor = System.Drawing.Color.White;
-            this.ClearButton.Location = new System.Drawing.Point(12, 612);
+            this.ClearButton.Location = new System.Drawing.Point(44, 612);
             this.ClearButton.Name = "ClearButton";
-            this.ClearButton.Size = new System.Drawing.Size(64, 25);
+            this.ClearButton.Size = new System.Drawing.Size(130, 25);
             this.ClearButton.TabIndex = 8;
-            this.ClearButton.Text = "Clear all";
+            this.ClearButton.Text = "Delete Selected";
             this.ClearButton.UseVisualStyleBackColor = false;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
@@ -485,9 +492,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dlProg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
             this.dlProg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.dlProg.Location = new System.Drawing.Point(82, 612);
+            this.dlProg.Location = new System.Drawing.Point(179, 612);
             this.dlProg.Name = "dlProg";
-            this.dlProg.Size = new System.Drawing.Size(514, 25);
+            this.dlProg.Size = new System.Drawing.Size(464, 25);
             this.dlProg.TabIndex = 9;
             // 
             // Close2Tray
@@ -505,6 +512,29 @@
             this.Close2Tray.UseVisualStyleBackColor = false;
             this.Close2Tray.CheckedChanged += new System.EventHandler(this.Close2Tray_CheckedChanged_1);
             // 
+            // UncheckAll
+            // 
+            this.UncheckAll.Image = ((System.Drawing.Image)(resources.GetObject("UncheckAll.Image")));
+            this.UncheckAll.Location = new System.Drawing.Point(13, 611);
+            this.UncheckAll.Name = "UncheckAll";
+            this.UncheckAll.Size = new System.Drawing.Size(26, 27);
+            this.UncheckAll.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.UncheckAll.TabIndex = 16;
+            this.UncheckAll.TabStop = false;
+            this.UncheckAll.Click += new System.EventHandler(this.UncheckAll_Click);
+            // 
+            // CheckAll
+            // 
+            this.CheckAll.Image = ((System.Drawing.Image)(resources.GetObject("CheckAll.Image")));
+            this.CheckAll.Location = new System.Drawing.Point(13, 611);
+            this.CheckAll.Name = "CheckAll";
+            this.CheckAll.Size = new System.Drawing.Size(26, 27);
+            this.CheckAll.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.CheckAll.TabIndex = 16;
+            this.CheckAll.TabStop = false;
+            this.CheckAll.Visible = false;
+            this.CheckAll.Click += new System.EventHandler(this.CheckAll_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -513,6 +543,8 @@
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(20)))));
             this.ClientSize = new System.Drawing.Size(821, 671);
+            this.Controls.Add(this.CheckAll);
+            this.Controls.Add(this.UncheckAll);
             this.Controls.Add(this.Close2Tray);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.StayOnTopCheckbox);
@@ -546,6 +578,8 @@
             this.settingsP.ResumeLayout(false);
             this.settingsP.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UncheckAll)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckAll)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -557,7 +591,6 @@
         private System.Windows.Forms.TextBox DownloadDir;
         private System.Windows.Forms.Button SetDLDIR;
         private System.Windows.Forms.ColumnHeader Group;
-        private new System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.Button PasteButton;
         private System.Windows.Forms.CheckBox StayOnTopCheckbox;
         private System.Windows.Forms.Label SplashText;
@@ -582,6 +615,9 @@
         private System.Windows.Forms.Label zipPWLabel;
         private System.Windows.Forms.CheckBox Close2Tray;
         public System.Windows.Forms.NotifyIcon ALTrayIcon;
+        private System.Windows.Forms.PictureBox UncheckAll;
+        private System.Windows.Forms.PictureBox CheckAll;
+        public System.Windows.Forms.Button CancelButton;
     }
 }
 
