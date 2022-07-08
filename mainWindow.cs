@@ -577,14 +577,14 @@ namespace ALL_LEGIT
 
                     this.Invoke(() =>
                     {
-                        ALTrayIcon.ShowBalloonTip(2000, "", "Adding magnet links...", ToolTipIcon.None);
+                        ALTrayIcon.ShowBalloonTip(2000, "", "Adding magnet links/retrieving magnet info, this can take a minute.", ToolTipIcon.None);
                     });
                 }
                 else
                 {
                     this.Invoke(() =>
                     {
-                        DownloadingText.Text = $"Adding magnet links...";
+                        DownloadingText.Text = $"Adding magnet links/retrieving magnet info, this can take a minute.";
                     });
 
                 }
@@ -676,11 +676,11 @@ namespace ALL_LEGIT
                                 magnetName = obj.data.magnets.filename.ToString();
                                 tries++;
                             }
+                            tries = 0; 
                             alertedonce = false;
                             while (notdone && !cancel)
                             {
                                 obj = getJson(MagnetPoll);
-
 
                                 bool ready = false;
 
