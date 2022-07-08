@@ -665,7 +665,8 @@ namespace ALL_LEGIT
                             string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}";
                             while (notdone && !cancel)
                             {
-                     
+                                magnetName = obj.data.magnets[0].name.ToString();
+
                                 obj = getJson(MagnetPoll);
                                 foreach (var key in obj.data.magnets)
                                 {
@@ -708,17 +709,13 @@ namespace ALL_LEGIT
                                                 if (torrentDLING)
                                                 {
                                                     torrentDLING = false;
-                                                    DialogResult CancelQ = MessageBox.Show("Do you want to stop converting this torrent and remove it from your magnets page?\n\n" +
-                                                        "Answering no will leave it on your Magnets page but remove it from All Legit!, however you can have onmly up to 30 magnets at a time, so if there are no seeds you're " +
-                                                        "better off removing it.", "Remove magnet?", MessageBoxButtons.YesNo);
-                                                    if (CancelQ != DialogResult.Yes)
-                                                    {
-                                                        getJson($"magnet/delete?agent={apiNAME}&apikey={APIKEY}&id{magnetID}");
+                                         
+                                                        getJson($"magnet/delete?agent={apiNAME}&apikey={APIKEY}&id={magnetID}");
                                                         this.Invoke(() =>
                                                         {
                                                             Program.form.DownloadingText.Text = "Magnet removed from profile!";
                                                         });
-                                                    }
+                                                    
 
                                                     this.Invoke(() =>
                                                     {
