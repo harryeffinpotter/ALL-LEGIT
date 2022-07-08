@@ -49,7 +49,6 @@
             this.settingsP = new System.Windows.Forms.Panel();
             this.autoDelZips = new System.Windows.Forms.CheckBox();
             this.AutoExtract = new System.Windows.Forms.CheckBox();
-            this.zipPWLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.RemDL = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -62,6 +61,8 @@
             this.Close2Tray = new System.Windows.Forms.CheckBox();
             this.UncheckAll = new System.Windows.Forms.PictureBox();
             this.CheckAll = new System.Windows.Forms.PictureBox();
+            this.disableNotiesBox = new System.Windows.Forms.CheckBox();
+            this.zipPWLabel = new System.Windows.Forms.Label();
             this.settingsP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncheckAll)).BeginInit();
@@ -140,9 +141,11 @@
             this.SetDLDIR.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SetDLDIR.BackColor = System.Drawing.Color.Transparent;
             this.SetDLDIR.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.SetDLDIR.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkSeaGreen;
+            this.SetDLDIR.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkSlateGray;
             this.SetDLDIR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SetDLDIR.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SetDLDIR.ForeColor = System.Drawing.Color.White;
+            this.SetDLDIR.ForeColor = System.Drawing.SystemColors.Control;
             this.SetDLDIR.Location = new System.Drawing.Point(222, 29);
             this.SetDLDIR.Name = "SetDLDIR";
             this.SetDLDIR.Size = new System.Drawing.Size(114, 24);
@@ -157,10 +160,12 @@
             this.CancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.CancelButton.BackColor = System.Drawing.Color.Transparent;
             this.CancelButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.CancelButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkSeaGreen;
+            this.CancelButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkSlateGray;
             this.CancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.CancelButton.ForeColor = System.Drawing.Color.White;
-            this.CancelButton.Location = new System.Drawing.Point(649, 640);
+            this.CancelButton.ForeColor = System.Drawing.SystemColors.Control;
+            this.CancelButton.Location = new System.Drawing.Point(649, 641);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(160, 25);
             this.CancelButton.TabIndex = 11;
@@ -175,9 +180,11 @@
             this.PasteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.PasteButton.BackColor = System.Drawing.Color.Transparent;
             this.PasteButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.PasteButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkSeaGreen;
+            this.PasteButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkSlateGray;
             this.PasteButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PasteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.PasteButton.ForeColor = System.Drawing.Color.White;
+            this.PasteButton.ForeColor = System.Drawing.SystemColors.Control;
             this.PasteButton.Location = new System.Drawing.Point(748, 612);
             this.PasteButton.Name = "PasteButton";
             this.PasteButton.Size = new System.Drawing.Size(61, 25);
@@ -192,6 +199,7 @@
             this.StayOnTopCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.StayOnTopCheckbox.AutoSize = true;
             this.StayOnTopCheckbox.BackColor = System.Drawing.Color.Transparent;
+            this.StayOnTopCheckbox.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.StayOnTopCheckbox.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Bold);
             this.StayOnTopCheckbox.ForeColor = System.Drawing.Color.White;
             this.StayOnTopCheckbox.Location = new System.Drawing.Point(575, 7);
@@ -218,7 +226,6 @@
             this.SplashText.Text = "All Legit v1.0.0\r\nby HarryEffinPottter/YSG\r\n\r\nGlobal hot key works everywhere,\r\ne" +
     "ven when app is minimized.\r\n\r\nCTRL+V or Paste button while in app.";
             this.SplashText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.SplashText.Click += new System.EventHandler(this.DOwnlol);
             this.SplashText.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
             // PWBox
@@ -226,7 +233,7 @@
             this.PWBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
             this.PWBox.Enabled = false;
             this.PWBox.ForeColor = System.Drawing.Color.White;
-            this.PWBox.Location = new System.Drawing.Point(46, 261);
+            this.PWBox.Location = new System.Drawing.Point(46, 274);
             this.PWBox.Name = "PWBox";
             this.PWBox.Size = new System.Drawing.Size(414, 26);
             this.PWBox.TabIndex = 4;
@@ -299,6 +306,7 @@
             this.settingsP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.settingsP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
             this.settingsP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.settingsP.Controls.Add(this.disableNotiesBox);
             this.settingsP.Controls.Add(this.autoDelZips);
             this.settingsP.Controls.Add(this.AutoExtract);
             this.settingsP.Controls.Add(this.zipPWLabel);
@@ -311,7 +319,7 @@
             this.settingsP.Location = new System.Drawing.Point(302, 5);
             this.settingsP.Name = "settingsP";
             this.settingsP.Padding = new System.Windows.Forms.Padding(45, 65, 45, 45);
-            this.settingsP.Size = new System.Drawing.Size(511, 326);
+            this.settingsP.Size = new System.Drawing.Size(511, 345);
             this.settingsP.TabIndex = 13;
             this.settingsP.Visible = false;
             this.settingsP.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
@@ -349,20 +357,6 @@
             this.AutoExtract.CheckedChanged += new System.EventHandler(this.AutoExtract_CheckedChanged_1);
             this.AutoExtract.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
             // 
-            // zipPWLabel
-            // 
-            this.zipPWLabel.AutoSize = true;
-            this.zipPWLabel.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.zipPWLabel.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.zipPWLabel.Location = new System.Drawing.Point(58, 235);
-            this.zipPWLabel.Name = "zipPWLabel";
-            this.zipPWLabel.Size = new System.Drawing.Size(390, 22);
-            this.zipPWLabel.TabIndex = 9;
-            this.zipPWLabel.Text = "Archive passwords - Use ; to separate.";
-            this.zipPWLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.zipPWLabel.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
-            this.zipPWLabel.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -398,9 +392,9 @@
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(773, 4);
+            this.pictureBox1.Location = new System.Drawing.Point(771, 10);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(41, 43);
+            this.pictureBox1.Size = new System.Drawing.Size(36, 35);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
@@ -412,9 +406,11 @@
             this.HotKeyBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.HotKeyBtn.BackColor = System.Drawing.Color.Transparent;
             this.HotKeyBtn.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.HotKeyBtn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkSeaGreen;
+            this.HotKeyBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkSlateGray;
             this.HotKeyBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.HotKeyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HotKeyBtn.ForeColor = System.Drawing.Color.White;
+            this.HotKeyBtn.ForeColor = System.Drawing.SystemColors.Control;
             this.HotKeyBtn.Location = new System.Drawing.Point(465, 29);
             this.HotKeyBtn.Name = "HotKeyBtn";
             this.HotKeyBtn.Size = new System.Drawing.Size(97, 24);
@@ -442,10 +438,12 @@
             this.startDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.startDownloads.Cursor = System.Windows.Forms.Cursors.Default;
             this.startDownloads.FlatAppearance.BorderColor = System.Drawing.Color.Turquoise;
+            this.startDownloads.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkSeaGreen;
+            this.startDownloads.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkSlateGray;
             this.startDownloads.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.startDownloads.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.startDownloads.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.startDownloads.Location = new System.Drawing.Point(649, 640);
+            this.startDownloads.ForeColor = System.Drawing.SystemColors.Control;
+            this.startDownloads.Location = new System.Drawing.Point(649, 641);
             this.startDownloads.Name = "startDownloads";
             this.startDownloads.Size = new System.Drawing.Size(160, 25);
             this.startDownloads.TabIndex = 5;
@@ -459,9 +457,11 @@
             this.CopyLinks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CopyLinks.BackColor = System.Drawing.Color.Transparent;
             this.CopyLinks.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.CopyLinks.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkSeaGreen;
+            this.CopyLinks.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkSlateGray;
             this.CopyLinks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CopyLinks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.CopyLinks.ForeColor = System.Drawing.Color.White;
+            this.CopyLinks.ForeColor = System.Drawing.SystemColors.Control;
             this.CopyLinks.Location = new System.Drawing.Point(649, 612);
             this.CopyLinks.Name = "CopyLinks";
             this.CopyLinks.Size = new System.Drawing.Size(96, 25);
@@ -475,9 +475,11 @@
             this.ClearButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ClearButton.BackColor = System.Drawing.Color.Transparent;
             this.ClearButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.ClearButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkSeaGreen;
+            this.ClearButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkSlateGray;
             this.ClearButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.ClearButton.ForeColor = System.Drawing.Color.White;
+            this.ClearButton.ForeColor = System.Drawing.SystemColors.Control;
             this.ClearButton.Location = new System.Drawing.Point(44, 612);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(130, 25);
@@ -502,6 +504,7 @@
             this.Close2Tray.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Close2Tray.AutoSize = true;
             this.Close2Tray.BackColor = System.Drawing.Color.Transparent;
+            this.Close2Tray.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.Close2Tray.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Bold);
             this.Close2Tray.ForeColor = System.Drawing.Color.White;
             this.Close2Tray.Location = new System.Drawing.Point(575, 30);
@@ -514,10 +517,11 @@
             // 
             // UncheckAll
             // 
+            this.UncheckAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.UncheckAll.Image = ((System.Drawing.Image)(resources.GetObject("UncheckAll.Image")));
-            this.UncheckAll.Location = new System.Drawing.Point(13, 611);
+            this.UncheckAll.Location = new System.Drawing.Point(13, 612);
             this.UncheckAll.Name = "UncheckAll";
-            this.UncheckAll.Size = new System.Drawing.Size(26, 27);
+            this.UncheckAll.Size = new System.Drawing.Size(26, 25);
             this.UncheckAll.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.UncheckAll.TabIndex = 16;
             this.UncheckAll.TabStop = false;
@@ -525,15 +529,45 @@
             // 
             // CheckAll
             // 
+            this.CheckAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.CheckAll.Image = ((System.Drawing.Image)(resources.GetObject("CheckAll.Image")));
-            this.CheckAll.Location = new System.Drawing.Point(13, 611);
+            this.CheckAll.Location = new System.Drawing.Point(13, 612);
             this.CheckAll.Name = "CheckAll";
-            this.CheckAll.Size = new System.Drawing.Size(26, 27);
+            this.CheckAll.Size = new System.Drawing.Size(26, 25);
             this.CheckAll.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.CheckAll.TabIndex = 16;
             this.CheckAll.TabStop = false;
             this.CheckAll.Visible = false;
             this.CheckAll.Click += new System.EventHandler(this.CheckAll_Click);
+            // 
+            // disableNotiesBox
+            // 
+            this.disableNotiesBox.AutoSize = true;
+            this.disableNotiesBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            this.disableNotiesBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.disableNotiesBox.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.disableNotiesBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.disableNotiesBox.Location = new System.Drawing.Point(45, 205);
+            this.disableNotiesBox.Name = "disableNotiesBox";
+            this.disableNotiesBox.Size = new System.Drawing.Size(417, 26);
+            this.disableNotiesBox.TabIndex = 12;
+            this.disableNotiesBox.Text = "Disable Windows Notifications";
+            this.disableNotiesBox.UseVisualStyleBackColor = false;
+            this.disableNotiesBox.CheckedChanged += new System.EventHandler(this.disableNotiesBox_CheckedChanged);
+            // 
+            // zipPWLabel
+            // 
+            this.zipPWLabel.AutoSize = true;
+            this.zipPWLabel.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.zipPWLabel.ForeColor = System.Drawing.Color.PaleTurquoise;
+            this.zipPWLabel.Location = new System.Drawing.Point(58, 245);
+            this.zipPWLabel.Name = "zipPWLabel";
+            this.zipPWLabel.Size = new System.Drawing.Size(390, 22);
+            this.zipPWLabel.TabIndex = 9;
+            this.zipPWLabel.Text = "Archive passwords - Use ; to separate.";
+            this.zipPWLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.zipPWLabel.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            this.zipPWLabel.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
             // 
             // MainWindow
             // 
@@ -543,10 +577,11 @@
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(20)))));
             this.ClientSize = new System.Drawing.Size(821, 671);
+            this.Controls.Add(this.settingsP);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.CheckAll);
             this.Controls.Add(this.UncheckAll);
             this.Controls.Add(this.Close2Tray);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.StayOnTopCheckbox);
             this.Controls.Add(this.SplashText);
             this.Controls.Add(this.dlProg);
@@ -561,7 +596,6 @@
             this.Controls.Add(this.startDownloads);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.DownloadingText);
-            this.Controls.Add(this.settingsP);
             this.ForeColor = System.Drawing.Color.NavajoWhite;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(723, 508);
@@ -612,12 +646,13 @@
         private System.Windows.Forms.ProgressBar dlProg;
         private System.Windows.Forms.CheckBox autoDelZips;
         private System.Windows.Forms.CheckBox AutoExtract;
-        private System.Windows.Forms.Label zipPWLabel;
         private System.Windows.Forms.CheckBox Close2Tray;
         public System.Windows.Forms.NotifyIcon ALTrayIcon;
         private System.Windows.Forms.PictureBox UncheckAll;
         private System.Windows.Forms.PictureBox CheckAll;
         public System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.CheckBox disableNotiesBox;
+        private System.Windows.Forms.Label zipPWLabel;
     }
 }
 

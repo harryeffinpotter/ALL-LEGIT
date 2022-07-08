@@ -85,7 +85,8 @@ namespace ALL_LEGIT
             }
             if (fails == PWArrCount)
             {
-                MessageBox.Show("Archive is passworded and supplied passwords(if any) did not work.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                MessageBox.Show(new Form { TopMost = true }, "Archive is passworded and supplied passwords(if any) d" +
+                    "id not work.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         public static void DecryptDLC()

@@ -269,7 +269,7 @@ namespace ALL_LEGIT
             {
                 if (!cancel)
                 {
-                    MessageBox.Show("Not able to access the internet, so cannot login... Exiting program.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBox.Show("Not able to access the internet, so cannot login... Exiting program.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Application.Exit();
                     return null;
                 }
@@ -296,7 +296,7 @@ namespace ALL_LEGIT
                         }
                         else
                         {
-                            MessageBox.Show("Previously set API key no longer working... you must reconnect!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                            MessageBox.Show("Previously set API key no longer working... you must reconnect!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
 
@@ -336,7 +336,7 @@ namespace ALL_LEGIT
                         }
                         else
                         {
-                            MessageBox.Show("Previously set API key no longer working... you must reconnect!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                            MessageBox.Show("Previously set API key no longer working... you must reconnect!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }
@@ -394,7 +394,7 @@ namespace ALL_LEGIT
                 if (!currentGroup.Contains(MagnetNAME) || !Properties.Settings.Default.AutoOverwrite)
                 {
                     currentGroup = MagnetNAME;
-                    DialogResult Overwrite1 = MessageBox.Show($"Files found, do you want to overwrite all files from this batch of links({Utilities.RemoveEverythingAfterLast(MagnetNAME, ".")})", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    DialogResult Overwrite1 = MessageBox.Show($"Files found, do you want to overwrite all files from this batch of links({Utilities.RemoveEverythingAfterLast(MagnetNAME, ".")})", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (Overwrite1 == DialogResult.Yes)
                     {
                         overwrite = true;
@@ -665,11 +665,12 @@ namespace ALL_LEGIT
                             string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}";
                             while (notdone && !cancel)
                             {
-                                magnetName = obj.data.magnets[0].name.ToString();
-
+                       
                                 obj = getJson(MagnetPoll);
+                     
                                 foreach (var key in obj.data.magnets)
                                 {
+                                    magnetName = key.filename.ToString();
                                     bool ready = false;
 
                                     if (key.id.ToString().Equals(magnetID))
@@ -951,7 +952,7 @@ namespace ALL_LEGIT
                                         ALTrayIcon.ShowBalloonTip(2000, "", $"Magnet(s) not valid.", ToolTipIcon.Error);
                                     }
                                     else
-                                        MessageBox.Show($"{a1}\nMagnet(s) not valid.", "Invalid magnet.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                        MessageBox.Show($"{a1}\nMagnet(s) not valid.", "Invalid magnet.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
                                 if (b > 0)
                                 {
@@ -960,7 +961,7 @@ namespace ALL_LEGIT
                                         ALTrayIcon.ShowBalloonTip(2000, "", $"Already have maximum allowed active magnets (30)", ToolTipIcon.Error);
                                     }
                                     else
-                                        MessageBox.Show($"{b1}\nAlready have maximum allowed active magnets (30).", "Cannot add over 30 torrents.", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                        MessageBox.Show($"{b1}\nAlready have maximum allowed active magnets (30).", "Cannot add over 30 torrents.", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                                 }
                                 if (c > 0)
@@ -970,7 +971,7 @@ namespace ALL_LEGIT
                                         ALTrayIcon.ShowBalloonTip(2000, "", $"Server are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN", ToolTipIcon.Error);
                                     }
                                     else
-                                        MessageBox.Show($"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "LServer not allowed", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                                        MessageBox.Show($"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "LServer not allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
                             });
                         
@@ -1326,6 +1327,7 @@ namespace ALL_LEGIT
                 await Task.Delay(100);
             }
             if (cancel) return;
+            if (listView1.CheckedItems.Count == 0) return;
             string DLList = "";
             isDownloading = true;
             CancelButton.Visible = true;
@@ -1359,7 +1361,7 @@ namespace ALL_LEGIT
                         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //
-                        item.BackColor = Color.Transparent;
+                        item.BackColor = Color.FromArgb(0, 50, 42);
                     }
                     catch (System.Net.WebException Ex)
                     {
@@ -1539,12 +1541,12 @@ namespace ALL_LEGIT
                 }
                 catch
                 {
-                    MessageBox.Show("Clipboard was in use and could not be set!", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBox.Show("Clipboard was in use and could not be set!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
             {
-                MessageBox.Show("Please select items to download or hit clear.", "", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                MessageBox.Show("Please select items to download or hit clear.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1619,24 +1621,24 @@ namespace ALL_LEGIT
 
         private void PasteButton_Click(object sender, EventArgs e)
         {
-
-            DoAsyncConversion();
-
-
+            string cb = Clipboard.GetText();
+            if (cb.ToLower().StartsWith("https://") || cb.ToLower().StartsWith("magnet:?"))
+            {
+                DoAsyncConversion();
+            }
         }
 
 
 
         public void listView1_MouseDoubleClick(object sender, EventArgs e)
         {
-
-            DoAsyncConversion();
-
-
+            string cb = Clipboard.GetText();
+            if (cb.ToLower().StartsWith("https://") || cb.ToLower().StartsWith("magnet:?"))
+            {
+                DoAsyncConversion();
+            }
 
         }
-
-
         private void DownloadDir_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)System.Windows.Forms.Keys.Enter)
@@ -1644,7 +1646,7 @@ namespace ALL_LEGIT
                 if (!DownloadDir.Text.Equals(Properties.Settings.Default.DownloadDir))
                 {
 
-                    DialogResult answer = MessageBox.Show($"Apply current text as download directory?\n\n{DownloadDir.Text}", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    DialogResult answer = MessageBox.Show($"Apply current text as download directory?\n\n{DownloadDir.Text}", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                     if (answer == DialogResult.OK)
                     {
                         Properties.Settings.Default.DownloadDir = DownloadDir.Text;
@@ -1765,7 +1767,7 @@ namespace ALL_LEGIT
             if (!DownloadDir.Text.Equals(Properties.Settings.Default.DownloadDir))
             {
 
-                DialogResult answer = MessageBox.Show($"Apply current text as download directory?\n\n{DownloadDir.Text}", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                DialogResult answer = MessageBox.Show($"Apply current text as download directory?\n\n{DownloadDir.Text}", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 if (answer == DialogResult.OK)
                 {
                     Properties.Settings.Default.DownloadDir = DownloadDir.Text;
@@ -1829,7 +1831,7 @@ namespace ALL_LEGIT
                     ALTrayIcon.BalloonTipIcon = ToolTipIcon.None;
                     if (!Properties.Settings.Default.DisableNotifies)
                     {
-                        ALTrayIcon.ShowBalloonTip(2000);
+                        ALTrayIcon.ShowBalloonTip(1000);
 
                     }
                     this.Hide();
@@ -1944,7 +1946,8 @@ namespace ALL_LEGIT
                 PWBox.Enabled = false;
 
             }
-
+            Properties.Settings.Default.AutoExtract = AutoExtract.Checked;
+            Properties.Settings.Default.Save();
         }
 
         private void autoDelZips_CheckedChanged_1(object sender, EventArgs e)
@@ -1957,7 +1960,8 @@ namespace ALL_LEGIT
             {
                 autoDelZips.ForeColor = Color.FromArgb(0, 100, 80);
             }
-
+            Properties.Settings.Default.DelZips = autoDelZips.Checked;
+            Properties.Settings.Default.Save();
         }
         private void AutoDLBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -2043,9 +2047,18 @@ namespace ALL_LEGIT
             }
         }
 
-        private void DOwnlol(object sender, EventArgs e)
+        private void disableNotiesBox_CheckedChanged(object sender, EventArgs e)
         {
-
+            Properties.Settings.Default.DisableNotifies = disableNotiesBox.Checked;
+            Properties.Settings.Default.Save();
+            if (disableNotiesBox.Checked)
+            {
+                disableNotiesBox.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                disableNotiesBox.ForeColor = Color.FromArgb(0, 100, 80);
+            }
         }
     }
 }
