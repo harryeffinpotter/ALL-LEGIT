@@ -1250,7 +1250,14 @@ namespace ALL_LEGIT
                 isConverting = false;
             }
 
+            this.Invoke(() =>
+            {
+                if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                {
+                    DownloadingText.Text = "A";
+                }
 
+            });
             this.Invoke(() =>
             {
                 listView1.Update();
