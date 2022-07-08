@@ -439,7 +439,10 @@ namespace ALL_LEGIT
                 var name = FILENAME;
                 const int MaxLength = 35;
                 if (name.Length > MaxLength)
-                    name = name.Substring(0, MaxLength) + "..."; // name = "Chris"
+                {
+                    FILENAME = name.Substring(0, MaxLength) + "..."; // name = "Chris"
+                }
+      
                 this.Invoke(() =>
                 {
                     DownloadingText.Text = $"{FILENAME} - {e.ProgressPercentage}% - {DLS}MB\\s";
@@ -1294,7 +1297,7 @@ namespace ALL_LEGIT
                     });
                     try
                     {
-                        item.BackColor = Color.DarkBlue;
+                        item.BackColor = Color.LightSeaGreen;
                         //
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
