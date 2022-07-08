@@ -442,7 +442,7 @@ namespace ALL_LEGIT
                 {
                     FILENAME = name.Substring(0, MaxLength) + "..."; // name = "Chris"
                 }
-      
+
                 this.Invoke(() =>
                 {
                     DownloadingText.Text = $"{FILENAME} - {e.ProgressPercentage}% - {DLS}MB\\s";
@@ -691,6 +691,7 @@ namespace ALL_LEGIT
                                             {
                                                 if (!alertedonce)
                                                 {
+                                                    alertedonce = true;
                                                     this.Invoke(() =>
                                                     {
                                                         if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
@@ -704,110 +705,116 @@ namespace ALL_LEGIT
                                                         }
 
                                                     });
-                                                    MagnetStatus = key.status.ToString();
-                                                    if (MagnetStatus.Equals("In Queue"))
+                                                }
+                                                MagnetStatus = key.status.ToString();
+                                                if (MagnetStatus.Equals("In Queue"))
+                                                {
+                                                    this.Invoke(() =>
                                                     {
-                                                        this.Invoke(() =>
+                                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                                                         {
-                                                            if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                                            {
-                                                                ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} added to Queue!", ToolTipIcon.None);
-                                                            }
-                                                            else
-                                                            {
-                                                                DownloadingText.Text = $"Torrent added to queue...";
-                                                            }
-
-                                                        });
-                                                    }
-                                                    if (MagnetStatus.Equals("Downloading"))
-                                                    {
-                                                        if (!isDownloading)
+                                                            ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} added to Queue!", ToolTipIcon.None);
+                                                        }
+                                                        else
                                                         {
-                                                            string seeders = key.seeders.ToString();
-                                                            notdone = true;
-                                                            DownloadSpeed = double.Parse(key.downloadSpeed.ToString());
-                                                            double DownloadSpeed2 = (DownloadSpeed / 1024) / 1024;
-                                                            string DLS;
-                                                            DLS = "Speed:" + String.Format("{0:0.00}", DownloadSpeed2) + $" MB/s";
-
-
-                                                            total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
-                                                            DLsofar = long.Parse(Utilities.KeepOnlyNumbers(key.downloaded.ToString()));
-
-                                                            int percentComplete = (int)Math.Round((double)(100 * DLsofar) / total);
-                                                            if (percentComplete < 0)
-                                                            {
-                                                                percentComplete = 0;
-                                                            }
-                                                            this.Invoke(() =>
-                                                            {
-
-                                                                dlProg.Value = percentComplete;
-                                                            });
-                                                            this.Invoke(() =>
-                                                            {
-                                                                DownloadingText.Text = $"All Debrid is downloading torrent: {magnetName}. {percentComplete}% complete. Seeds:{seeders}. {DLS}\n(NOTE: If youa cancel this you will have to go to your magnets page on the AD website and remove it.";
-                                                            });
+                                                            DownloadingText.Text = $"Torrent added to queue...";
                                                         }
 
-                                                    }
-                                                    else if (MagnetStatus.Equals("Ready"))
+                                                    });
+                                                }
+                                                if (MagnetStatus.Equals("Downloading"))
+                                                {
+                                                    if (!isDownloading)
                                                     {
+                                                        string seeders = key.seeders.ToString();
+                                                        notdone = true;
+                                                        DownloadSpeed = double.Parse(key.downloadSpeed.ToString());
+                                                        double DownloadSpeed2 = (DownloadSpeed / 1024) / 1024;
+                                                        string DLS;
+                                                        DLS = "Speed:" + String.Format("{0:0.00}", DownloadSpeed2) + $" MB/s";
+
+
+                                                        total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
+                                                        DLsofar = long.Parse(Utilities.KeepOnlyNumbers(key.downloaded.ToString()));
+
+                                                        int percentComplete = (int)Math.Round((double)(100 * DLsofar) / total);
+                                                        if (percentComplete < 0)
+                                                        {
+                                                            percentComplete = 0;
+                                                        }
                                                         this.Invoke(() =>
                                                         {
-                                                            if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                                            {
 
-                                                                ALTrayIcon.ShowBalloonTip(3000, "", $"{magnetName} finished downloading, now uploading to DDL links...", ToolTipIcon.None);
+                                                            dlProg.Value = percentComplete;
+                                                        });
+                                                        const int MaxLength = 20;
+                                                        var name = magnetName;
+                                                        if (name.Length > MaxLength)
+                                                            name = name.Substring(0, MaxLength); // name = "Chris"
+                                                        this.Invoke(() =>
+                                                        {
 
-                                                            }
-                                                            else
-                                                            {
+                                                            DownloadingText.Text = $"Downloading torrent: {name}. {percentComplete}% Seeds:{seeders}. {DLS}";
+                                                        });
+                                                    }
 
-                                                                DownloadingText.Text = $"{magnetName} finshed downloading!";
-                                                            }
+                                                }
+                                                else if (MagnetStatus.Equals("Ready"))
+                                                {
+                                                    this.Invoke(() =>
+                                                    {
+                                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                                        {
+
+                                                            ALTrayIcon.ShowBalloonTip(3000, "", $"{magnetName} finished downloading, now uploading to DDL links...", ToolTipIcon.None);
+
+                                                        }
+                                                        else
+                                                        {
+
+                                                            DownloadingText.Text = $"{magnetName} finshed downloading!";
+                                                        }
+                                                    });
+
+                                                }
+                                                else if (MagnetStatus.Equals("Uploading"))
+                                                {
+                                                    if (!isDownloading)
+                                                    {
+
+
+                                                        notdone = true;
+                                                        UploadSpeed = double.Parse(key.uploadSpeed.ToString());
+                                                        double UploadSpeed2 = (UploadSpeed / 1024) / 1024;
+                                                        string ULS;
+                                                        ULS = "Speed: " + String.Format("{0:0.00}", UploadSpeed2) + $" MB/s";
+
+
+                                                        total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
+                                                        ULsofar = long.Parse(Utilities.KeepOnlyNumbers(key.uploaded.ToString()));
+
+                                                        int percentComplete = (int)Math.Round((double)(100 * ULsofar) / total);
+                                                        if (percentComplete < 0)
+                                                        {
+                                                            percentComplete = 0;
+                                                        }
+                                                        this.Invoke(() =>
+                                                        {
+                                                            dlProg.Value = percentComplete;
+                                                        });
+                                                        this.Invoke(() =>
+                                                        {
+                                                            DownloadingText.Text = $"Uploading to DDL links. {percentComplete}% complete. {ULS}";
                                                         });
 
                                                     }
-                                                    else if (MagnetStatus.Equals("Uploading"))
-                                                    {
-                                                        if (!isDownloading)
-                                                        {
 
 
-                                                            notdone = true;
-                                                            UploadSpeed = double.Parse(key.uploadSpeed.ToString());
-                                                            double UploadSpeed2 = (UploadSpeed / 1024) / 1024;
-                                                            string ULS;
-                                                            ULS = "Speed: " + String.Format("{0:0.00}", UploadSpeed2) + $" MB/s";
-
-
-                                                            total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
-                                                            ULsofar = long.Parse(Utilities.KeepOnlyNumbers(key.uploaded.ToString()));
-
-                                                            int percentComplete = (int)Math.Round((double)(100 * ULsofar) / total);
-                                                            if (percentComplete < 0)
-                                                            {
-                                                                percentComplete = 0;
-                                                            }
-                                                            this.Invoke(() =>
-                                                            {
-                                                                dlProg.Value = percentComplete;
-                                                            });
-                                                            this.Invoke(() =>
-                                                            {
-                                                                DownloadingText.Text = $"Uploading to DDL links. {percentComplete}% complete. {ULS}";
-                                                            });
-
-                                                        }
-
-
-                                                    }
                                                 }
                                             }
+
                                             await Task.Delay(10);
-                            
+
                                         }
                                         if (ready)
                                         {
@@ -851,7 +858,7 @@ namespace ALL_LEGIT
                                                                         ALTrayIcon.ShowBalloonTip(2000, "", $"Already in queue!", ToolTipIcon.None);
                                                                     });
                                                             }
-                       
+
                                                         }
 
                                                         if (!skip)
@@ -895,11 +902,11 @@ namespace ALL_LEGIT
                             }
                             notdone = false;
                             if (cancel)
-                            { 
+                            {
                                 isConverting = false;
                                 CancelButton.Visible = false;
                             }
-                  
+
 
                         }
                         if (isErrors)
@@ -1297,7 +1304,7 @@ namespace ALL_LEGIT
                     });
                     try
                     {
-                        item.BackColor = Color.LightSeaGreen;
+                        item.BackColor = Color.MediumSpringGreen;
                         //
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
