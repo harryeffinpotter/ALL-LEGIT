@@ -73,9 +73,12 @@ namespace ALL_LEGIT
                             }
                             foreach (ListViewItem item in Program.form.listView1.Items)
                             {
-                                if (file.Contains(item.SubItems[0].Text))
+                                if (Properties.Settings.Default.RemDL)
                                 {
-                                    Program.form.listView1.Items.Remove(item);
+                                    if (file.Contains(item.SubItems[0].Text))
+                                    {
+                                        Program.form.listView1.Items.Remove(item);
+                                    }
                                 }
                             }
                         }

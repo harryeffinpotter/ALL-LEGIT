@@ -414,26 +414,27 @@ namespace ALL_LEGIT
                 }
                 else if (!overwrite)
                 {
-                    midRun = false;
-                    listView1.BeginUpdate();
-                    foreach (ListViewItem itemmm in listView1.Items)
+                    if (Properties.Settings.Default.RemDL)
                     {
-                        if (itemmm.SubItems[2].Text.Contains(MagnetNAME) && itemmm.Checked)
+                        listView1.BeginUpdate();
+                        foreach (ListViewItem itemmm in listView1.Items)
                         {
-                            listView1.Items.Remove(itemmm);
+                            if (itemmm.SubItems[2].Text.Contains(MagnetNAME) && itemmm.Checked)
+                            {
+                                listView1.Items.Remove(itemmm);
+                            }
                         }
+                        listView1.EndUpdate();
+                        listView1.Refresh();
                     }
-                    listView1.EndUpdate();
-                    listView1.Refresh();
-
                 }
-
+                midRun = false;
             }
 
             //DOWNLOAD AREA
 
 
-         
+
             webClient.DownloadProgressChanged += (s, e) =>
             {
                 sw.Start();
@@ -452,7 +453,7 @@ namespace ALL_LEGIT
                     dlProg.Value = e.ProgressPercentage;
                 });
 
- 
+
             };
 
             webClient.DownloadFileCompleted += (s, e) =>
@@ -473,7 +474,7 @@ namespace ALL_LEGIT
                 });
                 midRun = false;
                 sw.Stop();
-                if (RemDL.Checked)
+                if (Properties.Settings.Default.RemDL)
                 {
                     this.Invoke(() =>
                     {
@@ -565,7 +566,6 @@ namespace ALL_LEGIT
 
 
             isConverting = true;
-            cancel = false;
             SplashText.Visible = false;
             string pasted = Clipboard.GetText();
 
@@ -663,11 +663,11 @@ namespace ALL_LEGIT
 
                             string magnetID = obj.data.magnets[0].id.ToString();
                             string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}";
-                            while (notdone && !cancel)
+                            while (notdone)
                             {
-                       
+
                                 obj = getJson(MagnetPoll);
-                     
+
                                 foreach (var key in obj.data.magnets)
                                 {
                                     magnetName = key.filename.ToString();
@@ -685,77 +685,78 @@ namespace ALL_LEGIT
                                         {
                                             bool alerted2nd = false;
                                             bool torrentDLING = false;
-                                                                                  
-                                                if (!alertedonce)
-                                                {
-                                                    await Task.Delay(1000);
-                         
-                                                    alertedonce = true;
-                                                    this.Invoke(() =>
-                                                    {
-                                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                                        {
-                                                            ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} not cached, now converting!", ToolTipIcon.None);
-
-                                                        }
-                                                        else
-                                                        {
-                                                            DownloadingText.Text = $"{magnetName} not cached, now converting!.";
-                                                        }
-
-                                                    });
-                                            }
                                             if (cancel)
                                             {
                                                 if (torrentDLING)
                                                 {
-                                                    torrentDLING = false;
-                                         
-                                                        getJson($"magnet/delete?agent={apiNAME}&apikey={APIKEY}&id={magnetID}");
-                                                        this.Invoke(() =>
-                                                        {
-                                                            Program.form.DownloadingText.Text = "Magnet removed from profile!";
-                                                        });
-                                                    
+                                                    getJson($"magnet/delete?agent={apiNAME}&apikey={APIKEY}&id={magnetID}");
+                                                    this.Invoke(() =>
+                                                    {
+                                                        Program.form.DownloadingText.Text = "Magnet removed from profile!";
+                                                    });
+
 
                                                     this.Invoke(() =>
                                                     {
                                                         Program.form.DownloadingText.Text = $"";
                                                     });
-                                                }
-                                                this.Invoke(() =>
-                                                {
-                                                    CancelButton.Visible = false;
-                                                    DownloadingText.Text = $"";
-                                                    dlProg.Value = 0;
-                                                });
-                                                notdone = true;
-                                                break;
 
-                                            }
-                                            MagnetStatus = key.status.ToString();
-                                                if (MagnetStatus.Equals("In Queue") && !alerted2nd)
-                                                {
-                                                    await Task.Delay(1000);
-                                                    alerted2nd = true;
                                                     this.Invoke(() =>
                                                     {
-                                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                                        {
-                                                            ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} added to Queue!", ToolTipIcon.None);
-                                                        }
-                                                        else
-                                                        {
-                                                            DownloadingText.Text = $"Torrent added to queue...";
-                                                        }
-
+                                                        CancelButton.Visible = false;
+                                                        DownloadingText.Text = $"";
+                                                        dlProg.Value = 0;
                                                     });
+                                                    notdone = true;
+                                                    cancel = false;
+                                                    torrentDLING = false;
+                                                    break;
                                                 }
-                                                if (MagnetStatus.Equals("Downloading"))
+                                            }
+                                            if (!alertedonce)
+                                            {
+                                                await Task.Delay(1000);
+
+                                                alertedonce = true;
+                                                this.Invoke(() =>
                                                 {
-                                                    torrentDLING = true;
+                                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                                    {
+                                                        ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} not cached, now converting!", ToolTipIcon.None);
+
+                                                    }
+                                                    else
+                                                    {
+                                                        DownloadingText.Text = $"{magnetName} not cached, now converting!.";
+                                                    }
+
+                                                });
+                                            }
+                                        
+                                            MagnetStatus = key.status.ToString();
+                                            if (MagnetStatus.Equals("In Queue") && !alerted2nd)
+                                            {
+                                                await Task.Delay(1000);
+                                                alerted2nd = true;
+                                                this.Invoke(() =>
+                                                {
+                                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                                    {
+                                                        ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} added to Queue!", ToolTipIcon.None);
+                                                    }
+                                                    else
+                                                    {
+                                                        DownloadingText.Text = $"Torrent added to queue...";
+                                                    }
+
+                                                });
+                                            }
+                                            if (MagnetStatus.Equals("Downloading"))
+                                            {
+                                                torrentDLING = true;
                                                 if (!isDownloading)
                                                 {
+                                                    torrentDLING = true;
                                                     string seeders = key.seeders.ToString();
                                                     notdone = true;
                                                     DownloadSpeed = double.Parse(key.downloadSpeed.ToString());
@@ -788,62 +789,62 @@ namespace ALL_LEGIT
                                                     });
                                                 }
 
-                                                }
-                                                else if (MagnetStatus.Equals("Ready"))
-                                                {
+                                            }
+                                            else if (MagnetStatus.Equals("Ready"))
+                                            {
                                                 torrentDLING = false;
-                                                      notdone = false;
+                                                notdone = false;
+                                                this.Invoke(() =>
+                                                {
+                                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                                    {
+
+                                                        ALTrayIcon.ShowBalloonTip(3000, "", $"{magnetName} finished downloading, now uploading to DDL links...", ToolTipIcon.None);
+
+                                                    }
+                                                    else
+                                                    {
+
+                                                        DownloadingText.Text = $"{magnetName} finshed downloading!";
+                                                    }
+                                                });
+
+                                            }
+                                            else if (MagnetStatus.Equals("Uploading"))
+                                            {
+                                                if (!isDownloading)
+                                                {
+
+
+                                                    notdone = true;
+                                                    UploadSpeed = double.Parse(key.uploadSpeed.ToString());
+                                                    double UploadSpeed2 = (UploadSpeed / 1024) / 1024;
+                                                    string ULS;
+                                                    ULS = "Speed: " + String.Format("{0:0.00}", UploadSpeed2) + $" MB/s";
+
+
+                                                    total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
+                                                    ULsofar = long.Parse(Utilities.KeepOnlyNumbers(key.uploaded.ToString()));
+
+                                                    int percentComplete = (int)Math.Round((double)(100 * ULsofar) / total);
+                                                    if (percentComplete < 0)
+                                                    {
+                                                        percentComplete = 0;
+                                                    }
                                                     this.Invoke(() =>
                                                     {
-                                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                                        {
-
-                                                            ALTrayIcon.ShowBalloonTip(3000, "", $"{magnetName} finished downloading, now uploading to DDL links...", ToolTipIcon.None);
-
-                                                        }
-                                                        else
-                                                        {
-
-                                                            DownloadingText.Text = $"{magnetName} finshed downloading!";
-                                                        }
+                                                        dlProg.Value = percentComplete;
+                                                    });
+                                                    this.Invoke(() =>
+                                                    {
+                                                        DownloadingText.Text = $"Uploading to DDL links. {percentComplete}% complete. {ULS}";
                                                     });
 
                                                 }
-                                                else if (MagnetStatus.Equals("Uploading"))
-                                                {
-                                                    if (!isDownloading)
-                                                    {
 
 
-                                                        notdone = true;
-                                                        UploadSpeed = double.Parse(key.uploadSpeed.ToString());
-                                                        double UploadSpeed2 = (UploadSpeed / 1024) / 1024;
-                                                        string ULS;
-                                                        ULS = "Speed: " + String.Format("{0:0.00}", UploadSpeed2) + $" MB/s";
+                                            }
 
-
-                                                        total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
-                                                        ULsofar = long.Parse(Utilities.KeepOnlyNumbers(key.uploaded.ToString()));
-
-                                                        int percentComplete = (int)Math.Round((double)(100 * ULsofar) / total);
-                                                        if (percentComplete < 0)
-                                                        {
-                                                            percentComplete = 0;
-                                                        }
-                                                        this.Invoke(() =>
-                                                        {
-                                                            dlProg.Value = percentComplete;
-                                                        });
-                                                        this.Invoke(() =>
-                                                        {
-                                                            DownloadingText.Text = $"Uploading to DDL links. {percentComplete}% complete. {ULS}";
-                                                        });
-
-                                                    }
-
-
-                                                }
-                                            
 
                                             await Task.Delay(10);
 
@@ -974,7 +975,7 @@ namespace ALL_LEGIT
                                         MessageBox.Show($"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "LServer not allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
                             });
-                        
+
 
                         }
                     }
@@ -1239,13 +1240,13 @@ namespace ALL_LEGIT
                 {
                     this.Invoke(() =>
                     {
-                
-                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                    {
-                        ALTrayIcon.ShowBalloonTip(2000, "", $"Pasted information is not suppported.", ToolTipIcon.None);
-                    }
-                    else
-                        DownloadingText.Text = "Pasted information is not suppported.";
+
+                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                        {
+                            ALTrayIcon.ShowBalloonTip(2000, "", $"Pasted information is not suppported.", ToolTipIcon.None);
+                        }
+                        else
+                            DownloadingText.Text = "Pasted information is not suppported.";
                     });
                 }
                 isConverting = false;
@@ -1255,7 +1256,7 @@ namespace ALL_LEGIT
             {
                 if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                 {
-                    DownloadingText.Text = "A";
+                    DownloadingText.Text = "";
                 }
 
             });
@@ -1265,7 +1266,7 @@ namespace ALL_LEGIT
             });
 
 
-        
+
             if (filecryptinprog)
             {
                 isConverting = true;
@@ -1298,13 +1299,14 @@ namespace ALL_LEGIT
                 }
                 isConverting = false;
             }
+            CancelButton.Visible = false;
             if (Properties.Settings.Default.AutoDL)
             {
                 object sender = null;
                 EventArgs e = new EventArgs();
                 startDownloads_Click(sender, e);
             }
-        
+
             PastedThisRun = "";
         }
 
@@ -1322,10 +1324,7 @@ namespace ALL_LEGIT
         public static bool isDownloading = false;
         public async void startDownloads_Click(object sender, EventArgs e)
         {
-            while (isDownloading)
-            {
-                await Task.Delay(100);
-            }
+
             if (cancel) return;
             if (listView1.CheckedItems.Count == 0) return;
             string DLList = "";
@@ -1486,7 +1485,7 @@ namespace ALL_LEGIT
                             else
                                 DownloadingText.Text = $"All Extractions finished!";
                         }
-            
+
 
 
 
@@ -1518,22 +1517,23 @@ namespace ALL_LEGIT
             if (listView1.CheckedItems.Count > 0)
             {
                 string forclip = "";
+                listView1.BeginUpdate();
                 foreach (ListViewItem item in listView1.Items)
                 {
                     if (item.Checked)
                     {
                         forclip += item.SubItems[1].Text + "\n";
-                        if (RemDL.Checked)
+                        if (Properties.Settings.Default.RemDL)
                         {
                             this.Invoke(() =>
                             {
-                                listView1.Items.Remove(item);
-                                listView1.Update();
+                                listView1.Items.Remove(item);    
                             });
                         }
                     }
-
                 }
+                listView1.EndUpdate();
+                listView1.Refresh();
                 forclip = forclip.Trim('\r', '\n');
                 try
                 {
@@ -1601,14 +1601,18 @@ namespace ALL_LEGIT
                 if (cancel)
                 {
                     CancelButton.Visible = false;
-                    listView1.BeginUpdate();
-                    foreach (ListViewItem itemstogo in listView1.CheckedItems)
+                    if (Properties.Settings.Default.RemDL)
                     {
-                        listView1.Items.Remove(itemstogo);
+                        listView1.BeginUpdate();
+                        foreach (ListViewItem itemstogo in listView1.CheckedItems)
+                        {
+                            listView1.Items.Remove(itemstogo);
+                        }
+                        listView1.EndUpdate();
+                        listView1.Update();
+                        listView1.Refresh();
                     }
-                    listView1.EndUpdate();
-                    listView1.Update();
-                    listView1.Refresh();
+   
                 }
             }
             this.Invoke(() =>

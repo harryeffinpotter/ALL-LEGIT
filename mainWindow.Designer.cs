@@ -47,8 +47,10 @@
             this.AutoOverwrite = new System.Windows.Forms.CheckBox();
             this.ALTrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.settingsP = new System.Windows.Forms.Panel();
+            this.disableNotiesBox = new System.Windows.Forms.CheckBox();
             this.autoDelZips = new System.Windows.Forms.CheckBox();
             this.AutoExtract = new System.Windows.Forms.CheckBox();
+            this.zipPWLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.RemDL = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -61,8 +63,6 @@
             this.Close2Tray = new System.Windows.Forms.CheckBox();
             this.UncheckAll = new System.Windows.Forms.PictureBox();
             this.CheckAll = new System.Windows.Forms.PictureBox();
-            this.disableNotiesBox = new System.Windows.Forms.CheckBox();
-            this.zipPWLabel = new System.Windows.Forms.Label();
             this.settingsP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncheckAll)).BeginInit();
@@ -92,7 +92,7 @@
             this.listView1.Location = new System.Drawing.Point(12, 56);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(797, 550);
-            this.listView1.TabIndex = 1;
+            this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listView1_ItemChecked);
@@ -131,7 +131,7 @@
             this.DownloadDir.Location = new System.Drawing.Point(12, 5);
             this.DownloadDir.Name = "DownloadDir";
             this.DownloadDir.Size = new System.Drawing.Size(324, 22);
-            this.DownloadDir.TabIndex = 7;
+            this.DownloadDir.TabIndex = 5;
             this.DownloadDir.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DownloadDir_KeyPress);
             this.DownloadDir.Leave += new System.EventHandler(this.DownloadDir_Leave);
             this.DownloadDir.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
@@ -149,7 +149,7 @@
             this.SetDLDIR.Location = new System.Drawing.Point(222, 29);
             this.SetDLDIR.Name = "SetDLDIR";
             this.SetDLDIR.Size = new System.Drawing.Size(114, 24);
-            this.SetDLDIR.TabIndex = 3;
+            this.SetDLDIR.TabIndex = 6;
             this.SetDLDIR.Text = "Set Output Dir";
             this.SetDLDIR.UseVisualStyleBackColor = false;
             this.SetDLDIR.Click += new System.EventHandler(this.SetDLDIR_Click);
@@ -168,7 +168,7 @@
             this.CancelButton.Location = new System.Drawing.Point(649, 641);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(160, 25);
-            this.CancelButton.TabIndex = 11;
+            this.CancelButton.TabIndex = 1;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = false;
             this.CancelButton.Visible = false;
@@ -188,7 +188,7 @@
             this.PasteButton.Location = new System.Drawing.Point(748, 612);
             this.PasteButton.Name = "PasteButton";
             this.PasteButton.Size = new System.Drawing.Size(61, 25);
-            this.PasteButton.TabIndex = 2;
+            this.PasteButton.TabIndex = 3;
             this.PasteButton.Text = "Paste links";
             this.PasteButton.UseVisualStyleBackColor = false;
             this.PasteButton.Click += new System.EventHandler(this.PasteButton_Click);
@@ -205,7 +205,7 @@
             this.StayOnTopCheckbox.Location = new System.Drawing.Point(575, 7);
             this.StayOnTopCheckbox.Name = "StayOnTopCheckbox";
             this.StayOnTopCheckbox.Size = new System.Drawing.Size(115, 21);
-            this.StayOnTopCheckbox.TabIndex = 1;
+            this.StayOnTopCheckbox.TabIndex = 8;
             this.StayOnTopCheckbox.Text = "Keep on top";
             this.StayOnTopCheckbox.UseVisualStyleBackColor = false;
             this.StayOnTopCheckbox.CheckedChanged += new System.EventHandler(this.StayOnTopCheckbox_CheckedChanged_1);
@@ -222,7 +222,7 @@
             this.SplashText.Location = new System.Drawing.Point(104, 196);
             this.SplashText.Name = "SplashText";
             this.SplashText.Size = new System.Drawing.Size(613, 286);
-            this.SplashText.TabIndex = 4;
+            this.SplashText.TabIndex = 2;
             this.SplashText.Text = "All Legit v1.0.0\r\nby HarryEffinPottter/YSG\r\n\r\nGlobal hot key works everywhere,\r\ne" +
     "ven when app is minimized.\r\n\r\nCTRL+V or Paste button while in app.";
             this.SplashText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -325,6 +325,21 @@
             this.settingsP.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
             this.settingsP.MouseHover += new System.EventHandler(this.showSettings_MouseHover);
             // 
+            // disableNotiesBox
+            // 
+            this.disableNotiesBox.AutoSize = true;
+            this.disableNotiesBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            this.disableNotiesBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.disableNotiesBox.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.disableNotiesBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.disableNotiesBox.Location = new System.Drawing.Point(45, 205);
+            this.disableNotiesBox.Name = "disableNotiesBox";
+            this.disableNotiesBox.Size = new System.Drawing.Size(417, 26);
+            this.disableNotiesBox.TabIndex = 12;
+            this.disableNotiesBox.Text = "Disable Windows Notifications";
+            this.disableNotiesBox.UseVisualStyleBackColor = false;
+            this.disableNotiesBox.CheckedChanged += new System.EventHandler(this.disableNotiesBox_CheckedChanged);
+            // 
             // autoDelZips
             // 
             this.autoDelZips.AutoSize = true;
@@ -356,6 +371,20 @@
             this.AutoExtract.UseVisualStyleBackColor = false;
             this.AutoExtract.CheckedChanged += new System.EventHandler(this.AutoExtract_CheckedChanged_1);
             this.AutoExtract.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            // 
+            // zipPWLabel
+            // 
+            this.zipPWLabel.AutoSize = true;
+            this.zipPWLabel.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.zipPWLabel.ForeColor = System.Drawing.Color.PaleTurquoise;
+            this.zipPWLabel.Location = new System.Drawing.Point(58, 245);
+            this.zipPWLabel.Name = "zipPWLabel";
+            this.zipPWLabel.Size = new System.Drawing.Size(390, 22);
+            this.zipPWLabel.TabIndex = 9;
+            this.zipPWLabel.Text = "Archive passwords - Use ; to separate.";
+            this.zipPWLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.zipPWLabel.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            this.zipPWLabel.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
             // 
             // label1
             // 
@@ -414,7 +443,7 @@
             this.HotKeyBtn.Location = new System.Drawing.Point(465, 29);
             this.HotKeyBtn.Name = "HotKeyBtn";
             this.HotKeyBtn.Size = new System.Drawing.Size(97, 24);
-            this.HotKeyBtn.TabIndex = 3;
+            this.HotKeyBtn.TabIndex = 7;
             this.HotKeyBtn.Text = "Set Hotkey";
             this.HotKeyBtn.UseVisualStyleBackColor = false;
             this.HotKeyBtn.Click += new System.EventHandler(this.HotKeyBtn_Click);
@@ -446,7 +475,7 @@
             this.startDownloads.Location = new System.Drawing.Point(649, 641);
             this.startDownloads.Name = "startDownloads";
             this.startDownloads.Size = new System.Drawing.Size(160, 25);
-            this.startDownloads.TabIndex = 5;
+            this.startDownloads.TabIndex = 1;
             this.startDownloads.Text = "Download Selected";
             this.startDownloads.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.startDownloads.UseVisualStyleBackColor = false;
@@ -465,7 +494,7 @@
             this.CopyLinks.Location = new System.Drawing.Point(649, 612);
             this.CopyLinks.Name = "CopyLinks";
             this.CopyLinks.Size = new System.Drawing.Size(96, 25);
-            this.CopyLinks.TabIndex = 10;
+            this.CopyLinks.TabIndex = 2;
             this.CopyLinks.Text = "Copy Links";
             this.CopyLinks.UseVisualStyleBackColor = false;
             this.CopyLinks.Click += new System.EventHandler(this.CopyLinks_Click);
@@ -483,7 +512,7 @@
             this.ClearButton.Location = new System.Drawing.Point(44, 612);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(130, 25);
-            this.ClearButton.TabIndex = 8;
+            this.ClearButton.TabIndex = 4;
             this.ClearButton.Text = "Delete Selected";
             this.ClearButton.UseVisualStyleBackColor = false;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
@@ -510,7 +539,7 @@
             this.Close2Tray.Location = new System.Drawing.Point(575, 30);
             this.Close2Tray.Name = "Close2Tray";
             this.Close2Tray.Size = new System.Drawing.Size(187, 21);
-            this.Close2Tray.TabIndex = 15;
+            this.Close2Tray.TabIndex = 9;
             this.Close2Tray.Text = "Close to system tray";
             this.Close2Tray.UseVisualStyleBackColor = false;
             this.Close2Tray.CheckedChanged += new System.EventHandler(this.Close2Tray_CheckedChanged_1);
@@ -540,35 +569,6 @@
             this.CheckAll.Visible = false;
             this.CheckAll.Click += new System.EventHandler(this.CheckAll_Click);
             // 
-            // disableNotiesBox
-            // 
-            this.disableNotiesBox.AutoSize = true;
-            this.disableNotiesBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
-            this.disableNotiesBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.disableNotiesBox.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.disableNotiesBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.disableNotiesBox.Location = new System.Drawing.Point(45, 205);
-            this.disableNotiesBox.Name = "disableNotiesBox";
-            this.disableNotiesBox.Size = new System.Drawing.Size(417, 26);
-            this.disableNotiesBox.TabIndex = 12;
-            this.disableNotiesBox.Text = "Disable Windows Notifications";
-            this.disableNotiesBox.UseVisualStyleBackColor = false;
-            this.disableNotiesBox.CheckedChanged += new System.EventHandler(this.disableNotiesBox_CheckedChanged);
-            // 
-            // zipPWLabel
-            // 
-            this.zipPWLabel.AutoSize = true;
-            this.zipPWLabel.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.zipPWLabel.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.zipPWLabel.Location = new System.Drawing.Point(58, 245);
-            this.zipPWLabel.Name = "zipPWLabel";
-            this.zipPWLabel.Size = new System.Drawing.Size(390, 22);
-            this.zipPWLabel.TabIndex = 9;
-            this.zipPWLabel.Text = "Archive passwords - Use ; to separate.";
-            this.zipPWLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.zipPWLabel.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
-            this.zipPWLabel.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -577,7 +577,6 @@
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(20)))));
             this.ClientSize = new System.Drawing.Size(821, 671);
-            this.Controls.Add(this.settingsP);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.CheckAll);
             this.Controls.Add(this.UncheckAll);
@@ -596,6 +595,7 @@
             this.Controls.Add(this.startDownloads);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.DownloadingText);
+            this.Controls.Add(this.settingsP);
             this.ForeColor = System.Drawing.Color.NavajoWhite;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(723, 508);
@@ -650,7 +650,7 @@
         public System.Windows.Forms.NotifyIcon ALTrayIcon;
         private System.Windows.Forms.PictureBox UncheckAll;
         private System.Windows.Forms.PictureBox CheckAll;
-        public System.Windows.Forms.Button CancelButton;
+        public new System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.CheckBox disableNotiesBox;
         private System.Windows.Forms.Label zipPWLabel;
     }
