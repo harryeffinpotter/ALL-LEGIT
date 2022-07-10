@@ -385,40 +385,15 @@ namespace ALL_LEGIT
             {
                 if (MagnetNAME.Equals(cancelledGroup))
                 {
-          
                     webClient.CancelAsync();
                     webClient.Dispose();
                     return;
                 }
                 else
                 {
-                    if (CheckedCount == 0)
-                    {
-                        CheckedCount = listView1.CheckedItems.Count;
-                    }
-                    if (CurrentCount == CheckedCount)
-                    {
-                        cancel = false;
-                        cancelledGroup = "";
-                    }
-                    else
-                    {
-                        foreach (ListViewItem item in listView1.CheckedItems)
-                        {
-                            if (MagnetNAME.Equals(item.SubItems[2].Text))
-                            {
-                                CurrentCount++;
-                                webClient.CancelAsync();
-                                webClient.Dispose();
-                                return;
-                            }
-                        }
-                    }
-
+                    cancelledGroup = "";
                 }
             }
-
-
             else
             {
                 cancelledGroup = "";
@@ -799,6 +774,7 @@ namespace ALL_LEGIT
                                        
                                                         torrentDLING = false;
                                                         cancel = false;
+                                                        fileDownloading = "";
                                                         break;
                                                     }
                                                 }
