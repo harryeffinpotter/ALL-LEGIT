@@ -11,7 +11,7 @@
     <ProjectGuid>{BB3C5E2E-80DB-4B85-941F-790611BF3D7A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ALL_LEGIT</RootNamespace>
-    <AssemblyName>ALL-LEGIT</AssemblyName>
+    <AssemblyName>All Legit!</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -420,6 +420,7 @@
     <EmbeddedResource Include="WebFormForm.resx">
       <DependentUpon>WebFormForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="_bin\CHANGELOG.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1992,9 +1993,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">

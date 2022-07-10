@@ -208,6 +208,8 @@ namespace ALL_LEGIT
         }
         private async void MainWindow_Load(object sender, EventArgs e)
         {
+            menuItem2.Checked = Properties.Settings.Default.DisableNotifies;
+            disableNotiesBox.Checked = Properties.Settings.Default.DisableNotifies;
             Close2Tray.Checked = Properties.Settings.Default.Close2Tray;
             RemDL.Checked = Properties.Settings.Default.RemDL;
             AutoOverwrite.Checked = Properties.Settings.Default.AutoOverwrite;
@@ -354,6 +356,8 @@ namespace ALL_LEGIT
 
 
         }
+        public static bool wascancelled = false;
+        public static string fileDownloading = "";
         public static bool warnedthisbatch = false;
         public static bool overwrite = false;
         public static string MagnetSubName = "";
@@ -362,6 +366,27 @@ namespace ALL_LEGIT
         string currentGroup = "";
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
+            foreach (ListViewItem item in listView1.CheckedItems)
+            {
+                if (item.SubItems[1].Text.Equals(FILENAME))
+                { 
+                    return; 
+                }
+
+            }
+            if (wascancelled)
+            {
+                webClient.Dispose();
+            }
+            if (webClient.IsBusy == false)
+            {
+                webClient.Dispose();
+            }
+            while (webClient.IsBusy)
+            {
+                await Task.Delay(100);
+            }
+            CancelButton.Visible = true;
             if (cancel) return;
             webClient = new WebClient();
             isDownloading = true;
@@ -389,10 +414,12 @@ namespace ALL_LEGIT
                 Directory.CreateDirectory(DIR);
             }
             string DL = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".") + "\\" + FILENAME;
+            if (fileDownloading.Equals(DL)) return;
+            fileDownloading = DL;
             if (File.Exists(DL))
             {
 
-                if (!currentGroup.Contains(MagnetNAME) || !Properties.Settings.Default.AutoOverwrite)
+                if (!currentGroup.Contains(MagnetNAME) && !Properties.Settings.Default.AutoOverwrite)
                 {
                     currentGroup = MagnetNAME;
                     DialogResult Overwrite1 = MessageBox.Show($"Files found, do you want to overwrite all files from this batch of links({Utilities.RemoveEverythingAfterLast(MagnetNAME, ".")})", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -408,26 +435,40 @@ namespace ALL_LEGIT
                 }
                 if (overwrite)
                 {
-                    if (File.Exists(DL))
+                    try
                     {
-                        File.Delete(DL);
+
+                        if (File.Exists(DL))
+                        {
+                            File.Delete(DL);
+                        }
+
                     }
+                    catch { }
                 }
                 else if (!overwrite)
                 {
-                    if (Properties.Settings.Default.RemDL)
+                    try
                     {
-                        listView1.BeginUpdate();
-                        foreach (ListViewItem itemmm in listView1.Items)
+                        if (Properties.Settings.Default.RemDL)
                         {
-                            if (itemmm.SubItems[2].Text.Contains(MagnetNAME) && itemmm.Checked)
+                            listView1.BeginUpdate();
+                            foreach (ListViewItem itemmm in listView1.Items)
                             {
-                                listView1.Items.Remove(itemmm);
+                                if (itemmm.SubItems[2].Text.Contains(MagnetNAME) && itemmm.Checked)
+                                {
+                                    listView1.Items.Remove(itemmm);
+                                }
                             }
+                            listView1.EndUpdate();
+                            listView1.Refresh();
                         }
-                        listView1.EndUpdate();
-                        listView1.Refresh();
+                        webClient.Dispose();
                     }
+                    catch { }
+      
+                    return;
+
                 }
                 midRun = false;
             }
@@ -467,6 +508,10 @@ namespace ALL_LEGIT
                         File.Delete(DL);
                     }
                     webClient.Dispose();
+                    isDownloading = false;
+                    midRun = false;
+                    fileDownloading = "";
+                    wascancelled = true;
                     return;
                 }
                 this.Invoke(() =>
@@ -508,6 +553,7 @@ namespace ALL_LEGIT
             };
             await webClient.DownloadFileTaskAsync(new Uri(URL), $"{DL}");
             isConverting = false;
+            fileDownloading = "";
             midRun = false;
             webClient.Dispose();
             isDownloading = false;
@@ -733,7 +779,7 @@ namespace ALL_LEGIT
 
                                                 });
                                             }
-                                        
+
                                             MagnetStatus = key.status.ToString();
                                             if (MagnetStatus.Equals("In Queue") && !alerted2nd)
                                             {
@@ -1361,6 +1407,7 @@ namespace ALL_LEGIT
                         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //
+      
                         item.BackColor = Color.FromArgb(0, 50, 42);
                     }
                     catch (System.Net.WebException Ex)
@@ -1449,7 +1496,7 @@ namespace ALL_LEGIT
                                 {
                                     Extract = true;
                                 }
-                                if (Extract && !muteoutputcancelled)
+                                if (Extract && !muteoutputcancelled && !wascancelled)
                                 {
                                     this.Invoke(() =>
                                     {
@@ -1505,6 +1552,10 @@ namespace ALL_LEGIT
                 CancelButton.Visible = false;
             }
 
+            if (wascancelled)
+            {
+                wascancelled = false;
+            }
             System.GC.Collect();
             System.GC.WaitForPendingFinalizers();
             muteoutputcancelled = false;
@@ -1528,7 +1579,7 @@ namespace ALL_LEGIT
                         {
                             this.Invoke(() =>
                             {
-                                listView1.Items.Remove(item);    
+                                listView1.Items.Remove(item);
                             });
                         }
                     }
@@ -1613,7 +1664,7 @@ namespace ALL_LEGIT
                         listView1.Update();
                         listView1.Refresh();
                     }
-   
+
                 }
             }
             this.Invoke(() =>
