@@ -304,6 +304,7 @@
             this.ALTrayIcon.Tag = "";
             this.ALTrayIcon.Text = "All Legit";
             this.ALTrayIcon.Visible = true;
+            this.ALTrayIcon.BalloonTipClicked += new System.EventHandler(this.ALTrayIcon_BalloonTipClicked);
             this.ALTrayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ALTrayIcon_MouseClick);
             this.ALTrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ALTrayIcon_MouseDoubleClick_1);
             // 

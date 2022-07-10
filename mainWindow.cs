@@ -804,19 +804,24 @@ namespace ALL_LEGIT
                                                 }
                                                 if (!alertedonce)
                                                 {
-                                                    await Task.Delay(1000);
+                                                    while (magnetName.Equals("noname"))
+                                                    {
 
-                                                    alertedonce = true;
+                                                    await Task.Delay(5000);
+                                                    obj = getJson(MagnetPoll);
+                                                    magnetName = key.filename.ToString();
+                                                    }
+                                                    alertedonce = true; 
                                                     this.Invoke(() =>
                                                     {
                                                         if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                                                         {
-                                                            ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} not cached, now converting!", ToolTipIcon.None);
+                                                            ALTrayIcon.ShowBalloonTip(2000, "", $"Torrent not cached, now converting!", ToolTipIcon.None);
 
                                                         }
                                                         else
                                                         {
-                                                            DownloadingText.Text = $"{magnetName} not cached, now converting!.";
+                                                            DownloadingText.Text = $"Torrent not cached, now converting!.";
                                                         }
 
                                                     });
@@ -999,14 +1004,7 @@ namespace ALL_LEGIT
                                                             }
 
                                                             skip = false;
-                                                            foreach (ListViewItem item in listView1.Items)
-                                                            {
-                                                                if (item.SubItems[2].Text.Equals(magnetName))
-                                                                {
-                                                                    item.Checked = true;
-
-                                                                }
-                                                            }
+                          
                                                         });
                                                     }
                                                     catch
@@ -2128,6 +2126,12 @@ namespace ALL_LEGIT
             {
                 disableNotiesBox.ForeColor = Color.FromArgb(0, 100, 80);
             }
+        }
+
+        private void ALTrayIcon_BalloonTipClicked(object sender, EventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
         }
     }
 }
