@@ -175,7 +175,7 @@
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(160, 25);
             this.CancelButton.TabIndex = 1;
-            this.CancelButton.Text = "Cancel";
+            this.CancelButton.Text = "Cancel Current Job";
             this.CancelButton.UseVisualStyleBackColor = false;
             this.CancelButton.Visible = false;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);

@@ -385,6 +385,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GetBrowser.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="FolderBrowserDialog.cs" />
     <Compile Include="mainWindow.cs">

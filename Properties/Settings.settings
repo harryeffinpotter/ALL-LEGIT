@@ -33,7 +33,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="HotKeyKeyData" Type="System.Windows.Forms.Keys" Scope="User">
-      <Value Profile="(Default)">Ctrl+Shift+A</Value>
+      <Value Profile="(Default)">Ctrl+Oemtilde</Value>
     </Setting>
     <Setting Name="AutoDL" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

@@ -206,6 +206,7 @@ namespace ALL_LEGIT
             Properties.Settings.Default.Save();
 
         }
+        public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
         {
             menuItem2.Checked = Properties.Settings.Default.DisableNotifies;
@@ -361,10 +362,13 @@ namespace ALL_LEGIT
         public static bool overwrite = false;
         public static string MagnetSubName = "";
         public static bool NoNamesPresent = false;
+        public static int CheckedCount = 0;
+        public static int CurrentCount = 0;
         public WebClient webClient = new WebClient();
         string currentGroup = "";
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
+  
             if (webClient.IsBusy == false)
             {
                 webClient.Dispose();
@@ -373,9 +377,52 @@ namespace ALL_LEGIT
             {
                 await Task.Delay(100);
             }
+            currGroup = MagnetNAME;
             CancelButton.Visible = true;
             if (cancel) return;
             webClient = new WebClient();
+            if (!String.IsNullOrEmpty(cancelledGroup))
+            {
+                if (MagnetNAME.Equals(cancelledGroup))
+                {
+          
+                    webClient.CancelAsync();
+                    webClient.Dispose();
+                    return;
+                }
+                else
+                {
+                    if (CheckedCount == 0)
+                    {
+                        CheckedCount = listView1.CheckedItems.Count;
+                    }
+                    if (CurrentCount == CheckedCount)
+                    {
+                        cancel = false;
+                        cancelledGroup = "";
+                    }
+                    else
+                    {
+                        foreach (ListViewItem item in listView1.CheckedItems)
+                        {
+                            if (MagnetNAME.Equals(item.SubItems[2].Text))
+                            {
+                                CurrentCount++;
+                                webClient.CancelAsync();
+                                webClient.Dispose();
+                                return;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+
+            else
+            {
+                cancelledGroup = "";
+            }
             isDownloading = true;
             midRun = true;
             warnedthisbatch = false;
@@ -404,7 +451,10 @@ namespace ALL_LEGIT
 
             if (File.Exists(DL))
             {
-
+                if (Properties.Settings.Default.AutoOverwrite)
+                {
+                    overwrite = true;
+                }
                 if (!currentGroup.Contains(MagnetNAME) && !Properties.Settings.Default.AutoOverwrite)
                 {
                     currentGroup = MagnetNAME;
@@ -416,8 +466,8 @@ namespace ALL_LEGIT
                     else
                     {
                         overwrite = false;
-                        midRun = false;
                     }
+       
                 }
                 if (overwrite)
                 {
@@ -441,7 +491,7 @@ namespace ALL_LEGIT
                             listView1.BeginUpdate();
                             foreach (ListViewItem itemmm in listView1.Items)
                             {
-                                if (itemmm.SubItems[2].Text.Contains(MagnetNAME) && itemmm.Checked)
+                                if (itemmm.SubItems[2].Text.Contains(currGroup) && itemmm.Checked)
                                 {
                                     listView1.Items.Remove(itemmm);
                                 }
@@ -578,7 +628,7 @@ namespace ALL_LEGIT
             Int32 reserved,
             IntPtr callBack);
 
-
+        public static string currGroup = "";
         /// <summary>
         /// Download a file from the webpage and save it to the destination without promting the user
         /// </summary>
@@ -747,7 +797,7 @@ namespace ALL_LEGIT
                                                             dlProg.Value = 0;
                                                         });
                                                         notdone = true;
-                                                        cancel = false;
+                                       
                                                         torrentDLING = false;
                                                         break;
                                                     }
@@ -1026,7 +1076,6 @@ namespace ALL_LEGIT
                         if (cancel)
                         {
                             t1.Abort();
-                            cancel = false;
                         }
                         await Task.Delay(100);
                     }
@@ -1270,7 +1319,6 @@ namespace ALL_LEGIT
                             if (cancel)
                             {
                                 t1.Abort();
-                                cancel = false;
                             }
                             await Task.Delay(100);
                         }
@@ -1363,9 +1411,15 @@ namespace ALL_LEGIT
         public static bool isDownloading = false;
         public async void startDownloads_Click(object sender, EventArgs e)
         {
+            endreached = false;
 
             if (cancel) return;
-            if (listView1.CheckedItems.Count == 0) return;
+            if (listView1.CheckedItems.Count == 0)
+            {
+                endreached = true;
+                return;
+            }
+
             string DLList = "";
             isDownloading = true;
             CancelButton.Visible = true;
@@ -1548,8 +1602,8 @@ namespace ALL_LEGIT
             System.GC.Collect();
             System.GC.WaitForPendingFinalizers();
             muteoutputcancelled = false;
-
             isDownloading = false;
+            endreached = true;
             cancel = false;
         }
 
@@ -1568,7 +1622,11 @@ namespace ALL_LEGIT
                         {
                             this.Invoke(() =>
                             {
-                                listView1.Items.Remove(item);
+                                if (item.SubItems[2].Text.Equals(currGroup))
+                                {
+                                    listView1.Items.Remove(item);
+
+                                }
                             });
                         }
                     }
@@ -1632,11 +1690,13 @@ namespace ALL_LEGIT
         }
         public static bool muteoutputcancelled = false;
         public static bool cancel = false;
+        public static string cancelledGroup = "";
         public void CancelButton_Click(object sender, EventArgs e)
         {
             cancel = true;
             if (isDownloading)
             {
+                cancelledGroup = currGroup;
                 muteoutputcancelled = true;
                 webClient.CancelAsync();
                 if (cancel)
@@ -1647,7 +1707,12 @@ namespace ALL_LEGIT
                         listView1.BeginUpdate();
                         foreach (ListViewItem itemstogo in listView1.CheckedItems)
                         {
-                            listView1.Items.Remove(itemstogo);
+                            if (itemstogo.SubItems[2].Text.Equals(currGroup))
+                            {
+                                listView1.Items.Remove(itemstogo);
+
+                            }
+
                         }
                         listView1.EndUpdate();
                         listView1.Update();
