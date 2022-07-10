@@ -746,7 +746,7 @@ namespace ALL_LEGIT
                             }
                             else
                             {
-
+                                bool torrentDLING = false;
                                 string magnetName = obj.data.magnets[0].name.ToString();
 
                                 string magnetID = obj.data.magnets[0].id.ToString();
@@ -772,8 +772,7 @@ namespace ALL_LEGIT
                                             }
                                             else
                                             {
-                                                bool alerted2nd = false;
-                                                bool torrentDLING = false;
+                                        
                                                 if (cancel)
                                                 {
                                                     if (torrentDLING)
@@ -799,18 +798,12 @@ namespace ALL_LEGIT
                                                         notdone = true;
                                        
                                                         torrentDLING = false;
+                                                        cancel = false;
                                                         break;
                                                     }
                                                 }
                                                 if (!alertedonce)
-                                                {
-                                                    while (magnetName.Equals("noname"))
-                                                    {
-
-                                                    await Task.Delay(5000);
-                                                    obj = getJson(MagnetPoll);
-                                                    magnetName = key.filename.ToString();
-                                                    }
+                                                { 
                                                     alertedonce = true; 
                                                     this.Invoke(() =>
                                                     {
@@ -828,28 +821,21 @@ namespace ALL_LEGIT
                                                 }
 
                                                 MagnetStatus = key.status.ToString();
-                                                if (MagnetStatus.Equals("In Queue") && !alerted2nd)
+                                                if (MagnetStatus.Equals("In Queue"))
                                                 {
                                                     await Task.Delay(1000);
-                                                    alerted2nd = true;
-                                                    this.Invoke(() =>
-                                                    {
-                                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                                        {
-                                                            ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} added to Queue!", ToolTipIcon.None);
-                                                        }
-                                                        else
-                                                        {
-                                                            DownloadingText.Text = $"Torrent added to queue...";
-                                                        }
 
-                                                    });
                                                 }
                                                 if (MagnetStatus.Equals("Downloading"))
                                                 {
                                                     torrentDLING = true;
                                                     if (!isDownloading)
                                                     {
+                                                        this.Invoke(() =>
+                                                        {
+                                                            CancelButton.Visible = true;
+
+                                                        });
                                                         torrentDLING = true;
                                                         string seeders = key.seeders.ToString();
                                                         notdone = true;
@@ -990,8 +976,12 @@ namespace ALL_LEGIT
 
                                                             if (!skip)
                                                             {
-
-                                                                listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
+                                                            string[] row = { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt };
+                                                                ListViewItem item = new ListViewItem(row);
+                                                                 listView1.Items.Add(item);
+                                                                item.Checked = true;
+                                      
+                              
 
                                                             }
 
@@ -1023,8 +1013,13 @@ namespace ALL_LEGIT
                                 notdone = true;
                                 if (cancel)
                                 {
+                                    this.Invoke(() =>
+                                    {
+                   
                                     isConverting = false;
                                     CancelButton.Visible = false;
+           
+                                    });
                                 }
 
 
@@ -1185,6 +1180,10 @@ namespace ALL_LEGIT
 
                             foreach (string s in output)
                             {
+                                if (s.ToLower().Contains("debrid.it"))
+                                {
+                                    return;
+                                }
                                 var obj = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={s}");
                                 if (obj.status.ToString().Equals("error"))
                                 {

@@ -434,8 +434,7 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
-            this.pictureBox1.MouseHover += new System.EventHandler(this.showSettings_MouseHover);
+            this.pictureBox1.Click += new System.EventHandler(this.showSettings_MouseEnter);
             // 
             // HotKeyBtn
             // 
