@@ -356,8 +356,7 @@ namespace ALL_LEGIT
 
 
         }
-        public static bool wascancelled = false;
-        public static string fileDownloading = "";
+        public static string fileDownloading = ";";
         public static bool warnedthisbatch = false;
         public static bool overwrite = false;
         public static string MagnetSubName = "";
@@ -366,18 +365,6 @@ namespace ALL_LEGIT
         string currentGroup = "";
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
-            foreach (ListViewItem item in listView1.CheckedItems)
-            {
-                if (item.SubItems[1].Text.Equals(FILENAME))
-                { 
-                    return; 
-                }
-
-            }
-            if (wascancelled)
-            {
-                webClient.Dispose();
-            }
             if (webClient.IsBusy == false)
             {
                 webClient.Dispose();
@@ -414,8 +401,7 @@ namespace ALL_LEGIT
                 Directory.CreateDirectory(DIR);
             }
             string DL = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".") + "\\" + FILENAME;
-            if (fileDownloading.Equals(DL)) return;
-            fileDownloading = DL;
+
             if (File.Exists(DL))
             {
 
@@ -466,7 +452,7 @@ namespace ALL_LEGIT
                         webClient.Dispose();
                     }
                     catch { }
-      
+
                     return;
 
                 }
@@ -510,8 +496,6 @@ namespace ALL_LEGIT
                     webClient.Dispose();
                     isDownloading = false;
                     midRun = false;
-                    fileDownloading = "";
-                    wascancelled = true;
                     return;
                 }
                 this.Invoke(() =>
@@ -553,7 +537,6 @@ namespace ALL_LEGIT
             };
             await webClient.DownloadFileTaskAsync(new Uri(URL), $"{DL}");
             isConverting = false;
-            fileDownloading = "";
             midRun = false;
             webClient.Dispose();
             isDownloading = false;
@@ -616,659 +599,424 @@ namespace ALL_LEGIT
             SplashText.Visible = false;
             string pasted = Clipboard.GetText();
 
-
-            if (pasted.ToLower().StartsWith("magnet".ToLower()))
+            if (fileDownloading.Contains(pasted))
             {
-                if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                return;
+            }
+            else
+            {
+                fileDownloading += $"{pasted};";
+                if (pasted.ToLower().StartsWith("magnet".ToLower()))
                 {
 
-                    this.Invoke(() =>
+                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                     {
-                        ALTrayIcon.ShowBalloonTip(2000, "", "Adding magnet links...", ToolTipIcon.None);
-                    });
-                }
-                else
-                {
-                    this.Invoke(() =>
-                    {
-                        DownloadingText.Text = $"Adding magnet links...";
-                    });
 
-                }
-
-                Thread t1 = new Thread(async () =>
-                {
-                    pasted = pasted.Trim();
-                    string[] output = new string[] { pasted };
-                    if (pasted.Contains(";"))
-                    {
-                        string[] pastedsplit = pasted.Split(';');
-                        output = pastedsplit;
-
+                        this.Invoke(() =>
+                        {
+                            ALTrayIcon.ShowBalloonTip(2000, "", "Adding magnet links...", ToolTipIcon.None);
+                        });
                     }
-                    else if (pasted.Contains("\r\n"))
-                    {
-                        pasted = pasted.Replace("\r\n", "\n");
-                        string[] pastedsplit = pasted.Split('\n');
-                        output = pastedsplit;
-                    }
-                    else if (pasted.Contains('\r'))
-                    {
-                        string[] pastedsplit = pasted.Split('\r');
-                        output = pastedsplit;
-                    }
-                    else if (pasted.Contains('\n'))
-                    {
-                        string[] pastedsplit = pasted.Split('\n');
-                        output = pastedsplit;
-                    }
-                    bool isErrors = false;
-                    int a = 0;
-                    int b = 0;
-                    int c = 0;
-                    string a1 = "";
-                    string b1 = "";
-                    string c1 = "";
-                    foreach (string s in output)
+                    else
                     {
                         this.Invoke(() =>
                         {
-                            CancelButton.Visible = true;
+                            DownloadingText.Text = $"Adding magnet links...";
                         });
 
-                        var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={s}");
-                        string status = obj.status.ToString();
+                    }
 
-                        if (obj.data.magnets[0].ToString().Contains("error"))
+                    Thread t1 = new Thread(async () =>
+                    {
+                        pasted = pasted.Trim();
+                        string[] output = new string[] { pasted };
+                        if (pasted.Contains(";"))
                         {
-                            isErrors = true;
-                            string error = obj.data.magnets[0].error.code.ToString();
-                            if (error.Contains("MAGNET_INVALID_URI"))
-                            {
-                                a++;
-                                a1 += $"{s}\n";
-                            }
-                            if (error.Contains("MAGNET_TOO_MANY_ACTIVE"))
-                            {
-                                b++;
-                                b1 += $"{s}\n";
-                            }
-                            if (error.Contains("MAGNET_NO_SERVER"))
-                            {
-                                c++;
-                                c1 += $"{s}\n";
-                            }
-                        }
-                        if (isErrors)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-
-                            string magnetName = obj.data.magnets[0].name.ToString();
-
-                            string magnetID = obj.data.magnets[0].id.ToString();
-                            string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}";
-                            while (notdone)
-                            {
-
-                                obj = getJson(MagnetPoll);
-
-                                foreach (var key in obj.data.magnets)
-                                {
-                                    magnetName = key.filename.ToString();
-                                    bool ready = false;
-
-                                    if (key.id.ToString().Equals(magnetID))
-                                    {
-                                        string MagnetStatus = key.status.ToString();
-                                        if (MagnetStatus.Equals("Ready"))
-                                        {
-                                            notdone = false;
-                                            ready = true;
-                                        }
-                                        else
-                                        {
-                                            bool alerted2nd = false;
-                                            bool torrentDLING = false;
-                                            if (cancel)
-                                            {
-                                                if (torrentDLING)
-                                                {
-                                                    getJson($"magnet/delete?agent={apiNAME}&apikey={APIKEY}&id={magnetID}");
-                                                    this.Invoke(() =>
-                                                    {
-                                                        Program.form.DownloadingText.Text = "Magnet removed from profile!";
-                                                    });
-
-
-                                                    this.Invoke(() =>
-                                                    {
-                                                        Program.form.DownloadingText.Text = $"";
-                                                    });
-
-                                                    this.Invoke(() =>
-                                                    {
-                                                        CancelButton.Visible = false;
-                                                        DownloadingText.Text = $"";
-                                                        dlProg.Value = 0;
-                                                    });
-                                                    notdone = true;
-                                                    cancel = false;
-                                                    torrentDLING = false;
-                                                    break;
-                                                }
-                                            }
-                                            if (!alertedonce)
-                                            {
-                                                await Task.Delay(1000);
-
-                                                alertedonce = true;
-                                                this.Invoke(() =>
-                                                {
-                                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                                    {
-                                                        ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} not cached, now converting!", ToolTipIcon.None);
-
-                                                    }
-                                                    else
-                                                    {
-                                                        DownloadingText.Text = $"{magnetName} not cached, now converting!.";
-                                                    }
-
-                                                });
-                                            }
-
-                                            MagnetStatus = key.status.ToString();
-                                            if (MagnetStatus.Equals("In Queue") && !alerted2nd)
-                                            {
-                                                await Task.Delay(1000);
-                                                alerted2nd = true;
-                                                this.Invoke(() =>
-                                                {
-                                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                                    {
-                                                        ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} added to Queue!", ToolTipIcon.None);
-                                                    }
-                                                    else
-                                                    {
-                                                        DownloadingText.Text = $"Torrent added to queue...";
-                                                    }
-
-                                                });
-                                            }
-                                            if (MagnetStatus.Equals("Downloading"))
-                                            {
-                                                torrentDLING = true;
-                                                if (!isDownloading)
-                                                {
-                                                    torrentDLING = true;
-                                                    string seeders = key.seeders.ToString();
-                                                    notdone = true;
-                                                    DownloadSpeed = double.Parse(key.downloadSpeed.ToString());
-                                                    double DownloadSpeed2 = (DownloadSpeed / 1024) / 1024;
-                                                    string DLS;
-                                                    DLS = "Speed:" + String.Format("{0:0.00}", DownloadSpeed2) + $" MB/s";
-
-
-                                                    total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
-                                                    DLsofar = long.Parse(Utilities.KeepOnlyNumbers(key.downloaded.ToString()));
-
-                                                    int percentComplete = (int)Math.Round((double)(100 * DLsofar) / total);
-                                                    if (percentComplete < 0)
-                                                    {
-                                                        percentComplete = 0;
-                                                    }
-                                                    this.Invoke(() =>
-                                                    {
-
-                                                        dlProg.Value = percentComplete;
-                                                    });
-                                                    const int MaxLength = 20;
-                                                    var name = magnetName;
-                                                    if (name.Length > MaxLength)
-                                                        name = name.Substring(0, MaxLength); // name = "Chris"
-                                                    this.Invoke(() =>
-                                                    {
-
-                                                        DownloadingText.Text = $"Downloading torrent: {name}. {percentComplete}% Seeds:{seeders}. {DLS}";
-                                                    });
-                                                }
-
-                                            }
-                                            else if (MagnetStatus.Equals("Ready"))
-                                            {
-                                                torrentDLING = false;
-                                                notdone = false;
-                                                this.Invoke(() =>
-                                                {
-                                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                                    {
-
-                                                        ALTrayIcon.ShowBalloonTip(3000, "", $"{magnetName} finished downloading, now uploading to DDL links...", ToolTipIcon.None);
-
-                                                    }
-                                                    else
-                                                    {
-
-                                                        DownloadingText.Text = $"{magnetName} finshed downloading!";
-                                                    }
-                                                });
-
-                                            }
-                                            else if (MagnetStatus.Equals("Uploading"))
-                                            {
-                                                if (!isDownloading)
-                                                {
-
-
-                                                    notdone = true;
-                                                    UploadSpeed = double.Parse(key.uploadSpeed.ToString());
-                                                    double UploadSpeed2 = (UploadSpeed / 1024) / 1024;
-                                                    string ULS;
-                                                    ULS = "Speed: " + String.Format("{0:0.00}", UploadSpeed2) + $" MB/s";
-
-
-                                                    total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
-                                                    ULsofar = long.Parse(Utilities.KeepOnlyNumbers(key.uploaded.ToString()));
-
-                                                    int percentComplete = (int)Math.Round((double)(100 * ULsofar) / total);
-                                                    if (percentComplete < 0)
-                                                    {
-                                                        percentComplete = 0;
-                                                    }
-                                                    this.Invoke(() =>
-                                                    {
-                                                        dlProg.Value = percentComplete;
-                                                    });
-                                                    this.Invoke(() =>
-                                                    {
-                                                        DownloadingText.Text = $"Uploading to DDL links. {percentComplete}% complete. {ULS}";
-                                                    });
-
-                                                }
-
-
-                                            }
-
-
-                                            await Task.Delay(10);
-
-                                        }
-                                        if (ready)
-                                        {
-                                            this.Invoke(() =>
-                                            {
-
-                                                DownloadingText.Text = "Magnet conversion finished!";
-                                            });
-                                            foreach (var key2 in key.links)
-                                            {
-                                                bool skip = false;
-                                                var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key2.link.ToString()}");
-                                                try
-                                                {
-                                                    string unlockedLink = result.data.link.ToString();
-                                                    double FileSize = double.Parse(result.data.filesize.ToString());
-                                                    string FileSizeInt = "";
-                                                    if ((FileSize / 1024 / 1024) > 1000)
-                                                    {
-                                                        FileSizeInt = String.Format("{0:0.00}", (FileSize / 1024 / 1024 / 1024).ToString("0.00")) + "GB";
-
-                                                    }
-                                                    else
-                                                    {
-                                                        FileSizeInt = (String.Format("{0:0.00}", (FileSize / 1024 / 1024).ToString("0.00"))) + "MB";
-                                                    }
-
-
-                                                    this.Invoke(() =>
-                                                    {
-                                                        foreach (ListViewItem item in listView1.Items)
-                                                        {
-                                                            if (item.SubItems[0].Text.Equals(key2.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
-                                                            {
-                                                                skip = true;
-
-                                                                if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-
-                                                                    this.Invoke(() =>
-                                                                    {
-                                                                        Program.form.DownloadingText.Text = "Already in the queue! Skipping...";
-                                                                    });
-                                                            }
-
-                                                        }
-
-                                                        if (!skip)
-                                                        {
-
-                                                            listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
-
-                                                        }
-
-                                                        if (listView1.Items.Count == 0)
-                                                        {
-                                                            this.Invoke(() =>
-                                                            {
-                                                                listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
-                                                            });
-                                                        }
-
-                                                        skip = false;
-                                                        foreach (ListViewItem item in listView1.Items)
-                                                        {
-                                                            if (item.SubItems[2].Text.Equals(magnetName))
-                                                            {
-                                                                item.Checked = true;
-
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                                catch
-                                                {
-                                                }
-                                            }
-                                            this.Invoke(() =>
-                                            {
-                                                dlProg.Value = 0;
-                                            });
-
-                                        }
-                                    }
-                                }
-                            }
-                            notdone = true;
-                            if (cancel)
-                            {
-                                isConverting = false;
-                                CancelButton.Visible = false;
-                            }
-
+                            string[] pastedsplit = pasted.Split(';');
+                            output = pastedsplit;
 
                         }
-                        if (isErrors)
+                        else if (pasted.Contains("\r\n"))
                         {
-                            this.Invoke(() =>
-                            {
-                                if (a > 0)
-                                {
-                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Magnet(s) not valid.", ToolTipIcon.Error);
-                                    }
-                                    else
-                                        MessageBox.Show($"{a1}\nMagnet(s) not valid.", "Invalid magnet.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                }
-                                if (b > 0)
-                                {
-                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Already have maximum allowed active magnets (30)", ToolTipIcon.Error);
-                                    }
-                                    else
-                                        MessageBox.Show($"{b1}\nAlready have maximum allowed active magnets (30).", "Cannot add over 30 torrents.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                                }
-                                if (c > 0)
-                                {
-                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Server are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN", ToolTipIcon.Error);
-                                    }
-                                    else
-                                        MessageBox.Show($"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "LServer not allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                }
-                            });
-
-
+                            pasted = pasted.Replace("\r\n", "\n");
+                            string[] pastedsplit = pasted.Split('\n');
+                            output = pastedsplit;
                         }
-                    }
-                });
-                t1.Start();
-                t1.IsBackground = true;
-                while (t1.IsAlive)
-                {
-                    if (cancel)
-                    {
-                        t1.Abort();
-                        cancel = false;
-                    }
-                    await Task.Delay(100);
-                }
-                isConverting = false;
-            }
-
-
-
-
-            if (pasted.ToLower().StartsWith("https://filecrypt.".ToLower()) || pasted.ToLower().StartsWith("https://www.filecrypt.".ToLower()))
-            {
-                isConverting = true;
-                this.Invoke(() =>
-                {
-                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                        ALTrayIcon.ShowBalloonTip(2000, "", $"Adding FileCrypt links...", ToolTipIcon.None);
-
-                    else
-                        DownloadingText.Text = "Adding FileCrypt links...";
-                });
-
-                CurrentDLC = randomNumber;
-                pasted = pasted.Trim();
-                string[] output = new string[] { pasted };
-                if (pasted.Contains(";"))
-                {
-                    string[] pastedsplit = pasted.Split(';');
-                    output = pastedsplit;
-
-                }
-                else if (pasted.Contains("\r\n"))
-                {
-                    pasted = pasted.Replace("\r\n", "\n");
-                    string[] pastedsplit = pasted.Split('\n');
-                    output = pastedsplit;
-                }
-                else if (pasted.Contains('\r'))
-                {
-                    string[] pastedsplit = pasted.Split('\r');
-                    output = pastedsplit;
-                }
-                else if (pasted.Contains('\n'))
-                {
-                    string[] pastedsplit = pasted.Split('\n');
-                    output = pastedsplit;
-                }
-                foreach (string s in output)
-                {
-
-                    FilecryptURL = s;
-
-                    Form WebFormForm = new WebFormForm();
-                    WebFormForm.ShowDialog();
-                    filecryptinprog = true;
-                    Utilities.DecryptDLC();
-
-                }
-                isConverting = false;
-            }
-            else if (pasted.ToLower().StartsWith("https://".ToLower()))
-            {
-                isConverting = true;
-                this.Invoke(() =>
-                {
-                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                    {
-                        DownloadingText.Text = "Attempting to add links.";
-                        ALTrayIcon.ShowBalloonTip(1000, "", "Attempting to add links.", ToolTipIcon.None);
-                    }
-
-                });
-                try
-                {
-                    pasted = pasted.Trim();
-                    string[] output = new string[] { pasted };
-                    if (pasted.Contains(";"))
-                    {
-                        string[] pastedsplit = pasted.Split(';');
-                        output = pastedsplit;
-
-                    }
-                    else if (pasted.Contains("\r\n"))
-                    {
-                        pasted = pasted.Replace("\r\n", "\n");
-                        string[] pastedsplit = pasted.Split('\n');
-                        output = pastedsplit;
-                    }
-                    else if (pasted.Contains('\r'))
-                    {
-                        string[] pastedsplit = pasted.Split('\r');
-                        output = pastedsplit;
-                    }
-                    else if (pasted.Contains('\n'))
-                    {
-                        string[] pastedsplit = pasted.Split('\n');
-                        output = pastedsplit;
-                    }
-                    bool isErrors = false;
-                    int linkdown = 0;
-                    string linkdowns = "";
-                    int linkmissing = 0;
-                    string linkmissings = "";
-                    int linkpass = 0;
-                    string linkpasss = "";
-                    int linknotsup = 0;
-                    string linknotsups = "";
-                    Thread t1 = new Thread(() =>
-                    {
-
+                        else if (pasted.Contains('\r'))
+                        {
+                            string[] pastedsplit = pasted.Split('\r');
+                            output = pastedsplit;
+                        }
+                        else if (pasted.Contains('\n'))
+                        {
+                            string[] pastedsplit = pasted.Split('\n');
+                            output = pastedsplit;
+                        }
+                        bool isErrors = false;
+                        int a = 0;
+                        int b = 0;
+                        int c = 0;
+                        string a1 = "";
+                        string b1 = "";
+                        string c1 = "";
                         foreach (string s in output)
                         {
-                            var obj = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={s}");
-                            if (obj.status.ToString().Equals("error"))
+                        
+                            this.Invoke(() =>
+                            {
+                                CancelButton.Visible = true;
+                            });
+
+                            var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={s}");
+                            string status = obj.status.ToString();
+
+                            if (obj.data.magnets[0].ToString().Contains("error"))
                             {
                                 isErrors = true;
-                                if (obj.error.code.ToString().Equals("LINK_DOWN"))
+                                string error = obj.data.magnets[0].error.code.ToString();
+                                if (error.Contains("MAGNET_INVALID_URI"))
                                 {
-                                    linkdown++;
-                                    linkdowns += s + "\n";
+                                    a++;
+                                    a1 += $"{s}\n";
                                 }
-
-                                if (obj.error.code.ToString().Equals("LINK_IS_MISSING"))
+                                if (error.Contains("MAGNET_TOO_MANY_ACTIVE"))
                                 {
-                                    linkmissing++;
-                                    linkmissings += s + "\n";
+                                    b++;
+                                    b1 += $"{s}\n";
                                 }
-                                if (obj.error.code.ToString().Equals("LINK_PASS_PROTECTED"))
+                                if (error.Contains("MAGNET_NO_SERVER"))
                                 {
-                                    linkpass++;
-                                    linkpasss += s + "\n";
+                                    c++;
+                                    c1 += $"{s}\n";
                                 }
-                                if (obj.error.code.ToString().Equals("LINK_HOST_NOT_SUPPORTED"))
-                                {
-                                    linknotsup++;
-                                    linknotsups += s + "\n";
-                                }
+                            }
+                            if (isErrors)
+                            {
+                                continue;
                             }
                             else
                             {
-                                int addedlinks = 0;
-                                string unlockedLink = obj.data.link.ToString();
-                                double FileSize = double.Parse(obj.data.filesize.ToString());
-                                string FullFileName = obj.data.filename.ToString();
-                                string FileNameNoExt = Utilities.RemoveEverythingAfterLast(FullFileName, ".");
-                                if (FileNameNoExt.Contains(".part") || FileNameNoExt.Contains(".7z") || FileNameNoExt.Contains(".zip"))
-                                {
-                                    FileNameNoExt = Utilities.RemoveEverythingAfterLast(FileNameNoExt, ".");
-                                }
-                                string FileSizeInt = "";
-                                if ((FileSize / 1024 / 1024) > 1000)
-                                {
-                                    FileSizeInt = String.Format("{0:0.00}", (FileSize / 1024 / 1024 / 1024).ToString("0.00")) + "GB";
 
-                                }
-                                else
+                                string magnetName = obj.data.magnets[0].name.ToString();
+
+                                string magnetID = obj.data.magnets[0].id.ToString();
+                                string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}";
+                                while (notdone)
                                 {
-                                    FileSizeInt = (String.Format("{0:0.00}", (FileSize / 1024 / 1024).ToString("0.00"))) + "MB";
+
+                                    obj = getJson(MagnetPoll);
+
+                                    foreach (var key in obj.data.magnets)
+                                    {
+                                        magnetName = key.filename.ToString();
+  
+                                        bool ready = false;
+
+                                        if (key.id.ToString().Equals(magnetID))
+                                        {
+                                            string MagnetStatus = key.status.ToString();
+                                            if (MagnetStatus.Equals("Ready"))
+                                            {
+                                                notdone = false;
+                                                ready = true;
+                                            }
+                                            else
+                                            {
+                                                bool alerted2nd = false;
+                                                bool torrentDLING = false;
+                                                if (cancel)
+                                                {
+                                                    if (torrentDLING)
+                                                    {
+                                                        getJson($"magnet/delete?agent={apiNAME}&apikey={APIKEY}&id={magnetID}");
+                                                        this.Invoke(() =>
+                                                        {
+                                                            Program.form.DownloadingText.Text = "Magnet removed from profile!";
+                                                        });
+
+
+                                                        this.Invoke(() =>
+                                                        {
+                                                            Program.form.DownloadingText.Text = $"";
+                                                        });
+
+                                                        this.Invoke(() =>
+                                                        {
+                                                            CancelButton.Visible = false;
+                                                            DownloadingText.Text = $"";
+                                                            dlProg.Value = 0;
+                                                        });
+                                                        notdone = true;
+                                                        cancel = false;
+                                                        torrentDLING = false;
+                                                        break;
+                                                    }
+                                                }
+                                                if (!alertedonce)
+                                                {
+                                                    await Task.Delay(1000);
+
+                                                    alertedonce = true;
+                                                    this.Invoke(() =>
+                                                    {
+                                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                                        {
+                                                            ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} not cached, now converting!", ToolTipIcon.None);
+
+                                                        }
+                                                        else
+                                                        {
+                                                            DownloadingText.Text = $"{magnetName} not cached, now converting!.";
+                                                        }
+
+                                                    });
+                                                }
+
+                                                MagnetStatus = key.status.ToString();
+                                                if (MagnetStatus.Equals("In Queue") && !alerted2nd)
+                                                {
+                                                    await Task.Delay(1000);
+                                                    alerted2nd = true;
+                                                    this.Invoke(() =>
+                                                    {
+                                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                                        {
+                                                            ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} added to Queue!", ToolTipIcon.None);
+                                                        }
+                                                        else
+                                                        {
+                                                            DownloadingText.Text = $"Torrent added to queue...";
+                                                        }
+
+                                                    });
+                                                }
+                                                if (MagnetStatus.Equals("Downloading"))
+                                                {
+                                                    torrentDLING = true;
+                                                    if (!isDownloading)
+                                                    {
+                                                        torrentDLING = true;
+                                                        string seeders = key.seeders.ToString();
+                                                        notdone = true;
+                                                        DownloadSpeed = double.Parse(key.downloadSpeed.ToString());
+                                                        double DownloadSpeed2 = (DownloadSpeed / 1024) / 1024;
+                                                        string DLS;
+                                                        DLS = "Speed:" + String.Format("{0:0.00}", DownloadSpeed2) + $" MB/s";
+
+
+                                                        total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
+                                                        DLsofar = long.Parse(Utilities.KeepOnlyNumbers(key.downloaded.ToString()));
+
+                                                        int percentComplete = (int)Math.Round((double)(100 * DLsofar) / total);
+                                                        if (percentComplete < 0)
+                                                        {
+                                                            percentComplete = 0;
+                                                        }
+                                                        this.Invoke(() =>
+                                                        {
+
+                                                            dlProg.Value = percentComplete;
+                                                        });
+                                                        const int MaxLength = 20;
+                                                        var name = magnetName;
+                                                        if (name.Length > MaxLength)
+                                                            name = name.Substring(0, MaxLength); // name = "Chris"
+                                                        this.Invoke(() =>
+                                                        {
+
+                                                            DownloadingText.Text = $"Downloading torrent: {name}. {percentComplete}% Seeds:{seeders}. {DLS}";
+                                                        });
+                                                    }
+
+                                                }
+                                                else if (MagnetStatus.Equals("Ready"))
+                                                {
+                                                    torrentDLING = false;
+                                                    notdone = false;
+                                                    this.Invoke(() =>
+                                                    {
+                                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                                        {
+
+                                                            ALTrayIcon.ShowBalloonTip(2000, "", $"{magnetName} finished downloading, now uploading to DDL links...", ToolTipIcon.None);
+
+                                                        }
+                                                        else
+                                                        {
+
+                                                            DownloadingText.Text = $"{magnetName} finshed downloading!";
+                                                        }
+                                                    });
+
+                                                }
+                                                else if (MagnetStatus.Equals("Uploading"))
+                                                {
+                                                    if (!isDownloading)
+                                                    {
+
+
+                                                        notdone = true;
+                                                        UploadSpeed = double.Parse(key.uploadSpeed.ToString());
+                                                        double UploadSpeed2 = (UploadSpeed / 1024) / 1024;
+                                                        string ULS;
+                                                        ULS = "Speed: " + String.Format("{0:0.00}", UploadSpeed2) + $" MB/s";
+
+
+                                                        total = long.Parse(Utilities.KeepOnlyNumbers(key.size.ToString()));
+                                                        ULsofar = long.Parse(Utilities.KeepOnlyNumbers(key.uploaded.ToString()));
+
+                                                        int percentComplete = (int)Math.Round((double)(100 * ULsofar) / total);
+                                                        if (percentComplete < 0)
+                                                        {
+                                                            percentComplete = 0;
+                                                        }
+                                                        this.Invoke(() =>
+                                                        {
+                                                            dlProg.Value = percentComplete;
+                                                        });
+                                                        this.Invoke(() =>
+                                                        {
+                                                            DownloadingText.Text = $"Uploading to DDL links. {percentComplete}% complete. {ULS}";
+                                                        });
+
+                                                    }
+
+
+                                                }
+
+
+                                                await Task.Delay(10);
+
+                                            }
+                                            if (ready)
+                                            {
+                                                this.Invoke(() =>
+                                                {
+
+                                                    DownloadingText.Text = "Magnet conversion finished!";
+                                                });
+                                                foreach (var key2 in key.links)
+                                                {
+                                                    bool skip = false;
+                                                    var result = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={key2.link.ToString()}");
+                                                    try
+                                                    {
+                                                        string unlockedLink = result.data.link.ToString();
+                                                        double FileSize = double.Parse(result.data.filesize.ToString());
+                                                        string FileSizeInt = "";
+                                                        if ((FileSize / 1024 / 1024) > 1000)
+                                                        {
+                                                            FileSizeInt = String.Format("{0:0.00}", (FileSize / 1024 / 1024 / 1024).ToString("0.00")) + "GB";
+
+                                                        }
+                                                        else
+                                                        {
+                                                            FileSizeInt = (String.Format("{0:0.00}", (FileSize / 1024 / 1024).ToString("0.00"))) + "MB";
+                                                        }
+
+
+                                                        this.Invoke(() =>
+                                                        {
+                                                            foreach (ListViewItem item in listView1.Items)
+                                                            {
+                                                                if (item.SubItems[0].Text.Equals(key2.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
+                                                                {
+                                                                    skip = true;
+
+                                                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+
+                                                                        this.Invoke(() =>
+                                                                        {
+                                                                            Program.form.DownloadingText.Text = "Already in the queue! Skipping...";
+                                                                        });
+                                                                }
+
+                                                            }
+
+                                                            if (!skip)
+                                                            {
+
+                                                                listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
+
+                                                            }
+
+                                                            if (listView1.Items.Count == 0)
+                                                            {
+                                                                this.Invoke(() =>
+                                                                {
+                                                                    listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
+                                                                });
+                                                            }
+
+                                                            skip = false;
+                                                            foreach (ListViewItem item in listView1.Items)
+                                                            {
+                                                                if (item.SubItems[2].Text.Equals(magnetName))
+                                                                {
+                                                                    item.Checked = true;
+
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                    catch
+                                                    {
+                                                    }
+                                                }
+                                                this.Invoke(() =>
+                                                {
+                                                    dlProg.Value = 0;
+                                                });
+
+                                            }
+                                        }
+                                    }
+                                }
+                                notdone = true;
+                                if (cancel)
+                                {
+                                    isConverting = false;
+                                    CancelButton.Visible = false;
                                 }
 
-                                bool skip = false;
+
+                            }
+                            if (isErrors)
+                            {
                                 this.Invoke(() =>
                                 {
-                                    foreach (ListViewItem item in listView1.Items)
+                                    if (a > 0)
                                     {
-                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Text.Equals(FileNameNoExt))
+                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                                         {
-                                            skip = true;
+                                            ALTrayIcon.ShowBalloonTip(2000, "", $"Magnet(s) not valid.", ToolTipIcon.Error);
                                         }
+                                        else
+                                            MessageBox.Show($"{a1}\nMagnet(s) not valid.", "Invalid magnet.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     }
-                                    if (!skip)
+                                    if (b > 0)
                                     {
-                                        addedlinks++;
-                                        listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, FileNameNoExt, FileSizeInt }));
+                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                        {
+                                            ALTrayIcon.ShowBalloonTip(2000, "", $"Already have maximum allowed active magnets (30)", ToolTipIcon.Error);
+                                        }
+                                        else
+                                            MessageBox.Show($"{b1}\nAlready have maximum allowed active magnets (30).", "Cannot add over 30 torrents.", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                                     }
-                                    if (listView1.Items.Count == 0)
+                                    if (c > 0)
                                     {
-                                        addedlinks++;
-                                        listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, FileNameNoExt, FileSizeInt }));
-
-                                    }
-                                    foreach (ListViewItem item in listView1.Items)
-                                    {
-                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[1].Text.Equals(unlockedLink))
+                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                                         {
-                                            item.Checked = true;
+                                            ALTrayIcon.ShowBalloonTip(2000, "", $"Server are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN", ToolTipIcon.Error);
                                         }
+                                        else
+                                            MessageBox.Show($"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "LServer not allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     }
                                 });
+
+
                             }
-
-                        }
-                        if (isErrors)
-                        {
-                            this.Invoke(() =>
-                            {
-                                if (linkdown > 0)
-                                {
-                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) have been taken down from the filehoster's website.\n\nNot adding!", ToolTipIcon.None);
-                                    }
-                                    else
-                                        DownloadingText.Text = "Link(s) have been taken down from the filehoster's website.\n\nNot adding!";
-                                }
-                                if (linkmissing > 0)
-                                {
-                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Links missing.\n\nNot adding!", ToolTipIcon.None);
-
-                                    }
-                                    else
-                                        DownloadingText.Text = "Links missing.\n\nNot adding!";
-                                }
-                                if (linkpass > 0)
-                                {
-                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) are password protected on the filehost's website.\n\nNot adding!", ToolTipIcon.None);
-                                    }
-                                    else
-                                        DownloadingText.Text = "Link(s) are password protected on the file hoster site.\n\nNot adding!";
-                                }
-                                if (linknotsup > 0)
-                                {
-                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) are from an unsupported host.\n\nPlease check this link for a list of supported filehosters:\nhttps://alldebrid.com/hosts/", ToolTipIcon.None);
-                                    }
-                                    else
-                                        DownloadingText.Text = "Link(s) are not supported by All Debrid!";
-                                }
-                            });
                         }
                     });
                     t1.Start();
@@ -1282,81 +1030,325 @@ namespace ALL_LEGIT
                         }
                         await Task.Delay(100);
                     }
+                    isConverting = false;
                 }
-                catch (Exception ex)
+
+
+
+
+                if (pasted.ToLower().StartsWith("https://filecrypt.".ToLower()) || pasted.ToLower().StartsWith("https://www.filecrypt.".ToLower()))
                 {
+                    isConverting = true;
                     this.Invoke(() =>
                     {
-
                         if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                        {
-                            ALTrayIcon.ShowBalloonTip(2000, "", $"Pasted information is not suppported.", ToolTipIcon.None);
-                        }
+                            ALTrayIcon.ShowBalloonTip(2000, "", $"Adding FileCrypt links...", ToolTipIcon.None);
+
                         else
-                            DownloadingText.Text = "Pasted information is not suppported.";
+                            DownloadingText.Text = "Adding FileCrypt links...";
                     });
-                }
-                isConverting = false;
-            }
 
-            this.Invoke(() =>
-            {
-                if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                {
-                    DownloadingText.Text = "";
-                }
-
-            });
-            this.Invoke(() =>
-            {
-                listView1.Update();
-            });
-
-
-
-            if (filecryptinprog)
-            {
-                isConverting = true;
-                string[] files = Directory.GetFiles($"{Environment.CurrentDirectory}\\_bin", "*.txt", SearchOption.TopDirectoryOnly);
-                string linkstoget = "";
-                foreach (string file in files)
-                {
-                    if (file.Contains(".txt"))
+                    CurrentDLC = randomNumber;
+                    pasted = pasted.Trim();
+                    string[] output = new string[] { pasted };
+                    if (pasted.Contains(";"))
                     {
-                        string[] list = File.ReadAllLines(file);
-                        foreach (string line in list)
-                        {
-                            if (!line.Contains("Urls stored"))
-                            {
-                                linkstoget += line + "\n";
-                            }
+                        string[] pastedsplit = pasted.Split(';');
+                        output = pastedsplit;
 
+                    }
+                    else if (pasted.Contains("\r\n"))
+                    {
+                        pasted = pasted.Replace("\r\n", "\n");
+                        string[] pastedsplit = pasted.Split('\n');
+                        output = pastedsplit;
+                    }
+                    else if (pasted.Contains('\r'))
+                    {
+                        string[] pastedsplit = pasted.Split('\r');
+                        output = pastedsplit;
+                    }
+                    else if (pasted.Contains('\n'))
+                    {
+                        string[] pastedsplit = pasted.Split('\n');
+                        output = pastedsplit;
+                    }
+                    foreach (string s in output)
+                    {
 
-                        }
-                        File.Delete(file);
+                        FilecryptURL = s;
+
+                        Form WebFormForm = new WebFormForm();
+                        WebFormForm.ShowDialog();
+                        filecryptinprog = true;
+                        Utilities.DecryptDLC();
+
                     }
                     isConverting = false;
                 }
-                if (!String.IsNullOrWhiteSpace(linkstoget))
+                else if (pasted.ToLower().StartsWith("https://".ToLower()))
                 {
-                    Clipboard.SetText(linkstoget);
-                    DoAsyncConversion();
-                    linkstoget = "";
-                    filecryptinprog = false;
+                    isConverting = true;
+                    this.Invoke(() =>
+                    {
+                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                        {
+                            DownloadingText.Text = "Attempting to add links.";
+                            ALTrayIcon.ShowBalloonTip(2000, "", "Attempting to add links.", ToolTipIcon.None);
+                        }
+
+                    });
+                    try
+                    {
+                        pasted = pasted.Trim();
+                        string[] output = new string[] { pasted };
+                        if (pasted.Contains(";"))
+                        {
+                            string[] pastedsplit = pasted.Split(';');
+                            output = pastedsplit;
+
+                        }
+                        else if (pasted.Contains("\r\n"))
+                        {
+                            pasted = pasted.Replace("\r\n", "\n");
+                            string[] pastedsplit = pasted.Split('\n');
+                            output = pastedsplit;
+                        }
+                        else if (pasted.Contains('\r'))
+                        {
+                            string[] pastedsplit = pasted.Split('\r');
+                            output = pastedsplit;
+                        }
+                        else if (pasted.Contains('\n'))
+                        {
+                            string[] pastedsplit = pasted.Split('\n');
+                            output = pastedsplit;
+                        }
+                        bool isErrors = false;
+                        int linkdown = 0;
+                        string linkdowns = "";
+                        int linkmissing = 0;
+                        string linkmissings = "";
+                        int linkpass = 0;
+                        string linkpasss = "";
+                        int linknotsup = 0;
+                        string linknotsups = "";
+                        Thread t1 = new Thread(() =>
+                        {
+
+                            foreach (string s in output)
+                            {
+                                var obj = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={s}");
+                                if (obj.status.ToString().Equals("error"))
+                                {
+                                    isErrors = true;
+                                    if (obj.error.code.ToString().Equals("LINK_DOWN"))
+                                    {
+                                        linkdown++;
+                                        linkdowns += s + "\n";
+                                    }
+
+                                    if (obj.error.code.ToString().Equals("LINK_IS_MISSING"))
+                                    {
+                                        linkmissing++;
+                                        linkmissings += s + "\n";
+                                    }
+                                    if (obj.error.code.ToString().Equals("LINK_PASS_PROTECTED"))
+                                    {
+                                        linkpass++;
+                                        linkpasss += s + "\n";
+                                    }
+                                    if (obj.error.code.ToString().Equals("LINK_HOST_NOT_SUPPORTED"))
+                                    {
+                                        linknotsup++;
+                                        linknotsups += s + "\n";
+                                    }
+                                }
+                                else
+                                {
+                                    int addedlinks = 0;
+                                    string unlockedLink = obj.data.link.ToString();
+                                    double FileSize = double.Parse(obj.data.filesize.ToString());
+                                    string FullFileName = obj.data.filename.ToString();
+                                    string FileNameNoExt = Utilities.RemoveEverythingAfterLast(FullFileName, ".");
+                                    if (FileNameNoExt.Contains(".part") || FileNameNoExt.Contains(".7z") || FileNameNoExt.Contains(".zip"))
+                                    {
+                                        FileNameNoExt = Utilities.RemoveEverythingAfterLast(FileNameNoExt, ".");
+                                    }
+                                    string FileSizeInt = "";
+                                    if ((FileSize / 1024 / 1024) > 1000)
+                                    {
+                                        FileSizeInt = String.Format("{0:0.00}", (FileSize / 1024 / 1024 / 1024).ToString("0.00")) + "GB";
+
+                                    }
+                                    else
+                                    {
+                                        FileSizeInt = (String.Format("{0:0.00}", (FileSize / 1024 / 1024).ToString("0.00"))) + "MB";
+                                    }
+
+                                    bool skip = false;
+                                    this.Invoke(() =>
+                                    {
+                                        foreach (ListViewItem item in listView1.Items)
+                                        {
+                                            if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Text.Equals(FileNameNoExt))
+                                            {
+                                                skip = true;
+                                            }
+                                        }
+                                        if (!skip)
+                                        {
+                                            addedlinks++;
+                                            listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, FileNameNoExt, FileSizeInt }));
+
+                                        }
+                                        if (listView1.Items.Count == 0)
+                                        {
+                                            addedlinks++;
+                                            listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, FileNameNoExt, FileSizeInt }));
+
+                                        }
+                                        foreach (ListViewItem item in listView1.Items)
+                                        {
+                                            if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[1].Text.Equals(unlockedLink))
+                                            {
+                                                item.Checked = true;
+                                            }
+                                        }
+                                    });
+                                }
+
+                            }
+                            if (isErrors)
+                            {
+                                this.Invoke(() =>
+                                {
+                                    if (linkdown > 0)
+                                    {
+                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                        {
+                                            ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) have been taken down from the filehoster's website.\n\nNot adding!", ToolTipIcon.None);
+                                        }
+                                        else
+                                            DownloadingText.Text = "Link(s) have been taken down from the filehoster's website.\n\nNot adding!";
+                                    }
+                                    if (linkmissing > 0)
+                                    {
+                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                        {
+                                            ALTrayIcon.ShowBalloonTip(2000, "", $"Links missing.\n\nNot adding!", ToolTipIcon.None);
+
+                                        }
+                                        else
+                                            DownloadingText.Text = "Links missing.\n\nNot adding!";
+                                    }
+                                    if (linkpass > 0)
+                                    {
+                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                        {
+                                            ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) are password protected on the filehost's website.\n\nNot adding!", ToolTipIcon.None);
+                                        }
+                                        else
+                                            DownloadingText.Text = "Link(s) are password protected on the file hoster site.\n\nNot adding!";
+                                    }
+                                    if (linknotsup > 0)
+                                    {
+                                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                        {
+                                            ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) are from an unsupported host.\n\nPlease check this link for a list of supported filehosters:\nhttps://alldebrid.com/hosts/", ToolTipIcon.None);
+                                        }
+                                        else
+                                            DownloadingText.Text = "Link(s) are not supported by All Debrid!";
+                                    }
+                                });
+                            }
+                        });
+                        t1.Start();
+                        t1.IsBackground = true;
+                        while (t1.IsAlive)
+                        {
+                            if (cancel)
+                            {
+                                t1.Abort();
+                                cancel = false;
+                            }
+                            await Task.Delay(100);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Invoke(() =>
+                        {
+
+                            if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                            {
+                                ALTrayIcon.ShowBalloonTip(2000, "", $"Pasted information is not suppported.", ToolTipIcon.None);
+                            }
+                            else
+                                DownloadingText.Text = "Pasted information is not suppported.";
+                        });
+                    }
+                    isConverting = false;
                 }
-                isConverting = false;
-            }
-            CancelButton.Visible = false;
-            if (Properties.Settings.Default.AutoDL)
-            {
-                object sender = null;
-                EventArgs e = new EventArgs();
-                startDownloads_Click(sender, e);
-            }
 
-            PastedThisRun = "";
+                this.Invoke(() =>
+                {
+                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                    {
+                        DownloadingText.Text = "";
+                    }
+
+                });
+                this.Invoke(() =>
+                {
+                    listView1.Update();
+                });
+
+
+
+                if (filecryptinprog)
+                {
+                    isConverting = true;
+                    string[] files = Directory.GetFiles($"{Environment.CurrentDirectory}\\_bin", "*.txt", SearchOption.TopDirectoryOnly);
+                    string linkstoget = "";
+                    foreach (string file in files)
+                    {
+                        if (file.Contains(".txt"))
+                        {
+                            string[] list = File.ReadAllLines(file);
+                            foreach (string line in list)
+                            {
+                                if (!line.Contains("Urls stored"))
+                                {
+                                    linkstoget += line + "\n";
+                                }
+
+                            }
+                            File.Delete(file);
+                        }
+                        isConverting = false;
+                    }
+                    if (!String.IsNullOrWhiteSpace(linkstoget))
+                    {
+                        Clipboard.SetText(linkstoget);
+                        DoAsyncConversion();
+                        linkstoget = "";
+                        filecryptinprog = false;
+                    }
+                    isConverting = false;
+                }
+                CancelButton.Visible = false;
+                if (Properties.Settings.Default.AutoDL)
+                {
+                    object sender = null;
+                    EventArgs e = new EventArgs();
+                    startDownloads_Click(sender, e);
+                }
+
+                PastedThisRun = "";
+
+            }
         }
-
         protected override bool ProcessCmdKey(ref Message msg, System.Windows.Forms.Keys keyData)
         {
             if (keyData == (System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V))
@@ -1407,7 +1399,7 @@ namespace ALL_LEGIT
                         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //
-      
+
                         item.BackColor = Color.FromArgb(0, 50, 42);
                     }
                     catch (System.Net.WebException Ex)
@@ -1434,13 +1426,14 @@ namespace ALL_LEGIT
                     {
                         if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                         {
-                            ALTrayIcon.ShowBalloonTip(5000, "", $"All Downloads finished!", ToolTipIcon.None);
+                            ALTrayIcon.ShowBalloonTip(2000, "", $"All Downloads finished!", ToolTipIcon.None);
                         }
                         else
                             DownloadingText.Text = $"All Downloads finished!";
                     });
                 }
                 isDownloading = false;
+
                 if (AutoExtract.Checked)
                 {
                     this.Invoke(() =>
@@ -1496,7 +1489,7 @@ namespace ALL_LEGIT
                                 {
                                     Extract = true;
                                 }
-                                if (Extract && !muteoutputcancelled && !wascancelled)
+                                if (Extract && !muteoutputcancelled)
                                 {
                                     this.Invoke(() =>
                                     {
@@ -1528,7 +1521,7 @@ namespace ALL_LEGIT
                         {
                             if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                             {
-                                ALTrayIcon.ShowBalloonTip(3000, "", $"All Extractions finished!", ToolTipIcon.None);
+                                ALTrayIcon.ShowBalloonTip(2000, "", $"All Extractions finished!", ToolTipIcon.None);
                             }
                             else
                                 DownloadingText.Text = $"All Extractions finished!";
@@ -1551,11 +1544,7 @@ namespace ALL_LEGIT
 
                 CancelButton.Visible = false;
             }
-
-            if (wascancelled)
-            {
-                wascancelled = false;
-            }
+            fileDownloading = "";
             System.GC.Collect();
             System.GC.WaitForPendingFinalizers();
             muteoutputcancelled = false;
@@ -1864,7 +1853,7 @@ namespace ALL_LEGIT
                     ALTrayIcon.BalloonTipIcon = ToolTipIcon.None;
                     if (!Properties.Settings.Default.DisableNotifies)
                     {
-                        ALTrayIcon.ShowBalloonTip(1000);
+                        ALTrayIcon.ShowBalloonTip(2000);
 
                     }
                     this.Hide();
