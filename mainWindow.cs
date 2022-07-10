@@ -2108,6 +2108,12 @@ namespace ALL_LEGIT
             this.Show();
             this.WindowState = FormWindowState.Normal;
         }
+
+        private void ALTrayIcon_Click(object sender, EventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+        }
     }
 }
 
