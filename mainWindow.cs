@@ -1180,7 +1180,7 @@ namespace ALL_LEGIT
 
                             foreach (string s in output)
                             {
-                                if (s.ToLower().Contains("debrid.it"))
+                                if (s.ToLower().Contains(".debrid.it"))
                                 {
                                     return;
                                 }
