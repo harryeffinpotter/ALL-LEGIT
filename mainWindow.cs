@@ -66,11 +66,12 @@ namespace ALL_LEGIT
             }
 
         }
+        public static bool TrayExit = false;
         private void menuItem1_Click(object Sender, EventArgs e)
         {
             // Close the form, which closes the application.
+            TrayExit = true;
             this.Close();
-            Application.Exit();
         }
         private System.Windows.Forms.ContextMenu contextMenu1;
         private System.Windows.Forms.MenuItem menuItem1;
@@ -1734,34 +1735,6 @@ namespace ALL_LEGIT
             listView1.Focus();
         }
 
-        private void AutoExtract_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.AutoExtract = AutoExtract.Checked;
-            Properties.Settings.Default.Save();
-            if (AutoExtract.Checked)
-            {
-                PWBox.Enabled = true;
-            }
-            else
-            {
-                PWBox.Enabled = false;
-            }
-            if (AutoExtract.Checked)
-            {
-                AutoExtract.ForeColor = Color.FromArgb(192, 255, 192);
-            }
-            else
-            {
-                AutoExtract.ForeColor = Color.FromArgb(0, 100, 80);
-            }
-        }
-
-        private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-
-            DoAsyncConversion();
-
-        }
 
 
 
@@ -1829,9 +1802,14 @@ namespace ALL_LEGIT
         {
             if (Properties.Settings.Default.Close2Tray)
             {
-                if (e.CloseReason == CloseReason.UserClosing)
+                if (TrayExit)
                 {
-                    ALTrayIcon.BalloonTipText = "All Legit! is still running in your tray.";
+                    Application.ExitThread();
+                    Application.Exit();
+                }
+                else if (e.CloseReason == CloseReason.UserClosing)
+                {
+                    ALTrayIcon.BalloonTipText = "All Legit! is still running in your system tray.";
                     ALTrayIcon.BalloonTipIcon = ToolTipIcon.None;
                     if (!Properties.Settings.Default.DisableNotifies)
                     {
@@ -1845,15 +1823,6 @@ namespace ALL_LEGIT
 
         }
 
-        void Form1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
-        {
-
-        }
 
         private void ALTrayIcon_MouseDoubleClick_1(object sender, MouseEventArgs e)
         {
@@ -1868,15 +1837,6 @@ namespace ALL_LEGIT
         {
             this.Show();
             this.WindowState = FormWindowState.Normal;
-        }
-
-
-
-        private void HotKeyBox_TextChanged(object sender, EventArgs e)
-        {
-
-            waitingforkey = true;
-            HotKeyBox.Text = "Press desired hotkey...";
         }
 
         private void showSettings_MouseEnter(object sender, EventArgs e)
