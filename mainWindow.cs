@@ -679,7 +679,25 @@ namespace ALL_LEGIT
                 fileDownloading += $"{pasted};";
                 if (pasted.ToLower().StartsWith("magnet".ToLower()))
                 {
+                    if (torrentDLING)
+                    {
+                        if (!Properties.Settings.Default.DisableNotifies)
+                        {
+                            this.Invoke(() =>
+                            {
+                                ALTrayIcon.ShowBalloonTip(2000, "", "Torrent is currently being cached, either allow it to finish or press cancel before adding another magnet", ToolTipIcon.None);
+                            });
+                        }
+                        else
+                        {
 
+                            this.Invoke(() =>
+                            {
+                                DownloadingText.Text = "Torrent is currently being cached, either allow it to finish or press cancel before adding another magnet";
+                            });
+                        }
+                        return;
+                    }
                     if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                     {
 
@@ -763,7 +781,6 @@ namespace ALL_LEGIT
                             }
                             else
                             {
-                                bool torrentDLING = false;
                                 string magnetName = obj.data.magnets[0].name.ToString();
 
                                 string magnetID = obj.data.magnets[0].id.ToString();
@@ -901,9 +918,12 @@ namespace ALL_LEGIT
                                                       if (torrentDLING && !isDownloading)
                                                         {
                                                             CancelButton.Visible = false;
-                                                            torrentDLING = false;
+                                                        
                                                         }
-                                                  
+                                                      if (torrentDLING)
+                                                        {
+                                                                torrentDLING = false;
+                                                        }
                                                    
 
                                                         if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
@@ -1461,7 +1481,7 @@ namespace ALL_LEGIT
                 }
                 foreach (ListViewItem item in listView1.CheckedItems)
                 {
-
+                    if (cancel) return;
                     if (!String.IsNullOrEmpty(currentGroup))
                     {
                         currentGroup = item.SubItems[2].Text;
@@ -1707,6 +1727,7 @@ namespace ALL_LEGIT
             }
             DownloadDir.Text = Properties.Settings.Default.DownloadDir;
         }
+        public static bool torrentDLING = false;
 
         private void RemDL_CheckedChanged(object sender, EventArgs e)
         {
@@ -1756,6 +1777,7 @@ namespace ALL_LEGIT
 
                 }
             }
+            if (!torrentDLING)
             cancel = false;
             this.Invoke(() =>
             {
