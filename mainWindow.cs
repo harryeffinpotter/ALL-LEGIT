@@ -286,7 +286,8 @@ namespace ALL_LEGIT
             }
         }
         public static bool loginsuccess = false;
-        public static async Task ConnectViaAPIAsync()
+
+        public async Task ConnectViaAPIAsync()
         {
             Thread t1 = new Thread(() =>
             {
@@ -317,8 +318,13 @@ namespace ALL_LEGIT
                         Properties.Settings.Default.ApiNAME = apiNAME;
                         Properties.Settings.Default.Save();
                         var obj = getJson($"pin/get?agent={apiNAME}");
-
-                        Process.Start(obj.data.user_url.ToString());
+                        FilecryptURL = obj.data.user_url.ToString();
+                        
+                        this.Invoke(() =>
+                        {
+                            Form WebFormForm = new WebFormForm();
+                        WebFormForm.ShowDialog();
+                        });
                         string CheckURL = obj.data.check_url.ToString();
                         obj = getJson(CheckURL);
                         bool Activated;
@@ -1719,7 +1725,7 @@ namespace ALL_LEGIT
         public static bool cancel = false;
         public static bool iscancelling = false;
         public static string cancelledGroup = "";
-        public async void CancelButton_Click(object sender, EventArgs e)
+        public void CancelButton_Click(object sender, EventArgs e)
         {
             startDownloads.Enabled = false;
             CancelButton.Visible = false;
@@ -2137,6 +2143,14 @@ namespace ALL_LEGIT
 
         private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
+            if (listView1.CheckedItems.Count == 0)
+            {
+                ClearButton.Enabled = false;
+            }
+            else
+            { 
+                ClearButton.Enabled = true; 
+            }
             if (listView1.Items.Count == listView1.CheckedItems.Count)
             {
                 CheckAll.Visible = false;

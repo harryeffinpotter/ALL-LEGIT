@@ -56,6 +56,7 @@ namespace ALL_LEGIT
             URLDownloadToFile(null, url, destinationFullPathWithName, 0, IntPtr.Zero);
             return new FileInfo(destinationFullPathWithName);
         }
+        public static bool mustsignin = false;
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             var links = webBrowser1.Document.GetElementsByTagName("button");
@@ -79,6 +80,26 @@ namespace ALL_LEGIT
                     this.Close();
 
                 }
+                if (link.InnerHtml.Contains("Confirm this code"))
+                {
+
+                   link.InvokeMember("click");
+                }
+                if (webBrowser1.DocumentText.Contains("premium links module"))
+                {
+                    webBrowser1.Navigate(MainWindow.FilecryptURL);
+                }
+
+                if (webBrowser1.DocumentText.Contains("Your device have been activated"))
+                {
+                    webBrowser1.Dispose();
+                    this.Close();
+                }
+                if (webBrowser1.DocumentText.Contains("The code you have enter"))
+                {
+                    this.Close();
+
+                }
                 if (webBrowser1.DocumentText.Contains("Security prompt"))
                 {
                     this.Invoke(() =>
@@ -86,10 +107,13 @@ namespace ALL_LEGIT
                         this.Text = "All Legit: Please complete CAPTCHA!";
                     });
                 }
+                if (!mustsignin && webBrowser1.DocumentText.ToString().Contains("Please login to use your PIN code"))
+                {
+                    MessageBox.Show("Please sign in your AllDebrid account!");
+                    mustsignin = true;
+                }
             }
         }
-
-
 
         private void WebFormForm_Load(object sender, EventArgs e)
         {
@@ -128,6 +152,7 @@ namespace ALL_LEGIT
             while (!GotDLC)
             {
 
+                webBrowser1.Document.GetElementsByTagName("button.dlcdownload");
                 string[] files = System.IO.Directory.GetFiles(Properties.Settings.Default.DownloadDir, "*.dlc", SearchOption.TopDirectoryOnly);
                 if (files.Length > 0) GotDLC = true;
                 await Task.Delay(100);
@@ -138,7 +163,7 @@ namespace ALL_LEGIT
                 Utilities.DecryptDLC();
                 this.Close();
             }
-    
+
 
 
 
