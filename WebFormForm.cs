@@ -57,7 +57,7 @@ namespace ALL_LEGIT
             return new FileInfo(destinationFullPathWithName);
         }
         public static bool mustsignin = false;
-        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private async void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             var links = webBrowser1.Document.GetElementsByTagName("button");
 
@@ -83,7 +83,11 @@ namespace ALL_LEGIT
                 if (link.InnerHtml.Contains("Confirm this code"))
                 {
 
-                   link.InvokeMember("click");
+                 link.InvokeMember("click");
+                    if (mustsignin)
+                    {
+                        this.Close();
+                    }
                 }
                 if (webBrowser1.DocumentText.Contains("premium links module"))
                 {

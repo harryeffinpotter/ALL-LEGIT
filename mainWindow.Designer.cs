@@ -163,7 +163,7 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.CancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CancelButton.BackColor = System.Drawing.Color.Transparent;
             this.CancelButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.CancelButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkSeaGreen;
