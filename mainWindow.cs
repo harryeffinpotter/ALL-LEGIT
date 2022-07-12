@@ -105,9 +105,11 @@ namespace ALL_LEGIT
             if (Properties.Settings.Default.DisableNotifies)
             {
                 menuItem2.Checked = true;
+                disableNotiesBox.Checked = true;
             }
             else
             {
+                disableNotiesBox.Checked = false;
                 menuItem2.Checked = false;
             }
 
@@ -195,11 +197,14 @@ namespace ALL_LEGIT
         {
             if (menuItem2.Checked)
             {
+                disableNotiesBox.Checked = false;
                 menuItem2.Checked = false;
                 Properties.Settings.Default.DisableNotifies = false;
             }
             else
             {
+                disableNotiesBox.Checked = true;
+
                 menuItem2.Checked = true;
                 Properties.Settings.Default.DisableNotifies = true;
             }
@@ -363,13 +368,15 @@ namespace ALL_LEGIT
         public static string MagnetSubName = "";
         public static bool NoNamesPresent = false;
         public static int CheckedCount = 0;
-        public static int CurrentCount = 0;
+        public static int cancelledCount = 0;
+        public static int CurrentCount = 1;
+        public static int cancelGroupRuns = 0;
         public WebClient webClient = new WebClient();
         string currentGroup = "";
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
   
-            if (webClient.IsBusy == false)
+            if (webClient.IsBusy)
             {
                 webClient.Dispose();
             }
@@ -381,12 +388,21 @@ namespace ALL_LEGIT
             CancelButton.Visible = true;
             if (cancel) return;
             webClient = new WebClient();
+       
             if (!String.IsNullOrEmpty(cancelledGroup))
             {
+
+                cancelGroupRuns++;
                 if (MagnetNAME.Equals(cancelledGroup))
                 {
                     webClient.CancelAsync();
                     webClient.Dispose();
+                    if (cancelGroupRuns == cancelledCount)
+                    {
+                        cancelledGroup = "";
+                        cancelledCount = 0;
+                        cancelGroupRuns = 1;
+                    }
                     return;
                 }
                 else
@@ -440,6 +456,13 @@ namespace ALL_LEGIT
                     }
                     else
                     {
+                        cancelledGroup = "";
+                        fileDownloading = "";
+                        midRun = false;
+                        isDownloading = false;
+                        notdone = true;
+                        cancel = false;
+
                         overwrite = false;
                     }
        
@@ -521,6 +544,21 @@ namespace ALL_LEGIT
                     webClient.Dispose();
                     isDownloading = false;
                     midRun = false;
+                    notdone = true;
+                    cancel = false;
+                    
+                    foreach (ListViewItem item in listView1.CheckedItems)
+                    {
+                        if (MagnetNAME == cancelledGroup)
+                        {
+                            cancelledCount++;
+                        }
+                        if (item.BackColor == Color.MediumSpringGreen)
+                        {
+
+                            item.BackColor = Color.FromArgb(0, 50, 42);
+                        }
+                    }
                     return;
                 }
                 this.Invoke(() =>
@@ -549,7 +587,6 @@ namespace ALL_LEGIT
 
 
                 }
-                webClient.Dispose();
 
 
 
@@ -565,6 +602,9 @@ namespace ALL_LEGIT
             midRun = false;
             webClient.Dispose();
             isDownloading = false;
+            cancel = false;
+            cancelledGroup = "";
+            fileDownloading = "";
             notdone = true;
             listView1.Refresh();
 
@@ -687,11 +727,7 @@ namespace ALL_LEGIT
                         foreach (string s in output)
                         {
                         
-                            this.Invoke(() =>
-                            {
-                                CancelButton.Visible = true;
-                            });
-
+                  
                             var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={s}");
                             string status = obj.status.ToString();
 
@@ -750,8 +786,10 @@ namespace ALL_LEGIT
                                         
                                                 if (cancel)
                                                 {
+
                                                     if (torrentDLING)
                                                     {
+
                                                         getJson($"magnet/delete?agent={apiNAME}&apikey={APIKEY}&id={magnetID}");
                                                         this.Invoke(() =>
                                                         {
@@ -807,6 +845,8 @@ namespace ALL_LEGIT
                                                     torrentDLING = true;
                                                     if (!isDownloading)
                                                     {
+                    
+
                                                         this.Invoke(() =>
                                                         {
                                                             CancelButton.Visible = true;
@@ -848,10 +888,18 @@ namespace ALL_LEGIT
                                                 }
                                                 else if (MagnetStatus.Equals("Ready"))
                                                 {
-                                                    torrentDLING = false;
+                                             
                                                     notdone = false;
                                                     this.Invoke(() =>
                                                     {
+                                                      if (torrentDLING && !isDownloading)
+                                                        {
+                                                            CancelButton.Visible = false;
+                                                            torrentDLING = false;
+                                                        }
+                                                  
+                                                   
+
                                                         if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                                                         {
 
@@ -1384,6 +1432,8 @@ namespace ALL_LEGIT
         public static bool isDownloading = false;
         public async void startDownloads_Click(object sender, EventArgs e)
         {
+            startDownloads.Enabled = false;
+            await Task.Delay(2000);
             endreached = false;
 
             if (cancel) return;
@@ -1576,8 +1626,12 @@ namespace ALL_LEGIT
             System.GC.WaitForPendingFinalizers();
             muteoutputcancelled = false;
             isDownloading = false;
+            fileDownloading = "";
+            currentGroup = "";
+            cancelledGroup = "";
             endreached = true;
             cancel = false;
+            startDownloads.Enabled = true;
         }
 
         private void CopyLinks_Click(object sender, EventArgs e)
@@ -1663,9 +1717,12 @@ namespace ALL_LEGIT
         }
         public static bool muteoutputcancelled = false;
         public static bool cancel = false;
+        public static bool iscancelling = false;
         public static string cancelledGroup = "";
-        public void CancelButton_Click(object sender, EventArgs e)
+        public async void CancelButton_Click(object sender, EventArgs e)
         {
+            startDownloads.Enabled = false;
+            CancelButton.Visible = false;
             cancel = true;
             if (isDownloading)
             {
@@ -1674,7 +1731,6 @@ namespace ALL_LEGIT
                 webClient.CancelAsync();
                 if (cancel)
                 {
-                    CancelButton.Visible = false;
                     if (Properties.Settings.Default.RemDL)
                     {
                         listView1.BeginUpdate();
@@ -1694,12 +1750,14 @@ namespace ALL_LEGIT
 
                 }
             }
+            cancel = false;
             this.Invoke(() =>
             {
                 CancelButton.Visible = false;
                 Program.form.DownloadingText.Text = $"";
                 dlProg.Value = 0;
             });
+            startDownloads.Enabled = true;
         }
 
         private void PasteButton_Click(object sender, EventArgs e)
@@ -2093,12 +2151,15 @@ namespace ALL_LEGIT
         {
             Properties.Settings.Default.DisableNotifies = disableNotiesBox.Checked;
             Properties.Settings.Default.Save();
+
             if (disableNotiesBox.Checked)
             {
+                menuItem2.Checked = true;
                 disableNotiesBox.ForeColor = Color.FromArgb(192, 255, 192);
             }
             else
             {
+                menuItem2.Checked = false;
                 disableNotiesBox.ForeColor = Color.FromArgb(0, 100, 80);
             }
         }

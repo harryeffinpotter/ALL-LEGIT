@@ -4609,7 +4609,6 @@
     <Content Include="AL.ico" />
     <EmbeddedResource Include="FodyWeavers.xml" />
     <EmbeddedResource Include="Gma.System.MouseKeyHook.dll" />
-    <Content Include="HTMLPage1.html" />
     <EmbeddedResource Include="SevenZipSharp.dll" />
     <EmbeddedResource Include="SharpCompress.dll" />
     <None Include="Fody.dll" />
