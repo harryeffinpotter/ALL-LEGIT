@@ -646,7 +646,6 @@
         private System.Windows.Forms.Button HotKeyBtn;
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.Label DownloadingText;
         private System.Windows.Forms.Button startDownloads;
         private System.Windows.Forms.Button CopyLinks;
         private System.Windows.Forms.Button ClearButton;
@@ -660,6 +659,7 @@
         private System.Windows.Forms.CheckBox disableNotiesBox;
         private System.Windows.Forms.Label zipPWLabel;
         public System.Windows.Forms.NotifyIcon ALTrayIcon;
+        public System.Windows.Forms.Label DownloadingText;
     }
 }
 

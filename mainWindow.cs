@@ -1174,15 +1174,7 @@ namespace ALL_LEGIT
                 else if (pasted.ToLower().StartsWith("https://".ToLower()))
                 {
                     isConverting = true;
-                    this.Invoke(() =>
-                    {
-                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                        {
-                            DownloadingText.Text = "Attempting to add links.";
-                            ALTrayIcon.ShowBalloonTip(2000, "", "Attempting to add links.", ToolTipIcon.None);
-                        }
 
-                    });
                     try
                     {
                         pasted = pasted.Trim();
