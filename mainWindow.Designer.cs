@@ -611,6 +611,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "All Legit: Connecting...";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             this.MouseLeave += new System.EventHandler(this.settingsP_MouseLeave);
@@ -658,7 +659,7 @@
         public new System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.CheckBox disableNotiesBox;
         private System.Windows.Forms.Label zipPWLabel;
-        private System.Windows.Forms.NotifyIcon ALTrayIcon;
+        public System.Windows.Forms.NotifyIcon ALTrayIcon;
     }
 }
 

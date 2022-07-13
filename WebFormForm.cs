@@ -1,14 +1,7 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -22,7 +15,7 @@ namespace ALL_LEGIT
             InitializeComponent();
 
         }
-
+        public static bool DLCDownloaded = false;
         /// <summary>
         /// The URLMON library contains this function, URLDownloadToFile, which is a way
         /// to download files without user prompts.  The ExecWB( _SAVEAS ) function always
@@ -57,15 +50,73 @@ namespace ALL_LEGIT
             return new FileInfo(destinationFullPathWithName);
         }
         public static bool mustsignin = false;
-        private async void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+
             var links = webBrowser1.Document.GetElementsByTagName("button");
+            string text = webBrowser1.DocumentText;
+
+            if (text.Contains("Please confirm that you are no robot"))
+            {
+                this.Invoke(async () =>
+                {
+                    var process = new Process
+                    {
+                        StartInfo = new ProcessStartInfo
+                        {
+                            UseShellExecute = true,
+                            FileName = MainWindow.FilecryptURL
+                        }
+                    };
+                    process.Start();
+                    splashCover.Visible = true;
+                    webBrowser1.Dispose();
+                    webBrowser1.Visible = false;
+                    dlcGIF.Visible = true;
+                    dlcGIF.Enabled = true;
+                    splashCover.Text = "\n\n This captcha (CUTCAPTCHA) cannot be loaded normally, so instead we opened it in your default browser." +
+                    "Once you solve it click the green DLC link on the following page.\n\nBE SURE THAT YOU SAVE IT TO YOUR DOWNLOADS FOLDER\n" +
+                    "This is where Firefox and Chrome save their downloads by default, so 99.9% of people will not have an issue!\n\n" +
+                    "Here is a gif of the entire process:\n\n";
+                    this.Text = "All Legit! Complete Captcha/Download DLC FILE!";
+                    bool dlcfilefound = false;
+                    while (!dlcfilefound)
+                    {
+                        string[] files = System.IO.Directory.GetFiles(MainWindow.GetDownloadsPath(), "*.dlc", SearchOption.TopDirectoryOnly);
+                        if (files.Length > 0) dlcfilefound = true;
+                        await Task.Delay(50);
+                    }
+
+                    if (dlcfilefound)
+                    {
+                        dlcGIF.Visible = false;
+                        dlcGIF.Enabled = false;
+                        splashCover.Text = "DLC File found!";
+                        await Task.Delay(1000);
+                        webBrowser1.Stop();
+                        webBrowser1.Dispose();
+                        Utilities.DecryptDLC();
+                        splashCover.Text = "Please wait...";
+                        this.Close();
+                    }
+                });
+            }
+            if (text.Contains("Please enter the correct result"))
+            {
+                splashCover.Visible = false;
+                this.Invoke(() =>
+                {
+                    this.Text = "All Legit: Please complete CAPTCHA!";
+                });
+
+            }
 
             foreach (HtmlElement link in links)
             {
 
                 if (link.GetAttribute("className").Contains("dlcdownload") && !DownloadedOnce)
                 {
+                   
                     DownloadedOnce = true;
                     string DLCID = link.OuterHtml;
                     DLCID = Utilities.RemoveEverythingBeforeFirst(DLCID, "(");
@@ -83,101 +134,58 @@ namespace ALL_LEGIT
                 if (link.InnerHtml.Contains("Confirm this code"))
                 {
 
-                 link.InvokeMember("click");
-                    if (mustsignin)
-                    {
-                        this.Close();
-                    }
+                   link.InvokeMember("click");
                 }
-                if (webBrowser1.DocumentText.Contains("premium links module"))
+
+            if (webBrowser1.DocumentText.Contains("The code you have enter"))
                 {
                     webBrowser1.Navigate(MainWindow.FilecryptURL);
-                }
-
-                if (webBrowser1.DocumentText.Contains("Your device have been activated"))
-                {
-                    webBrowser1.Dispose();
-                    this.Close();
-                }
-                if (webBrowser1.DocumentText.Contains("The code you have enter"))
-                {
-                    this.Close();
 
                 }
-                if (webBrowser1.DocumentText.Contains("Security prompt"))
-                {
-                    this.Invoke(() =>
-                    {
-                        this.Text = "All Legit: Please complete CAPTCHA!";
-                    });
-                }
-                if (!mustsignin && webBrowser1.DocumentText.ToString().Contains("Please login to use your PIN code"))
-                {
-                    MessageBox.Show("Please sign in your AllDebrid account!");
-                    mustsignin = true;
-                }
+            }
+            if (text.Contains("Please login to use your PIN code") && !mustsignin)
+            {
+                MessageBox.Show(new Form { TopMost = true }, "Please sign in your AllDebrid account!");
+                mustsignin = true;
+            }
+            if (text.Contains("Your device have been activated"))
+            {
+                webBrowser1.Dispose();
+                this.Close();
+            }
+            if (text.Contains("premium links module"))
+            {
+                webBrowser1.Navigate(MainWindow.FilecryptURL);
             }
         }
 
         private void WebFormForm_Load(object sender, EventArgs e)
         {
-            webBrowser1.ScriptErrorsSuppressed = true;
+            webBrowser1.Visible = true;
+            splashCover.Visible = false;
+            var appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+            Microsoft.Win32.Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
+                  appName, 11000, Microsoft.Win32.RegistryValueKind.DWord);
+            splashCover.Visible = false;
+
             webBrowser1.Navigate(MainWindow.FilecryptURL);
         }
         public static bool clicked = false;
 
-        private async void closeBrowser_Click(object sender, EventArgs e)
+
+        private void WebFormForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!clicked)
+            if (!webBrowser1.IsDisposed)
             {
-                closeBrowser.Text = "SUBMIT DOWNLOADED DLC FILE.";
-            }
-            if (clicked)
-            {
-                clicked = false;
+                dlcGIF.Visible = false;
+                dlcGIF.Enabled = false;
                 webBrowser1.Stop();
-                Utilities.DecryptDLC();
-                closeBrowser.Text = "CAPTCHA DIDN'T LOAD PROPERLY? USE THIS WORKAROUND!";
-                this.Close();
-                return;
-            }
-            bool GotDLC = false;
-            clicked = true;
-
-            var process = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = MainWindow.FilecryptURL
-                }
-            };
-            process.Start();
-
-            while (!GotDLC)
-            {
-
-                webBrowser1.Document.GetElementsByTagName("button.dlcdownload");
-                string[] files = System.IO.Directory.GetFiles(Properties.Settings.Default.DownloadDir, "*.dlc", SearchOption.TopDirectoryOnly);
-                if (files.Length > 0) GotDLC = true;
-                await Task.Delay(100);
-            }
-            if (GotDLC)
-            {
-                webBrowser1.Stop();
-                Utilities.DecryptDLC();
+                webBrowser1.Dispose();
+                splashCover.Text = "Please wait...";
                 this.Close();
             }
-
-
-
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
+     
         }
     }
-
 }
 

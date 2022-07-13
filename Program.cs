@@ -12,6 +12,7 @@ namespace ALL_LEGIT
 {
     internal static class Program
     {
+        public static System.Threading.Mutex mutex;
         public static MainWindow form;
         /// <summary>
         /// The main entry point for the application.
@@ -20,13 +21,27 @@ namespace ALL_LEGIT
         static void Main()
         {
 
+            bool mutexCreated = false;
+            mutex = new System.Threading.Mutex(false, "All Legit!.exe", out mutexCreated);
+
+            if (!mutexCreated)
+            {
+                MessageBox.Show(new Form { TopMost = true },"Loader is already running!!! try again!", "Already Runing!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+;
+                mutex.Close();
+                Application.Exit();
+                return;
+            }
             try
             {
 
                 // Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 form = new MainWindow();
-                Application.Run(form);
+                try
+                {
+                    Application.Run(form);
+                } finally { Program.form.ALTrayIcon.Dispose(); }
                 Application.Exit();
 
             }

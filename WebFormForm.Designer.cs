@@ -31,17 +31,18 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebFormForm));
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.label1 = new System.Windows.Forms.Label();
-            this.closeBrowser = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.splashCover = new System.Windows.Forms.Label();
+            this.dlcGIF = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.dlcGIF)).BeginInit();
             this.SuspendLayout();
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(12, 11);
+            this.webBrowser1.Location = new System.Drawing.Point(12, 12);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.ScriptErrorsSuppressed = true;
-            this.webBrowser1.Size = new System.Drawing.Size(1124, 625);
+            this.webBrowser1.Size = new System.Drawing.Size(964, 687);
             this.webBrowser1.TabIndex = 14;
             this.webBrowser1.Url = new System.Uri("", System.UriKind.Relative);
             this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
@@ -56,48 +57,50 @@
             this.label1.Size = new System.Drawing.Size(0, 16);
             this.label1.TabIndex = 15;
             // 
-            // closeBrowser
+            // splashCover
             // 
-            this.closeBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.closeBrowser.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(10)))));
-            this.closeBrowser.FlatAppearance.BorderSize = 0;
-            this.closeBrowser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.closeBrowser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.closeBrowser.ForeColor = System.Drawing.Color.White;
-            this.closeBrowser.Location = new System.Drawing.Point(292, 646);
-            this.closeBrowser.Name = "closeBrowser";
-            this.closeBrowser.Size = new System.Drawing.Size(575, 41);
-            this.closeBrowser.TabIndex = 16;
-            this.closeBrowser.Text = "CAPTCHA DIDN\'T LOAD PROPERLY? USE THIS WORKAROUND!";
-            this.closeBrowser.UseVisualStyleBackColor = false;
-            this.closeBrowser.Click += new System.EventHandler(this.closeBrowser_Click);
+            this.splashCover.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(18)))));
+            this.splashCover.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.75F);
+            this.splashCover.ForeColor = System.Drawing.SystemColors.Control;
+            this.splashCover.Location = new System.Drawing.Point(20, 17);
+            this.splashCover.Name = "splashCover";
+            this.splashCover.Size = new System.Drawing.Size(948, 369);
+            this.splashCover.TabIndex = 17;
+            this.splashCover.Text = "\r\nPlease wait...";
+            this.splashCover.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.splashCover.Visible = false;
             // 
-            // label2
+            // dlcGIF
             // 
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(36, 690);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(1076, 166);
-            this.label2.TabIndex = 15;
-            this.label2.Text = resources.GetString("label2.Text");
-            this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.label2.Click += new System.EventHandler(this.label2_Click);
+            this.dlcGIF.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(18)))));
+            this.dlcGIF.Enabled = false;
+            this.dlcGIF.Image = ((System.Drawing.Image)(resources.GetObject("dlcGIF.Image")));
+            this.dlcGIF.InitialImage = null;
+            this.dlcGIF.Location = new System.Drawing.Point(19, 376);
+            this.dlcGIF.Name = "dlcGIF";
+            this.dlcGIF.Size = new System.Drawing.Size(950, 319);
+            this.dlcGIF.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.dlcGIF.TabIndex = 18;
+            this.dlcGIF.TabStop = false;
+            this.dlcGIF.Visible = false;
+            this.dlcGIF.WaitOnLoad = true;
             // 
             // WebFormForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
-            this.ClientSize = new System.Drawing.Size(1148, 795);
-            this.Controls.Add(this.closeBrowser);
+            this.ClientSize = new System.Drawing.Size(988, 711);
+            this.Controls.Add(this.dlcGIF);
+            this.Controls.Add(this.splashCover);
             this.Controls.Add(this.webBrowser1);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WebFormForm";
-            this.Text = "AllLegit: Solve Captcha";
+            this.Text = "All Legit! Captcha Helper";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WebFormForm_FormClosing);
             this.Load += new System.EventHandler(this.WebFormForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dlcGIF)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -106,7 +109,7 @@
         #endregion
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.WebBrowser webBrowser1;
-        private System.Windows.Forms.Button closeBrowser;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label splashCover;
+        private System.Windows.Forms.PictureBox dlcGIF;
     }
 }

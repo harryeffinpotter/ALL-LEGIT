@@ -102,17 +102,6 @@ namespace ALL_LEGIT
             this.menuItem2.Text = "Diable notifications";
             this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
 
-            if (Properties.Settings.Default.DisableNotifies)
-            {
-                menuItem2.Checked = true;
-                disableNotiesBox.Checked = true;
-            }
-            else
-            {
-                disableNotiesBox.Checked = false;
-                menuItem2.Checked = false;
-            }
-
 
 
             // Create the NotifyIcon.
@@ -129,7 +118,10 @@ namespace ALL_LEGIT
             // in a tooltip, when the mouse hovers over the systray icon.
             ALTrayIcon.Text = "All Legit";
             ALTrayIcon.Visible = true;
-
+            this.Invoke(() =>
+            {
+                menuItem2.Checked = Properties.Settings.Default.DisableNotifies;
+            });
             // Handle the DoubleClick event to activate the form.
 
             var appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
@@ -203,18 +195,18 @@ namespace ALL_LEGIT
             }
             else
             {
-                disableNotiesBox.Checked = true;
-
                 menuItem2.Checked = true;
+                disableNotiesBox.Checked = true;
                 Properties.Settings.Default.DisableNotifies = true;
             }
+
             Properties.Settings.Default.Save();
 
         }
         public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
         {
-            menuItem2.Checked = Properties.Settings.Default.DisableNotifies;
+
             disableNotiesBox.Checked = Properties.Settings.Default.DisableNotifies;
             Close2Tray.Checked = Properties.Settings.Default.Close2Tray;
             RemDL.Checked = Properties.Settings.Default.RemDL;
@@ -278,7 +270,7 @@ namespace ALL_LEGIT
             {
                 if (!cancel)
                 {
-                    MessageBox.Show("Not able to access the internet, so cannot login... Exiting program.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(new Form { TopMost = true },"Not able to access the internet, so cannot login... Exiting program.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Application.Exit();
                     return null;
                 }
@@ -306,7 +298,7 @@ namespace ALL_LEGIT
                         }
                         else
                         {
-                            MessageBox.Show("Previously set API key no longer working... you must reconnect!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(new Form { TopMost = true },"Previously set API key no longer working... you must reconnect!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
 
@@ -351,12 +343,13 @@ namespace ALL_LEGIT
                         }
                         else
                         {
-                            MessageBox.Show("Previously set API key no longer working... you must reconnect!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(new Form { TopMost = true },"Previously set API key no longer working... you must reconnect!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }
                 catch
                 {
+                    Program.mutex.Close();
                     Application.Exit();
                 }
             });
@@ -455,7 +448,7 @@ namespace ALL_LEGIT
                 if (!currentGroup.Contains(MagnetNAME) && !Properties.Settings.Default.AutoOverwrite)
                 {
                     currentGroup = MagnetNAME;
-                    DialogResult Overwrite1 = MessageBox.Show($"Files found, do you want to overwrite all files from this batch of links({Utilities.RemoveEverythingAfterLast(MagnetNAME, ".")})", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult Overwrite1 = MessageBox.Show(new Form { TopMost = true },$"Files found, do you want to overwrite all files from this batch of links({Utilities.RemoveEverythingAfterLast(MagnetNAME, ".")})", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (Overwrite1 == DialogResult.Yes)
                     {
                         overwrite = true;
@@ -1085,7 +1078,7 @@ namespace ALL_LEGIT
                                             ALTrayIcon.ShowBalloonTip(2000, "", $"Magnet(s) not valid.", ToolTipIcon.Error);
                                         }
                                         else
-                                            MessageBox.Show($"{a1}\nMagnet(s) not valid.", "Invalid magnet.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            MessageBox.Show(new Form { TopMost = true },$"{a1}\nMagnet(s) not valid.", "Invalid magnet.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     }
                                     if (b > 0)
                                     {
@@ -1094,7 +1087,7 @@ namespace ALL_LEGIT
                                             ALTrayIcon.ShowBalloonTip(2000, "", $"Already have maximum allowed active magnets (30)", ToolTipIcon.Error);
                                         }
                                         else
-                                            MessageBox.Show($"{b1}\nAlready have maximum allowed active magnets (30).", "Cannot add over 30 torrents.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            MessageBox.Show(new Form { TopMost = true },$"{b1}\nAlready have maximum allowed active magnets (30).", "Cannot add over 30 torrents.", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                                     }
                                     if (c > 0)
@@ -1104,7 +1097,7 @@ namespace ALL_LEGIT
                                             ALTrayIcon.ShowBalloonTip(2000, "", $"Server are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN", ToolTipIcon.Error);
                                         }
                                         else
-                                            MessageBox.Show($"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "LServer not allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            MessageBox.Show(new Form { TopMost = true },$"{c1}\nServer are not allowed to use this feature. Visit https://alldebrid.com/vpn if you're using a VPN.", "LServer not allowed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     }
                                 });
 
@@ -1693,12 +1686,12 @@ namespace ALL_LEGIT
                 }
                 catch
                 {
-                    MessageBox.Show("Clipboard was in use and could not be set!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(new Form { TopMost = true },"Clipboard was in use and could not be set!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
             {
-                MessageBox.Show("Please select items to download or hit clear.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(new Form { TopMost = true },"Please select items to download or hit clear.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1815,7 +1808,7 @@ namespace ALL_LEGIT
                 if (!DownloadDir.Text.Equals(Properties.Settings.Default.DownloadDir))
                 {
 
-                    DialogResult answer = MessageBox.Show($"Apply current text as download directory?\n\n{DownloadDir.Text}", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                    DialogResult answer = MessageBox.Show(new Form { TopMost = true },$"Apply current text as download directory?\n\n{DownloadDir.Text}", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                     if (answer == DialogResult.OK)
                     {
                         Properties.Settings.Default.DownloadDir = DownloadDir.Text;
@@ -1908,7 +1901,7 @@ namespace ALL_LEGIT
             if (!DownloadDir.Text.Equals(Properties.Settings.Default.DownloadDir))
             {
 
-                DialogResult answer = MessageBox.Show($"Apply current text as download directory?\n\n{DownloadDir.Text}", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                DialogResult answer = MessageBox.Show(new Form { TopMost = true },$"Apply current text as download directory?\n\n{DownloadDir.Text}", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 if (answer == DialogResult.OK)
                 {
                     Properties.Settings.Default.DownloadDir = DownloadDir.Text;
@@ -1964,12 +1957,16 @@ namespace ALL_LEGIT
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
+      
             if (Properties.Settings.Default.Close2Tray)
             {
                 if (TrayExit)
                 {
+                    ALTrayIcon.Visible = false;
+                    ALTrayIcon.Dispose();
+                    Program.mutex.Close();
                     Application.ExitThread();
-                    Application.Exit();
+                    this.Close();
                 }
                 else if (e.CloseReason == CloseReason.UserClosing)
                 {
@@ -1983,6 +1980,21 @@ namespace ALL_LEGIT
                     this.Hide();
                     e.Cancel = true;
                 }
+                else
+                {
+                    ALTrayIcon.Visible = false;
+                    ALTrayIcon.Dispose();
+                    Program.mutex.Close();
+                    Application.ExitThread();
+                    this.Close();
+                }
+            }
+            else
+            {
+                ALTrayIcon.Dispose();
+                Program.mutex.Close();
+                Application.ExitThread();
+                this.Close();
             }
 
         }
@@ -2185,17 +2197,18 @@ namespace ALL_LEGIT
 
         private void disableNotiesBox_CheckedChanged(object sender, EventArgs e)
         {
+            menuItem2.Checked = disableNotiesBox.Checked;
             Properties.Settings.Default.DisableNotifies = disableNotiesBox.Checked;
             Properties.Settings.Default.Save();
 
             if (disableNotiesBox.Checked)
             {
-                menuItem2.Checked = true;
+
                 disableNotiesBox.ForeColor = Color.FromArgb(192, 255, 192);
             }
             else
             {
-                menuItem2.Checked = false;
+   
                 disableNotiesBox.ForeColor = Color.FromArgb(0, 100, 80);
             }
         }
@@ -2210,6 +2223,10 @@ namespace ALL_LEGIT
         {
             this.Show();
             this.WindowState = FormWindowState.Normal;
+        }
+
+        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
+        {
         }
     }
 }
