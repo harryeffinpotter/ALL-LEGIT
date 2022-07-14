@@ -226,5 +226,17 @@ namespace ALL_LEGIT.Properties {
                 this["DisableNotifies"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OpenDir {
+            get {
+                return ((bool)(this["OpenDir"]));
+            }
+            set {
+                this["OpenDir"] = value;
+            }
+        }
     }
 }

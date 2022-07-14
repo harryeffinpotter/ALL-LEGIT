@@ -57,6 +57,7 @@
             this.autoDelZips = new System.Windows.Forms.CheckBox();
             this.AutoExtract = new System.Windows.Forms.CheckBox();
             this.zipPWLabel = new System.Windows.Forms.Label();
+            this.Close2Tray = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.RemDL = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -66,9 +67,9 @@
             this.CopyLinks = new System.Windows.Forms.Button();
             this.ClearButton = new System.Windows.Forms.Button();
             this.dlProg = new System.Windows.Forms.ProgressBar();
-            this.Close2Tray = new System.Windows.Forms.CheckBox();
             this.UncheckAll = new System.Windows.Forms.PictureBox();
             this.CheckAll = new System.Windows.Forms.PictureBox();
+            this.OpenDirBox = new System.Windows.Forms.CheckBox();
             this.settingsP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncheckAll)).BeginInit();
@@ -239,7 +240,7 @@
             this.PWBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
             this.PWBox.Enabled = false;
             this.PWBox.ForeColor = System.Drawing.Color.White;
-            this.PWBox.Location = new System.Drawing.Point(46, 274);
+            this.PWBox.Location = new System.Drawing.Point(46, 287);
             this.PWBox.Name = "PWBox";
             this.PWBox.Size = new System.Drawing.Size(414, 26);
             this.PWBox.TabIndex = 4;
@@ -272,7 +273,7 @@
             this.AutoDLBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.AutoDLBox.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.AutoDLBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.AutoDLBox.Location = new System.Drawing.Point(45, 101);
+            this.AutoDLBox.Location = new System.Drawing.Point(45, 91);
             this.AutoDLBox.Name = "AutoDLBox";
             this.AutoDLBox.Size = new System.Drawing.Size(417, 26);
             this.AutoDLBox.TabIndex = 0;
@@ -288,7 +289,7 @@
             this.AutoOverwrite.Dock = System.Windows.Forms.DockStyle.Top;
             this.AutoOverwrite.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.AutoOverwrite.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.AutoOverwrite.Location = new System.Drawing.Point(45, 127);
+            this.AutoOverwrite.Location = new System.Drawing.Point(45, 117);
             this.AutoOverwrite.Name = "AutoOverwrite";
             this.AutoOverwrite.Size = new System.Drawing.Size(417, 26);
             this.AutoOverwrite.TabIndex = 0;
@@ -318,13 +319,14 @@
             this.settingsP.Controls.Add(this.autoDelZips);
             this.settingsP.Controls.Add(this.AutoExtract);
             this.settingsP.Controls.Add(this.zipPWLabel);
+            this.settingsP.Controls.Add(this.Close2Tray);
             this.settingsP.Controls.Add(this.label1);
             this.settingsP.Controls.Add(this.PWBox);
             this.settingsP.Controls.Add(this.AutoOverwrite);
             this.settingsP.Controls.Add(this.AutoDLBox);
             this.settingsP.Controls.Add(this.RemDL);
             this.settingsP.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.settingsP.Location = new System.Drawing.Point(302, 5);
+            this.settingsP.Location = new System.Drawing.Point(308, 5);
             this.settingsP.Name = "settingsP";
             this.settingsP.Padding = new System.Windows.Forms.Padding(45, 65, 45, 45);
             this.settingsP.Size = new System.Drawing.Size(511, 345);
@@ -340,7 +342,7 @@
             this.disableNotiesBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.disableNotiesBox.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.disableNotiesBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.disableNotiesBox.Location = new System.Drawing.Point(45, 205);
+            this.disableNotiesBox.Location = new System.Drawing.Point(45, 221);
             this.disableNotiesBox.Name = "disableNotiesBox";
             this.disableNotiesBox.Size = new System.Drawing.Size(417, 26);
             this.disableNotiesBox.TabIndex = 12;
@@ -355,7 +357,7 @@
             this.autoDelZips.Dock = System.Windows.Forms.DockStyle.Top;
             this.autoDelZips.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.autoDelZips.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.autoDelZips.Location = new System.Drawing.Point(45, 179);
+            this.autoDelZips.Location = new System.Drawing.Point(45, 195);
             this.autoDelZips.Name = "autoDelZips";
             this.autoDelZips.Size = new System.Drawing.Size(417, 26);
             this.autoDelZips.TabIndex = 11;
@@ -371,7 +373,7 @@
             this.AutoExtract.Dock = System.Windows.Forms.DockStyle.Top;
             this.AutoExtract.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.AutoExtract.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.AutoExtract.Location = new System.Drawing.Point(45, 153);
+            this.AutoExtract.Location = new System.Drawing.Point(45, 169);
             this.AutoExtract.Name = "AutoExtract";
             this.AutoExtract.Size = new System.Drawing.Size(417, 26);
             this.AutoExtract.TabIndex = 10;
@@ -385,7 +387,7 @@
             this.zipPWLabel.AutoSize = true;
             this.zipPWLabel.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.zipPWLabel.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.zipPWLabel.Location = new System.Drawing.Point(58, 245);
+            this.zipPWLabel.Location = new System.Drawing.Point(58, 256);
             this.zipPWLabel.Name = "zipPWLabel";
             this.zipPWLabel.Size = new System.Drawing.Size(390, 22);
             this.zipPWLabel.TabIndex = 9;
@@ -393,6 +395,22 @@
             this.zipPWLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.zipPWLabel.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
             this.zipPWLabel.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
+            // 
+            // Close2Tray
+            // 
+            this.Close2Tray.AutoSize = true;
+            this.Close2Tray.BackColor = System.Drawing.Color.Transparent;
+            this.Close2Tray.Dock = System.Windows.Forms.DockStyle.Top;
+            this.Close2Tray.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.Close2Tray.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.Close2Tray.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.Close2Tray.Location = new System.Drawing.Point(45, 143);
+            this.Close2Tray.Name = "Close2Tray";
+            this.Close2Tray.Size = new System.Drawing.Size(417, 26);
+            this.Close2Tray.TabIndex = 9;
+            this.Close2Tray.Text = "Close to system tray";
+            this.Close2Tray.UseVisualStyleBackColor = false;
+            this.Close2Tray.CheckedChanged += new System.EventHandler(this.Close2Tray_CheckedChanged_1);
             // 
             // label1
             // 
@@ -416,8 +434,7 @@
             this.RemDL.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.RemDL.Location = new System.Drawing.Point(45, 65);
             this.RemDL.Name = "RemDL";
-            this.RemDL.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.RemDL.Size = new System.Drawing.Size(417, 36);
+            this.RemDL.Size = new System.Drawing.Size(417, 26);
             this.RemDL.TabIndex = 6;
             this.RemDL.Text = "Clear Finished";
             this.RemDL.UseVisualStyleBackColor = true;
@@ -535,22 +552,6 @@
             this.dlProg.Size = new System.Drawing.Size(464, 25);
             this.dlProg.TabIndex = 9;
             // 
-            // Close2Tray
-            // 
-            this.Close2Tray.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Close2Tray.AutoSize = true;
-            this.Close2Tray.BackColor = System.Drawing.Color.Transparent;
-            this.Close2Tray.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.Close2Tray.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Bold);
-            this.Close2Tray.ForeColor = System.Drawing.Color.White;
-            this.Close2Tray.Location = new System.Drawing.Point(575, 30);
-            this.Close2Tray.Name = "Close2Tray";
-            this.Close2Tray.Size = new System.Drawing.Size(187, 21);
-            this.Close2Tray.TabIndex = 9;
-            this.Close2Tray.Text = "Close to system tray";
-            this.Close2Tray.UseVisualStyleBackColor = false;
-            this.Close2Tray.CheckedChanged += new System.EventHandler(this.Close2Tray_CheckedChanged_1);
-            // 
             // UncheckAll
             // 
             this.UncheckAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -576,6 +577,24 @@
             this.CheckAll.Visible = false;
             this.CheckAll.Click += new System.EventHandler(this.CheckAll_Click);
             // 
+            // OpenDirBox
+            // 
+            this.OpenDirBox.AccessibleDescription = "w";
+            this.OpenDirBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.OpenDirBox.AutoSize = true;
+            this.OpenDirBox.BackColor = System.Drawing.Color.Transparent;
+            this.OpenDirBox.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.OpenDirBox.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Bold);
+            this.OpenDirBox.ForeColor = System.Drawing.Color.White;
+            this.OpenDirBox.Location = new System.Drawing.Point(575, 29);
+            this.OpenDirBox.Name = "OpenDirBox";
+            this.OpenDirBox.Size = new System.Drawing.Size(171, 21);
+            this.OpenDirBox.TabIndex = 8;
+            this.OpenDirBox.Text = "Open dir when done";
+            this.OpenDirBox.UseVisualStyleBackColor = false;
+            this.OpenDirBox.CheckedChanged += new System.EventHandler(this.OpenDirBox_CheckedChanged);
+            this.OpenDirBox.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -587,7 +606,7 @@
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.CheckAll);
             this.Controls.Add(this.UncheckAll);
-            this.Controls.Add(this.Close2Tray);
+            this.Controls.Add(this.OpenDirBox);
             this.Controls.Add(this.StayOnTopCheckbox);
             this.Controls.Add(this.SplashText);
             this.Controls.Add(this.dlProg);
@@ -660,6 +679,7 @@
         private System.Windows.Forms.Label zipPWLabel;
         public System.Windows.Forms.NotifyIcon ALTrayIcon;
         public System.Windows.Forms.Label DownloadingText;
+        private System.Windows.Forms.CheckBox OpenDirBox;
     }
 }
 

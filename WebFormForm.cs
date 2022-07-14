@@ -71,7 +71,6 @@ namespace ALL_LEGIT
                     process.Start();
                     splashCover.Visible = true;
                     webBrowser1.Dispose();
-                    MainWindow.fileDownloading = "";
                     webBrowser1.Visible = false;
                     dlcGIF.Visible = true;
                     dlcGIF.Enabled = true;
@@ -90,30 +89,11 @@ namespace ALL_LEGIT
 
                     if (dlcfilefound)
                     {
-                        if (!Properties.Settings.Default.DisableNotifies)
-                        {
-                            this.Invoke(() =>
-                            {
-                                Program.form.ALTrayIcon.ShowBalloonTip(2000, "", "DLC file found, converting links now!", ToolTipIcon.None);
-                            });
-                        }
-                        else
-                        {
-
-                            this.Invoke(() =>
-                            {
-                                Program.form.DownloadingText.Text = "DLC file found, converting links now!";
-                            });
-                        }
                         this.Hide();
-                        dlcGIF.Visible = false;
-                        dlcGIF.Enabled = false;
-                        splashCover.Text = "DLC File found!";
-                        await Task.Delay(1000);
                         webBrowser1.Stop();
                         webBrowser1.Dispose();
-                        MainWindow.fileDownloading = "";
                         Utilities.DecryptDLC();
+                        MainWindow.fileDownloading = "";
                         splashCover.Text = "Please wait...";
                         this.Close();
                     }
@@ -128,51 +108,47 @@ namespace ALL_LEGIT
                 });
 
             }
-            if (text.Contains("Add Link to JDownloader"))
+
+            foreach (HtmlElement link in links)
             {
-                foreach (HtmlElement link in links)
+
+                if (link.GetAttribute("className").Contains("dlcdownload") && !DownloadedOnce)
                 {
 
-                    if (link.GetAttribute("className").Contains("dlcdownload") && !DownloadedOnce)
+                    DownloadedOnce = true;
+                    string DLCID = link.OuterHtml;
+                    DLCID = Utilities.RemoveEverythingBeforeFirst(DLCID, "(");
+                    DLCID = Utilities.RemoveEverythingAfterFirst(DLCID, ")");
+                    DLCID = DLCID.Replace("('", "");
+                    DLCID = DLCID.Replace("')", "");
+                    if (!File.Exists($"{MainWindow.CurrentDLC}.dlc"))
                     {
-                        if (!Properties.Settings.Default.DisableNotifies)
-                        {
-                            this.Invoke(() =>
-                            {
-                                Program.form.ALTrayIcon.ShowBalloonTip(2000, "", "DLC file found, converting links now!", ToolTipIcon.None);
-                            });
-                        }
-                        else
-                        {
-
-                            this.Invoke(() =>
-                            {
-                                Program.form.DownloadingText.Text = "DLC file found, converting links now!";
-                            });
-                        }
-                        this.Hide();
-                        DownloadedOnce = true;
-                        string DLCID = link.OuterHtml;
-                        DLCID = Utilities.RemoveEverythingBeforeFirst(DLCID, "(");
-                        DLCID = Utilities.RemoveEverythingAfterFirst(DLCID, ")");
-                        DLCID = DLCID.Replace("('", "");
-                        DLCID = DLCID.Replace("')", "");
-                        if (!File.Exists($"{MainWindow.CurrentDLC}.dlc"))
-                        {
-                            DownloadFile($"https://filecrypt.co/DLC/{DLCID}.dlc", $"_bin\\{MainWindow.CurrentDLC.ToString()}.dlc");
-                        }
-                        webBrowser1.Dispose();
-                        MainWindow.fileDownloading = "";
-                        Utilities.DecryptDLC();
-                        this.Close();
-
+                        DownloadFile($"https://filecrypt.co/DLC/{DLCID}.dlc", $"_bin\\{MainWindow.CurrentDLC.ToString()}.dlc");
                     }
-                }
-                if (webBrowser1.DocumentText.Contains("The code you have enter"))
-                {
-                    webBrowser1.Navigate(MainWindow.FilecryptURL);
+                    this.Hide();
+                    webBrowser1.Stop();
+                    webBrowser1.Dispose();
+                    Utilities.DecryptDLC();
+                    MainWindow.fileDownloading = "";
+                    splashCover.Text = "Please wait...";
+                    this.Close();
+                    webBrowser1.Stop();
+                    this.Close();
 
                 }
+                if (link.InnerHtml.Contains("Confirm this code"))
+                {
+
+                    link.InvokeMember("click");
+                }
+
+            }
+
+            if (webBrowser1.DocumentText.Contains("The code you have enter"))
+            {
+                webBrowser1.Dispose();
+                this.Close();
+
             }
             if (text.Contains("Please login to use your PIN code") && !mustsignin)
             {
@@ -184,12 +160,7 @@ namespace ALL_LEGIT
                 webBrowser1.Dispose();
                 this.Close();
             }
-            if (text.Contains("premium links module"))
-            {
-                webBrowser1.Navigate(MainWindow.FilecryptURL);
-            }
         }
-
 
         private void WebFormForm_Load(object sender, EventArgs e)
         {
