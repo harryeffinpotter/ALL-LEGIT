@@ -368,7 +368,7 @@ namespace ALL_LEGIT
         public static bool NoNamesPresent = false;
         public static int CheckedCount = 0;
         public static int cancelledCount = 0;
-        public static int CurrentCount = 1;
+        public static int CurrentCount = 0;
         public static int cancelGroupRuns = 0;
         public WebClient webClient = new WebClient();
         string currentGroup = "";
@@ -525,9 +525,6 @@ namespace ALL_LEGIT
                         File.Delete(DL);
                     }
                     if (webClient.IsBusy)
-
-
-
                         foreach (ListViewItem item in listView1.CheckedItems)
                         {
                             if (MagnetNAME == cancelledGroup)
@@ -536,11 +533,9 @@ namespace ALL_LEGIT
                             }
                             if (item.BackColor == Color.MediumSpringGreen)
                             {
-
                                 item.BackColor = Color.FromArgb(0, 50, 42);
                             }
                         }
-                    return;
                 }
                 this.Invoke(() =>
                 {
@@ -583,7 +578,6 @@ namespace ALL_LEGIT
             isDownloading = false;
             fileDownloading = "";
             torrentDLING = false;
-            cancel = false;
             listView1.Refresh();
 
         }
@@ -1440,7 +1434,17 @@ namespace ALL_LEGIT
                         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //
-
+                        
+                        if (!webClient.IsBusy)
+                        {
+                            this.Invoke(() =>
+                            {
+                                CancelButton.Visible = false;
+                                Program.form.DownloadingText.Text = $"";
+                                dlProg.Value = 0;
+                            });
+                            cancel = false;
+                        }
                         item.BackColor = Color.FromArgb(0, 50, 42);
                     }
                     catch (System.Net.WebException Ex)
@@ -1611,7 +1615,14 @@ namespace ALL_LEGIT
                 });
                 if (Properties.Settings.Default.OpenDir)
                 {
-                    Process.Start(Properties.Settings.Default.DownloadDir);
+                    if (tempNoOpen)
+                    {
+                        tempNoOpen = false;
+                    }
+                    else
+                    {
+                        Process.Start(Properties.Settings.Default.DownloadDir);
+                    }
                 }
 
             }
@@ -1702,48 +1713,55 @@ namespace ALL_LEGIT
         public static bool muteoutputcancelled = Properties.Settings.Default.DisableNotifies;
         public static bool cancel = false;
         public static bool iscancelling = false;
+        public static bool tempNoOpen = false;
         public static string cancelledGroup = "";
         public async void CancelButton_Click(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.OpenDir)
+            {
+                tempNoOpen = true;
+
+            }
             startDownloads.Enabled = false;
             CancelButton.Visible = false;
             cancel = true;
-            if (isDownloading)
-            {
-                isDownloading = false;
-                cancelledGroup = currGroup;
-                muteoutputcancelled = true;
-                webClient.CancelAsync();
-                if (cancel)
-                {
-                    if (Properties.Settings.Default.RemDL)
-                    {
-                        listView1.BeginUpdate();
-                        foreach (ListViewItem itemstogo in listView1.CheckedItems)
-                        {
-                            if (itemstogo.SubItems[2].Text.Equals(currGroup))
-                            {
-                                listView1.Items.Remove(itemstogo);
 
-                            }
+                this.Invoke(() =>
+                {
+                    CancelButton.Visible = false;
+                    Program.form.DownloadingText.Text = $"";
+                    dlProg.Value = 0;
+                });
+                isDownloading = false;
+            cancelledGroup = currGroup;
+            muteoutputcancelled = true;
+            webClient.CancelAsync();
+            if (cancel)
+            {
+                if (Properties.Settings.Default.RemDL)
+                {
+                    listView1.BeginUpdate();
+                    foreach (ListViewItem itemstogo in listView1.CheckedItems)
+                    {
+                        if (itemstogo.SubItems[2].Text.Equals(currGroup))
+                        {
+                            listView1.Items.Remove(itemstogo);
 
                         }
-                        listView1.EndUpdate();
-                        listView1.Update();
-                        listView1.Refresh();
-                    }
 
+                    }
+            
+                    listView1.EndUpdate();
+                    listView1.Update();
+                    listView1.Refresh();
                 }
+
             }
-            this.Invoke(() =>
-            {
-                CancelButton.Visible = false;
-                Program.form.DownloadingText.Text = $"";
-                dlProg.Value = 0;
-            });
+
+
             startDownloads.Enabled = true;
 
-            await Task.Delay(5000);
+            await Task.Delay(3000);
             muteoutputcancelled = false;
             cancel = false;
         }

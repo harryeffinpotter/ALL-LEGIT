@@ -94,7 +94,11 @@ namespace ALL_LEGIT
         }
         public static void DecryptDLC()
         {
-
+            Program.form.Invoke(() =>
+            {
+                Program.form.DownloadingText.Text = $"Decrypting Filecrypt links...";
+              
+            });
             string[] files = Directory.GetFiles(Environment.CurrentDirectory, "*.dlc", SearchOption.AllDirectories);
             string[] files2 = Directory.GetFiles(MainWindow.GetDownloadsPath(), "*.dlc", SearchOption.AllDirectories);
             string[] joinedResult = files.Concatenate(files2);
