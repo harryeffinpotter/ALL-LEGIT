@@ -254,16 +254,24 @@
             // 
             // HotKeyBox
             // 
+            this.HotKeyBox.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
             this.HotKeyBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.HotKeyBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
             this.HotKeyBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.HotKeyBox.ForeColor = System.Drawing.Color.White;
+            this.HotKeyBox.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.HotKeyBox.Location = new System.Drawing.Point(342, 5);
             this.HotKeyBox.Name = "HotKeyBox";
+            this.HotKeyBox.ReadOnly = true;
             this.HotKeyBox.Size = new System.Drawing.Size(220, 22);
             this.HotKeyBox.TabIndex = 7;
-            this.HotKeyBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DownloadDir_KeyPress);
-            this.HotKeyBox.Leave += new System.EventHandler(this.DownloadDir_Leave);
+            this.HotKeyBox.TabStop = false;
+            this.HotKeyBox.Click += new System.EventHandler(this.HotKeyBox_Click);
+            this.HotKeyBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.HotKeyBox_MouseClick);
+            this.HotKeyBox.TextChanged += new System.EventHandler(this.HotKeyBox_TextChanged);
+            this.HotKeyBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HotKeyBox_KeyDown);
+            this.HotKeyBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.HotKeyBox_KeyPress);
+            this.HotKeyBox.Leave += new System.EventHandler(this.HotKeyBox_Leave);
             this.HotKeyBox.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
             // AutoDLBox
@@ -464,11 +472,11 @@
             this.HotKeyBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.HotKeyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.HotKeyBtn.ForeColor = System.Drawing.SystemColors.Control;
-            this.HotKeyBtn.Location = new System.Drawing.Point(465, 29);
+            this.HotKeyBtn.Location = new System.Drawing.Point(446, 29);
             this.HotKeyBtn.Name = "HotKeyBtn";
-            this.HotKeyBtn.Size = new System.Drawing.Size(97, 24);
+            this.HotKeyBtn.Size = new System.Drawing.Size(116, 24);
             this.HotKeyBtn.TabIndex = 7;
-            this.HotKeyBtn.Text = "Set Hotkey";
+            this.HotKeyBtn.Text = "Set Shortcut";
             this.HotKeyBtn.UseVisualStyleBackColor = false;
             this.HotKeyBtn.Click += new System.EventHandler(this.HotKeyBtn_Click);
             // 

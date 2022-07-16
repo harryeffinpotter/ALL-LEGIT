@@ -22,11 +22,11 @@ namespace ALL_LEGIT
         {
 
             bool mutexCreated = false;
-            mutex = new System.Threading.Mutex(false, "All Legit!.exe", out mutexCreated);
+            mutex = new System.Threading.Mutex(false, "All Legit.exe", out mutexCreated);
 
             if (!mutexCreated)
             {
-                MessageBox.Show(new Form { TopMost = true },"Loader is already running!!! try again!", "Already Runing!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show(new Form { TopMost = true },"All Legit is already running!!! try again!", "Already Runing!", MessageBoxButtons.OK, MessageBoxIcon.Error)
 ;
                 mutex.Close();
                 Application.Exit();

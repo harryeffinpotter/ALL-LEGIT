@@ -131,59 +131,13 @@ namespace ALL_LEGIT
             {
                 Hook.GlobalEvents().KeyDown += (sender, e) =>
                 {
-                    if (waitingforkey)
+                    if (e.KeyData == Properties.Settings.Default.HotKeyKeyData)
                     {
-                        if (e.KeyData.ToString().Equals("LControlKey"))
-                        {
-                            HotKeyBox.Text = e.KeyData.ToString().Replace("LControlKey", "Control +");
-                        }
-                        if (e.KeyData.Equals(System.Windows.Forms.Keys.Control) || e.KeyData.Equals(System.Windows.Forms.Keys.ControlKey) || e.KeyData.Equals(System.Windows.Forms.Keys.LControlKey))
-                        {
-                            HotKeyBox.Text = "Control +";
-                        }
-                        HotKeyBox.Text = e.KeyData.ToString().Replace(",", " +");
-                        if (HotKeyBox.Text.Contains("Control") && !HotKeyBox.Text.Contains("+") && !HotKeyBox.Text.Contains("LControlKey") || HotKeyBox.Text.Contains("LControlKey"))
-                        {
-                            HotKeyBox.Text = Properties.Settings.Default.HotKeyKeyData.ToString().Replace(",", " +");
-                        }
-                        if (e.KeyData.ToString().Contains("LControlKey, Control") || e.KeyData.ToString().Contains("Control") && !e.KeyData.ToString().Contains(" ") || e.KeyData.ToString().Contains("LControlKey") && !e.KeyData.ToString().Contains(" "))
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            hotkeyset = e.KeyData;
-                        }
-                        if (hotkeyset.Equals(System.Windows.Forms.Keys.Control) || hotkeyset.Equals(System.Windows.Forms.Keys.ControlKey) || hotkeyset.Equals(System.Windows.Forms.Keys.LControlKey) || hotkeyset.ToString().Equals("LControlKey, Control"))
-                        {
-                            waitingforkey = false;
-                            return;
-                        }
-                        else
-                        {
-                            Properties.Settings.Default.HotKeyKeyData = hotkeyset;
-                            Properties.Settings.Default.Save();
-                            HotKeyBox.Text = Properties.Settings.Default.HotKeyKeyData.ToString().Replace(",", " +");
-                            waitingforkey = false;
-                        }
+                        DoAsyncConversion();
                     }
-                    else
-                    {
-                        if (e.KeyData == Properties.Settings.Default.HotKeyKeyData)
-                        {
-                            DoAsyncConversion();
-
-
-
-                        }
-                    }
-
-
                 };
             }
             catch { }
-
-
         }
         private void menuItem2_Click(object Sender, EventArgs e)
         {
@@ -206,14 +160,15 @@ namespace ALL_LEGIT
         public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
         {
-          OpenDirBox.Checked = Properties.Settings.Default.OpenDir;
+            var converter = new KeysConverter();
+            HotKeyBox.Text = converter.ConvertToString(Properties.Settings.Default.HotKeyKeyData);
+            OpenDirBox.Checked = Properties.Settings.Default.OpenDir;
             disableNotiesBox.Checked = Properties.Settings.Default.DisableNotifies;
             Close2Tray.Checked = Properties.Settings.Default.Close2Tray;
             RemDL.Checked = Properties.Settings.Default.RemDL;
             AutoOverwrite.Checked = Properties.Settings.Default.AutoOverwrite;
             AutoDLBox.Checked = Properties.Settings.Default.AutoDL;
             autoDelZips.Checked = Properties.Settings.Default.DelZips;
-            HotKeyBox.Text = Properties.Settings.Default.HotKeyKeyData.ToString().Replace(",", " +");
             AutoExtract.Checked = Properties.Settings.Default.AutoExtract;
             if (!String.IsNullOrEmpty(Properties.Settings.Default.ZipPWS))
             {
@@ -250,6 +205,7 @@ namespace ALL_LEGIT
             {
                 this.Invoke(() =>
                 {
+                    isloggingin = false;
                     this.Text = "All-Legit: Connected";
                 });
             }
@@ -278,9 +234,10 @@ namespace ALL_LEGIT
             }
         }
         public static bool loginsuccess = false;
-
+        public static bool isloggingin = false;
         public async Task ConnectViaAPIAsync()
         {
+            isloggingin = true;
             Thread t1 = new Thread(() =>
             {
                 try
@@ -316,7 +273,9 @@ namespace ALL_LEGIT
                         {
                             Form WebFormForm = new WebFormForm();
                             WebFormForm.ShowDialog();
+                            this.Show();
                         });
+                        this.Show();
                         string CheckURL = obj.data.check_url.ToString();
                         obj = getJson(CheckURL);
                         bool Activated;
@@ -374,10 +333,7 @@ namespace ALL_LEGIT
         string currentGroup = "";
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
-            if (webClient.IsBusy)
-            {
-                webClient.Dispose(); ;
-            }
+
 
             currGroup = MagnetNAME;
             CancelButton.Visible = true;
@@ -388,7 +344,6 @@ namespace ALL_LEGIT
                 if (MagnetNAME.Equals(cancelledGroup))
                 {
                     webClient.CancelAsync();
-                    webClient.Dispose();
                     if (cancelGroupRuns == cancelledCount)
                     {
                         cancelledGroup = "";
@@ -458,20 +413,27 @@ namespace ALL_LEGIT
                 {
                     try
                     {
-                        if (Properties.Settings.Default.RemDL)
-                        {
+                     
                             listView1.BeginUpdate();
                             foreach (ListViewItem itemmm in listView1.Items)
                             {
                                 if (itemmm.SubItems[2].Text.Contains(currGroup) && itemmm.Checked)
                                 {
+                                if (Properties.Settings.Default.RemDL)
+                                {
+
                                     listView1.Items.Remove(itemmm);
                                 }
+                                else
+                                {
+                                    itemmm.Checked = false;
+                                }
+                            }
                             }
                             listView1.EndUpdate();
                             listView1.Refresh();
-                        }
-                        webClient.Dispose();
+                        
+              
                     }
                     catch { }
 
@@ -542,8 +504,7 @@ namespace ALL_LEGIT
                     DownloadingText.Text = $"Download finished...";
                 });
                 sw.Stop();
-                if (Properties.Settings.Default.RemDL)
-                {
+           
                     this.Invoke(() =>
                     {
                         listView1.BeginUpdate();
@@ -552,7 +513,15 @@ namespace ALL_LEGIT
                         {
                             if (item.SubItems[1].Text.Equals(URL))
                             {
-                                listView1.Items.Remove(item);
+                                if (Properties.Settings.Default.RemDL)
+                                {
+
+                                    listView1.Items.Remove(item);
+                                }
+                                else
+                                {
+                                    item.Checked = false;
+                                }
 
                             }
                         }
@@ -560,8 +529,6 @@ namespace ALL_LEGIT
                         listView1.Refresh();
                     });
 
-
-                }
 
 
 
@@ -1077,6 +1044,7 @@ namespace ALL_LEGIT
 
             if (pasted.ToLower().StartsWith("https://filecrypt.".ToLower()) || pasted.ToLower().StartsWith("https://www.filecrypt.".ToLower()))
             {
+               
                 this.Invoke(() =>
                 {
                     if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
@@ -1118,6 +1086,8 @@ namespace ALL_LEGIT
 
                     Form WebFormForm = new WebFormForm();
                     WebFormForm.ShowDialog();
+                    this.Show();
+                    this.TopMost = false;
                     filecryptinprog = true;
                     Utilities.DecryptDLC();
 
@@ -1639,17 +1609,24 @@ namespace ALL_LEGIT
                     if (item.Checked)
                     {
                         forclip += item.SubItems[1].Text + "\n";
-                        if (Properties.Settings.Default.RemDL)
-                        {
+                
                             this.Invoke(() =>
                             {
                                 if (item.SubItems[2].Text.Equals(currGroup))
                                 {
-                                    listView1.Items.Remove(item);
+                                    if (Properties.Settings.Default.RemDL)
+                                    {
+
+                                        listView1.Items.Remove(item);
+                                    }
+                                    else
+                                    {
+                                        item.Checked = false;
+                                    }
 
                                 }
                             });
-                        }
+                        
                     }
                 }
                 listView1.EndUpdate();
@@ -1738,14 +1715,22 @@ namespace ALL_LEGIT
             webClient.CancelAsync();
             if (cancel)
             {
-                if (Properties.Settings.Default.RemDL)
-                {
+            
+                
                     listView1.BeginUpdate();
                     foreach (ListViewItem itemstogo in listView1.CheckedItems)
                     {
                         if (itemstogo.SubItems[2].Text.Equals(currGroup))
                         {
-                            listView1.Items.Remove(itemstogo);
+                            if (Properties.Settings.Default.RemDL)
+                            {
+
+                                listView1.Items.Remove(itemstogo);
+                            }
+                            else
+                            {
+                                itemstogo.Checked = false;
+                            }
 
                         }
 
@@ -1754,7 +1739,7 @@ namespace ALL_LEGIT
                     listView1.EndUpdate();
                     listView1.Update();
                     listView1.Refresh();
-                }
+                
 
             }
 
@@ -1901,8 +1886,13 @@ namespace ALL_LEGIT
 
         private void HotKeyBtn_Click(object sender, EventArgs e)
         {
-            waitingforkey = true;
-            HotKeyBox.Text = "Press desired hotkey...";
+            if (HotKeyBtn.Text == "Set Shortcut")
+            {
+                HotKeyBox.Text = "Press Ctrl/Shift/Alt then letter key...";
+                HotKeyBox.Focus();
+                return;
+            }
+       
         }
 
 
@@ -1942,7 +1932,6 @@ namespace ALL_LEGIT
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-
             if (Properties.Settings.Default.Close2Tray)
             {
                 if (TrayExit)
@@ -2225,6 +2214,98 @@ namespace ALL_LEGIT
         {
             Properties.Settings.Default.OpenDir = OpenDirBox.Checked;
             Properties.Settings.Default.Save();
+        }
+
+        private void HotKeyBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void HotKeyBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+         
+        }
+
+        public void HotKeyBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.None)
+            {
+                return;
+            }
+            var converter = new KeysConverter();
+            if (e.KeyCode == Keys.Enter)
+            {
+
+            }
+            if (e.KeyCode == Keys.Escape)
+            {
+                listView1.Focus();
+                HotKeyBox.Text = converter.ConvertToString(Properties.Settings.Default.HotKeyKeyData);
+            }
+            else if (e.KeyCode != Keys.Back)
+            {
+                Keys modifierKeys = e.Modifiers;
+                Keys pressedKey = e.KeyData ^ modifierKeys; //remove modifier keys
+
+                if (modifierKeys != Keys.None && pressedKey != Keys.None)
+                {
+                    HotKeyBox.Text = converter.ConvertToString(e.KeyData);
+                    //At this point, we know a one or more modifiers and another key were pressed
+                    //modifierKeys contains the modifiers
+                    //pressedKey contains the other pressed key
+                    //Do stuff with results here
+                    hotkeyset = e.KeyData;
+                    KeyUp += new KeyEventHandler(HotKeyBox_KeyUp);
+                    KeyPreview = true;
+                }
+            }
+            else
+            {
+                e.Handled = false;
+                e.SuppressKeyPress = true;
+                HotKeyBox.Text = converter.ConvertToString(Properties.Settings.Default.HotKeyKeyData);
+            }
+           
+        }
+
+        private void HotKeyBox_Leave(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(HotKeyBox.Text))
+            {
+                var converter = new KeysConverter();
+                HotKeyBox.Text = converter.ConvertToString(Properties.Settings.Default.HotKeyKeyData);
+            }
+            listView1.Focus();
+
+        }
+
+        private void HotKeyBox_Click(object sender, EventArgs e)
+        {
+            listView1.Focus();
+            return;
+        }
+
+        private void HotKeyBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            listView1.Focus();
+            return;
+        }
+
+        private void HotKeyBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            var converter = new KeysConverter();
+
+            if (e.KeyData == hotkeyset)
+            {
+                Properties.Settings.Default.HotKeyKeyData = e.KeyData;
+                Properties.Settings.Default.Save();
+                listView1.Focus();
+            }
+            else
+            {
+                HotKeyBox.Text = converter.ConvertToString(Properties.Settings.Default.HotKeyKeyData);
+                listView1.Focus();
+            }
         }
     }
 }

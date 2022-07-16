@@ -195,7 +195,6 @@ public static class Extension
         {
             return first;
         }
-
         return first.Concat(second).ToArray();
     }
 }

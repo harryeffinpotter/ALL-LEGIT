@@ -52,38 +52,42 @@ namespace ALL_LEGIT
         public static bool mustsignin = false;
         private async void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+            DownloadedOnce = false;
+            string text = "";
             var links = webBrowser1.Document.GetElementsByTagName("button");
-            string text = webBrowser1.DocumentText;
+            foreach (HtmlElement link in links)
+            {
+
+                if (link.GetAttribute("className").Contains("dlcdownload") && !DownloadedOnce)
+                {
+                    DownloadedOnce = true;
+                    string DLCID = link.OuterHtml;
+                    DLCID = Utilities.RemoveEverythingBeforeFirst(DLCID, "(");
+                    DLCID = Utilities.RemoveEverythingAfterFirst(DLCID, ")");
+                    DLCID = DLCID.Replace("('", "");
+                    DLCID = DLCID.Replace("')", "");
+                    if (!File.Exists($"{MainWindow.CurrentDLC}.dlc"))
+                    {
+                        DownloadFile($"https://filecrypt.co/DLC/{DLCID}.dlc", $"_bin\\{MainWindow.CurrentDLC.ToString()}.dlc");
+                    }
+                    this.Hide();
+                    Utilities.DecryptDLC();
+                    MainWindow.fileDownloading = "";
+                    splashCover.Text = "Please wait...";
+                    Program.form.Show();
+                }
+
+            }
+            if (!webBrowser1.IsDisposed)
+            {
+                text = webBrowser1.DocumentText;
+
+            }
+
+
             if (text.Contains("Security prompt") && !text.Contains("Please confirm that you are no robot"))
             {
-                foreach (HtmlElement link in links)
-                {
 
-                    if (link.GetAttribute("className").Contains("dlcdownload") && !DownloadedOnce)
-                    {
-                        DownloadedOnce = true;
-                        string DLCID = link.OuterHtml;
-                        DLCID = Utilities.RemoveEverythingBeforeFirst(DLCID, "(");
-                        DLCID = Utilities.RemoveEverythingAfterFirst(DLCID, ")");
-                        DLCID = DLCID.Replace("('", "");
-                        DLCID = DLCID.Replace("')", "");
-                        if (!File.Exists($"{MainWindow.CurrentDLC}.dlc"))
-                        {
-                            DownloadFile($"https://filecrypt.co/DLC/{DLCID}.dlc", $"_bin\\{MainWindow.CurrentDLC.ToString()}.dlc");
-                        }
-                        this.Hide();
-                        webBrowser1.Stop();
-                        Utilities.DecryptDLC();
-                        MainWindow.fileDownloading = "";
-                        splashCover.Text = "Please wait...";
-                        webBrowser1.Stop();
-                        this.Close();
-                    }
-                    if (link.InnerHtml.Contains("Confirm this code"))
-                    {
-                        link.InvokeMember("click");
-                    }
-                }
             }
             else if (text.Contains("Please confirm that you are no robot"))
 
@@ -122,14 +126,14 @@ namespace ALL_LEGIT
                     if (dlcfilefound)
                     {
                         this.Hide();
-                        webBrowser1.Stop();
                         Utilities.DecryptDLC();
                         MainWindow.fileDownloading = "";
                         splashCover.Text = "Please wait...";
-                        this.Close();
+      
                     }
                 });
             }
+
             if (text.Contains("Please enter the correct result"))
             {
                 splashCover.Visible = false;
@@ -139,54 +143,77 @@ namespace ALL_LEGIT
                 });
 
             }
-            foreach (HtmlElement link in links)
+            if (!webBrowser1.IsDisposed)
             {
 
-                if (link.GetAttribute("className").Contains("dlcdownload") && !DownloadedOnce)
+
+                links = webBrowser1.Document.GetElementsByTagName("button");
+                foreach (HtmlElement link in links)
                 {
 
-                    DownloadedOnce = true;
-                    string DLCID = link.OuterHtml;
-                    DLCID = Utilities.RemoveEverythingBeforeFirst(DLCID, "(");
-                    DLCID = Utilities.RemoveEverythingAfterFirst(DLCID, ")");
-                    DLCID = DLCID.Replace("('", "");
-                    DLCID = DLCID.Replace("')", "");
-                    if (!File.Exists($"{MainWindow.CurrentDLC}.dlc"))
+                    if (link.GetAttribute("className").Contains("dlcdownload") && !DownloadedOnce)
                     {
-                        DownloadFile($"https://filecrypt.co/DLC/{DLCID}.dlc", $"_bin\\{MainWindow.CurrentDLC.ToString()}.dlc");
+
+                        DownloadedOnce = true;
+                        string DLCID = link.OuterHtml;
+                        DLCID = Utilities.RemoveEverythingBeforeFirst(DLCID, "(");
+                        DLCID = Utilities.RemoveEverythingAfterFirst(DLCID, ")");
+                        DLCID = DLCID.Replace("('", "");
+                        DLCID = DLCID.Replace("')", "");
+                        if (!File.Exists($"{MainWindow.CurrentDLC}.dlc"))
+                        {
+                            DownloadFile($"https://filecrypt.co/DLC/{DLCID}.dlc", $"_bin\\{MainWindow.CurrentDLC.ToString()}.dlc");
+                        }
+                        this.Hide();
+                        Utilities.DecryptDLC();
+                        MainWindow.fileDownloading = "";
+                        splashCover.Text = "Please wait...";
                     }
-                    this.Hide();
-                    webBrowser1.Stop();
-                    Utilities.DecryptDLC();
-                    MainWindow.fileDownloading = "";
-                    splashCover.Text = "Please wait...";
-                    this.Close();
-                    webBrowser1.Stop();
-                    this.Close();
-                }
-                if (link.InnerHtml.Contains("Confirm this code"))
-                {
-                    link.InvokeMember("click");
+                    if (MainWindow.isloggingin)
+                    {
+                        if (!webBrowser1.IsDisposed)
+                        {
+                            if (link.InnerHtml.Contains("Confirm this code"))
+                            {
+                                link.InvokeMember("click");
+                            }
+                        }
+                    }
+
+
                 }
             }
-            if (webBrowser1.DocumentText.Contains("The code you have enter"))
+            if (!webBrowser1.IsDisposed)
             {
-                this.Close();
+
+                if (webBrowser1.DocumentText.Contains("The code you have enter"))
+                {
+                    this.Hide();
+
+                }
+                if (text.Contains("Please login to use your PIN code") && !mustsignin)
+                {
+                    MessageBox.Show(new Form { TopMost = true }, "Please sign in your AllDebrid account!");
+                    mustsignin = true;
+                }
+                if (text.Contains("Your device have been activated"))
+                {
+                    this.Hide();
+                }
 
             }
-            if (text.Contains("Please login to use your PIN code") && !mustsignin)
-            {
-                MessageBox.Show(new Form { TopMost = true }, "Please sign in your AllDebrid account!");
-                mustsignin = true;
-            }
-            if (text.Contains("Your device have been activated"))
-            {
-                this.Close();
-            }
+
         }
 
-        private void WebFormForm_Load(object sender, EventArgs e)
+        private async void WebFormForm_Load(object sender, EventArgs e)
         {
+            while (MainWindow.isDownloading)
+            {
+                this.Hide();
+                await Task.Delay(100);
+                this.Show();
+            }
+
             webBrowser1.Visible = true;
             splashCover.Visible = false;
             var appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
@@ -206,12 +233,14 @@ namespace ALL_LEGIT
                 dlcGIF.Visible = false;
                 dlcGIF.Enabled = false;
                 webBrowser1.Stop();
-                webBrowser1.Dispose();
                 splashCover.Text = "Please wait...";
                 this.Hide();
                 Program.form.BringToFront();
                 LoadedOnce = false;
-                this.Close();
+                Program.form.TopMost = true;
+                Program.form.TopMost = true;
+                Program.form.BringToFront();
+
             }
 
         }
