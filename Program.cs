@@ -38,10 +38,9 @@ namespace ALL_LEGIT
                 // Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 form = new MainWindow();
-                try
-                {
+             
                     Application.Run(form);
-                } finally { Program.form.ALTrayIcon.Dispose(); }
+         
                 Application.Exit();
 
             }

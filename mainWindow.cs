@@ -127,6 +127,7 @@ namespace ALL_LEGIT
             var appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             Microsoft.Win32.Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
                   appName, 11000, Microsoft.Win32.RegistryValueKind.DWord);
+            /*
             try
             {
                 Hook.GlobalEvents().KeyDown += (sender, e) =>
@@ -138,6 +139,7 @@ namespace ALL_LEGIT
                 };
             }
             catch { }
+            */
         }
         private void menuItem2_Click(object Sender, EventArgs e)
         {
@@ -227,7 +229,7 @@ namespace ALL_LEGIT
                 if (!cancel)
                 {
                     MessageBox.Show(new Form { TopMost = true }, "Not able to access the internet, so cannot login... Exiting program.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    Application.Exit();
+                    MessageBox.Show("Cant get online!");
                     return null;
                 }
                 return null;
@@ -275,7 +277,7 @@ namespace ALL_LEGIT
                             WebFormForm.ShowDialog();
                             this.Show();
                         });
-                        this.Show();
+
                         string CheckURL = obj.data.check_url.ToString();
                         obj = getJson(CheckURL);
                         bool Activated;
@@ -334,7 +336,10 @@ namespace ALL_LEGIT
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
 
-
+            while (webClient.IsBusy)
+            {
+                await (Task.Delay(100));
+            }
             currGroup = MagnetNAME;
             CancelButton.Visible = true;
             if (!String.IsNullOrEmpty(cancelledGroup))
@@ -413,12 +418,12 @@ namespace ALL_LEGIT
                 {
                     try
                     {
-                     
-                            listView1.BeginUpdate();
-                            foreach (ListViewItem itemmm in listView1.Items)
+
+                        listView1.BeginUpdate();
+                        foreach (ListViewItem itemmm in listView1.Items)
+                        {
+                            if (itemmm.SubItems[2].Text.Contains(currGroup) && itemmm.Checked)
                             {
-                                if (itemmm.SubItems[2].Text.Contains(currGroup) && itemmm.Checked)
-                                {
                                 if (Properties.Settings.Default.RemDL)
                                 {
 
@@ -429,11 +434,11 @@ namespace ALL_LEGIT
                                     itemmm.Checked = false;
                                 }
                             }
-                            }
-                            listView1.EndUpdate();
-                            listView1.Refresh();
-                        
-              
+                        }
+                        listView1.EndUpdate();
+                        listView1.Refresh();
+
+
                     }
                     catch { }
 
@@ -504,30 +509,30 @@ namespace ALL_LEGIT
                     DownloadingText.Text = $"Download finished...";
                 });
                 sw.Stop();
-           
-                    this.Invoke(() =>
+
+                this.Invoke(() =>
+                {
+                    listView1.BeginUpdate();
+
+                    foreach (ListViewItem item in listView1.Items)
                     {
-                        listView1.BeginUpdate();
-
-                        foreach (ListViewItem item in listView1.Items)
+                        if (item.SubItems[1].Text.Equals(URL))
                         {
-                            if (item.SubItems[1].Text.Equals(URL))
+                            if (Properties.Settings.Default.RemDL)
                             {
-                                if (Properties.Settings.Default.RemDL)
-                                {
 
-                                    listView1.Items.Remove(item);
-                                }
-                                else
-                                {
-                                    item.Checked = false;
-                                }
-
+                                listView1.Items.Remove(item);
                             }
+                            else
+                            {
+                                item.Checked = false;
+                            }
+
                         }
-                        listView1.EndUpdate();
-                        listView1.Refresh();
-                    });
+                    }
+                    listView1.EndUpdate();
+                    listView1.Refresh();
+                });
 
 
 
@@ -780,7 +785,7 @@ namespace ALL_LEGIT
                                                     {
                                                         ALTrayIcon.ShowBalloonTip(2000, "", $"Gathering information on torrent...", ToolTipIcon.None);
                                                     }
-                            
+
                                                 });
 
                                             }
@@ -1021,7 +1026,7 @@ namespace ALL_LEGIT
 
 
                         }
-                    
+
                     }
                     convertingMag = false;
                 });
@@ -1035,8 +1040,8 @@ namespace ALL_LEGIT
                     }
                     await Task.Delay(100);
                 }
-         
-                
+
+
             }
             cancel = false;
 
@@ -1044,7 +1049,7 @@ namespace ALL_LEGIT
 
             if (pasted.ToLower().StartsWith("https://filecrypt.".ToLower()) || pasted.ToLower().StartsWith("https://www.filecrypt.".ToLower()))
             {
-               
+
                 this.Invoke(() =>
                 {
                     if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
@@ -1404,7 +1409,7 @@ namespace ALL_LEGIT
                         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //
-                        
+
                         if (!webClient.IsBusy)
                         {
                             this.Invoke(() =>
@@ -1609,24 +1614,24 @@ namespace ALL_LEGIT
                     if (item.Checked)
                     {
                         forclip += item.SubItems[1].Text + "\n";
-                
-                            this.Invoke(() =>
+
+                        this.Invoke(() =>
+                        {
+                            if (item.SubItems[2].Text.Equals(currGroup))
                             {
-                                if (item.SubItems[2].Text.Equals(currGroup))
+                                if (Properties.Settings.Default.RemDL)
                                 {
-                                    if (Properties.Settings.Default.RemDL)
-                                    {
 
-                                        listView1.Items.Remove(item);
-                                    }
-                                    else
-                                    {
-                                        item.Checked = false;
-                                    }
-
+                                    listView1.Items.Remove(item);
                                 }
-                            });
-                        
+                                else
+                                {
+                                    item.Checked = false;
+                                }
+
+                            }
+                        });
+
                     }
                 }
                 listView1.EndUpdate();
@@ -1703,43 +1708,43 @@ namespace ALL_LEGIT
             CancelButton.Visible = false;
             cancel = true;
 
-                this.Invoke(() =>
-                {
-                    CancelButton.Visible = false;
-                    Program.form.DownloadingText.Text = $"";
-                    dlProg.Value = 0;
-                });
-                isDownloading = false;
+            this.Invoke(() =>
+            {
+                CancelButton.Visible = false;
+                Program.form.DownloadingText.Text = $"";
+                dlProg.Value = 0;
+            });
+            isDownloading = false;
             cancelledGroup = currGroup;
             muteoutputcancelled = true;
             webClient.CancelAsync();
             if (cancel)
             {
-            
-                
-                    listView1.BeginUpdate();
-                    foreach (ListViewItem itemstogo in listView1.CheckedItems)
+
+
+                listView1.BeginUpdate();
+                foreach (ListViewItem itemstogo in listView1.CheckedItems)
+                {
+                    if (itemstogo.SubItems[2].Text.Equals(currGroup))
                     {
-                        if (itemstogo.SubItems[2].Text.Equals(currGroup))
+                        if (Properties.Settings.Default.RemDL)
                         {
-                            if (Properties.Settings.Default.RemDL)
-                            {
 
-                                listView1.Items.Remove(itemstogo);
-                            }
-                            else
-                            {
-                                itemstogo.Checked = false;
-                            }
-
+                            listView1.Items.Remove(itemstogo);
+                        }
+                        else
+                        {
+                            itemstogo.Checked = false;
                         }
 
                     }
-            
-                    listView1.EndUpdate();
-                    listView1.Update();
-                    listView1.Refresh();
-                
+
+                }
+
+                listView1.EndUpdate();
+                listView1.Update();
+                listView1.Refresh();
+
 
             }
 
@@ -1892,7 +1897,7 @@ namespace ALL_LEGIT
                 HotKeyBox.Focus();
                 return;
             }
-       
+
         }
 
 
@@ -1929,7 +1934,7 @@ namespace ALL_LEGIT
         }
 
 
-
+        public static bool NotifiedTray = false;
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (Properties.Settings.Default.Close2Tray)
@@ -1937,14 +1942,25 @@ namespace ALL_LEGIT
                 if (TrayExit)
                 {
                     ALTrayIcon.Visible = false;
+                    ALTrayIcon.Icon.Dispose();
                     ALTrayIcon.Dispose();
                     Program.mutex.Close();
-                    Application.ExitThread();
+                    try
+                    {
+                        Application.ExitThread();
+                    }
+                    catch
+                    {
+                    }
                     this.Close();
                 }
-                else if (e.CloseReason == CloseReason.UserClosing)
+                if (e.CloseReason == CloseReason.UserClosing)
                 {
-                    ALTrayIcon.BalloonTipText = "All Legit! is still running in your system tray.";
+                    if (!NotifiedTray)
+                    {
+                        ALTrayIcon.BalloonTipText = "All Legit! is still running in your system tray!";
+                    }
+                    NotifiedTray = true;
                     ALTrayIcon.BalloonTipIcon = ToolTipIcon.None;
                     if (!Properties.Settings.Default.DisableNotifies)
                     {
@@ -1954,47 +1970,43 @@ namespace ALL_LEGIT
                     this.Hide();
                     e.Cancel = true;
                 }
-                else
-                {
-                    ALTrayIcon.Visible = false;
-                    ALTrayIcon.Dispose();
-                    Program.mutex.Close();
-                    Application.ExitThread();
-                    this.Close();
-                }
             }
             else
             {
+                ALTrayIcon.Visible = false;
+
+                ALTrayIcon.Icon.Dispose();
                 ALTrayIcon.Dispose();
                 Program.mutex.Close();
-                Application.ExitThread();
-                this.Close();
+                if (Application.OpenForms[0].InvokeRequired)
+                {
+                    Application.Exit();
+                }
+
             }
 
         }
+            private void ALTrayIcon_MouseDoubleClick_1(object sender, MouseEventArgs e)
+            {
+
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
 
 
-        private void ALTrayIcon_MouseDoubleClick_1(object sender, MouseEventArgs e)
-        {
+            }
 
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
+            private void ALTrayIcon_MouseClick(object sender, MouseEventArgs e)
+            {
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+            }
 
-
-        }
-
-        private void ALTrayIcon_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
-        }
-
-        private void showSettings_MouseEnter(object sender, EventArgs e)
-        {
-            stopwatch.Stop();
-            settingsP.Visible = true;
-            settingsP.BringToFront();
-        }
+            private void showSettings_MouseEnter(object sender, EventArgs e)
+            {
+                stopwatch.Stop();
+                settingsP.Visible = true;
+                settingsP.BringToFront();
+            }
 
         public static bool InSettings = false;
         public static bool InSettingsP = false;
@@ -2223,7 +2235,7 @@ namespace ALL_LEGIT
 
         private void HotKeyBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-         
+
         }
 
         public void HotKeyBox_KeyDown(object sender, KeyEventArgs e)
@@ -2265,7 +2277,7 @@ namespace ALL_LEGIT
                 e.SuppressKeyPress = true;
                 HotKeyBox.Text = converter.ConvertToString(Properties.Settings.Default.HotKeyKeyData);
             }
-           
+
         }
 
         private void HotKeyBox_Leave(object sender, EventArgs e)
@@ -2306,6 +2318,21 @@ namespace ALL_LEGIT
                 HotKeyBox.Text = converter.ConvertToString(Properties.Settings.Default.HotKeyKeyData);
                 listView1.Focus();
             }
+        }
+
+        private void ALTrayIcon_BalloonTipClosed(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ALTrayIcon_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void ALTrayIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+
         }
     }
 }

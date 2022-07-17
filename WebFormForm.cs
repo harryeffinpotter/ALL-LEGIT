@@ -129,7 +129,7 @@ namespace ALL_LEGIT
                         Utilities.DecryptDLC();
                         MainWindow.fileDownloading = "";
                         splashCover.Text = "Please wait...";
-      
+
                     }
                 });
             }

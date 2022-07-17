@@ -314,9 +314,9 @@
             this.ALTrayIcon.Text = "All Legit";
             this.ALTrayIcon.Visible = true;
             this.ALTrayIcon.BalloonTipClicked += new System.EventHandler(this.ALTrayIcon_BalloonTipClicked);
+            this.ALTrayIcon.BalloonTipClosed += new System.EventHandler(this.ALTrayIcon_BalloonTipClosed);
             this.ALTrayIcon.Click += new System.EventHandler(this.ALTrayIcon_Click);
             this.ALTrayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ALTrayIcon_MouseClick);
-            this.ALTrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ALTrayIcon_MouseDoubleClick_1);
             // 
             // settingsP
             // 
@@ -685,9 +685,9 @@
         public new System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.CheckBox disableNotiesBox;
         private System.Windows.Forms.Label zipPWLabel;
-        public System.Windows.Forms.NotifyIcon ALTrayIcon;
         public System.Windows.Forms.Label DownloadingText;
         private System.Windows.Forms.CheckBox OpenDirBox;
+        private System.Windows.Forms.NotifyIcon ALTrayIcon;
     }
 }
 
