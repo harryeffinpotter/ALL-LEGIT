@@ -687,7 +687,7 @@
         private System.Windows.Forms.Label zipPWLabel;
         public System.Windows.Forms.Label DownloadingText;
         private System.Windows.Forms.CheckBox OpenDirBox;
-        private System.Windows.Forms.NotifyIcon ALTrayIcon;
+        public System.Windows.Forms.NotifyIcon ALTrayIcon;
     }
 }
 

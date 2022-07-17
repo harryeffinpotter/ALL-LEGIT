@@ -39,7 +39,7 @@ namespace ALL_LEGIT
                 Application.SetCompatibleTextRenderingDefault(false);
                 form = new MainWindow();
              
-                    Application.Run(form);
+                Application.Run(form);
          
                 Application.Exit();
 

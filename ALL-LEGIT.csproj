@@ -11,7 +11,7 @@
     <ProjectGuid>{BB3C5E2E-80DB-4B85-941F-790611BF3D7A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ALL_LEGIT</RootNamespace>
-    <AssemblyName>All Legit!</AssemblyName>
+    <AssemblyName>All Legit</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -58,7 +58,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>2</WarningLevel>
+    <WarningLevel>1</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>
     </DocumentationFile>
@@ -73,9 +73,7 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
-  <PropertyGroup>
-    <NoWin32Manifest>true</NoWin32Manifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Azure.Core, Version=1.25.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
       <HintPath>packages\Azure.Core.1.25.0\lib\net461\Azure.Core.dll</HintPath>
@@ -401,6 +399,7 @@
   <ItemGroup>
     <Compile Include="GetBrowser.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Updater.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="FolderBrowserDialog.cs" />
     <Compile Include="mainWindow.cs">

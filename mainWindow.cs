@@ -84,7 +84,8 @@ namespace ALL_LEGIT
         public MainWindow()
         {
             InitializeComponent();
-
+            this.TopMost = true;
+            this.TopMost = false;
             this.components = new System.ComponentModel.Container();
             this.contextMenu1 = new System.Windows.Forms.ContextMenu();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
@@ -127,7 +128,7 @@ namespace ALL_LEGIT
             var appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             Microsoft.Win32.Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
                   appName, 11000, Microsoft.Win32.RegistryValueKind.DWord);
-            /*
+  
             try
             {
                 Hook.GlobalEvents().KeyDown += (sender, e) =>
@@ -139,7 +140,7 @@ namespace ALL_LEGIT
                 };
             }
             catch { }
-            */
+    
         }
         private void menuItem2_Click(object Sender, EventArgs e)
         {
@@ -162,6 +163,7 @@ namespace ALL_LEGIT
         public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
         {
+            Updater.Update();
             var converter = new KeysConverter();
             HotKeyBox.Text = converter.ConvertToString(Properties.Settings.Default.HotKeyKeyData);
             OpenDirBox.Checked = Properties.Settings.Default.OpenDir;
@@ -198,7 +200,7 @@ namespace ALL_LEGIT
             {
                 this.Invoke(() =>
                 {
-                    this.Text = "All-Legit: Not Connected";
+                    this.Text = $"All-Legit {Updater.currentVersion}: Not Connected";
                 });
 
 
@@ -208,7 +210,7 @@ namespace ALL_LEGIT
                 this.Invoke(() =>
                 {
                     isloggingin = false;
-                    this.Text = "All-Legit: Connected";
+                    this.Text = $"All-Legit {Updater.currentVersion}: Connected";
                 });
             }
         }

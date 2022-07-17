@@ -145,7 +145,7 @@ namespace ALL_LEGIT.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Ctrl+Oemtilde")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Ctrl+Alt+V")]
         public global::System.Windows.Forms.Keys HotKeyKeyData {
             get {
                 return ((global::System.Windows.Forms.Keys)(this["HotKeyKeyData"]));

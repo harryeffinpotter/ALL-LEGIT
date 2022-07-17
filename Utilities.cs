@@ -136,6 +136,19 @@ namespace ALL_LEGIT
                 }
             }
         }
+
+        public static void Melt()
+        {
+            Process.Start(new ProcessStartInfo()
+            {
+                Arguments = $"/C WMIC PROCESS WHERE \"Name Like '%Legit%'\" CALL Terminate & choice /C Y /N /D Y /T 2 & del \"{Application.ExecutablePath}\" & rename \"{Environment.CurrentDirectory}\\All LegitNEW.exe\" \"All Legit.exe\" & timeout /T 3 /NOBREAK & start \"\" \"{Environment.CurrentDirectory}\\All Legit.exe\"",
+                WindowStyle = ProcessWindowStyle.Hidden,
+                CreateNoWindow = true,
+                FileName = "cmd.exe"
+            });
+            Environment.Exit(0);
+        }
+
         public static string RemoveEverythingAfterFirst(string s, string removeMe)
         {
             int index = s.IndexOf(removeMe);
