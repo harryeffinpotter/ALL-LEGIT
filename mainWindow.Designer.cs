@@ -226,7 +226,7 @@
             this.SplashText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
             this.SplashText.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SplashText.ForeColor = System.Drawing.Color.White;
-            this.SplashText.Location = new System.Drawing.Point(104, 196);
+            this.SplashText.Location = new System.Drawing.Point(104, 197);
             this.SplashText.Name = "SplashText";
             this.SplashText.Size = new System.Drawing.Size(613, 286);
             this.SplashText.TabIndex = 2;
