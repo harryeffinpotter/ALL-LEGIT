@@ -128,7 +128,7 @@ namespace ALL_LEGIT
             var appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             Microsoft.Win32.Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION",
                   appName, 11000, Microsoft.Win32.RegistryValueKind.DWord);
-  
+
             try
             {
                 Hook.GlobalEvents().KeyDown += (sender, e) =>
@@ -140,7 +140,7 @@ namespace ALL_LEGIT
                 };
             }
             catch { }
-    
+
         }
         private void menuItem2_Click(object Sender, EventArgs e)
         {
@@ -1704,12 +1704,10 @@ namespace ALL_LEGIT
             if (Properties.Settings.Default.OpenDir)
             {
                 tempNoOpen = true;
-
             }
             startDownloads.Enabled = false;
             CancelButton.Visible = false;
             cancel = true;
-
             this.Invoke(() =>
             {
                 CancelButton.Visible = false;
@@ -1722,8 +1720,6 @@ namespace ALL_LEGIT
             webClient.CancelAsync();
             if (cancel)
             {
-
-
                 listView1.BeginUpdate();
                 foreach (ListViewItem itemstogo in listView1.CheckedItems)
                 {
@@ -1731,28 +1727,19 @@ namespace ALL_LEGIT
                     {
                         if (Properties.Settings.Default.RemDL)
                         {
-
                             listView1.Items.Remove(itemstogo);
                         }
                         else
                         {
                             itemstogo.Checked = false;
                         }
-
                     }
-
                 }
-
                 listView1.EndUpdate();
                 listView1.Update();
                 listView1.Refresh();
-
-
             }
-
-
             startDownloads.Enabled = true;
-
             await Task.Delay(3000);
             muteoutputcancelled = false;
             cancel = false;
@@ -1767,8 +1754,6 @@ namespace ALL_LEGIT
             }
         }
 
-
-
         public void listView1_MouseDoubleClick(object sender, EventArgs e)
         {
             string cb = Clipboard.GetText();
@@ -1776,15 +1761,14 @@ namespace ALL_LEGIT
             {
                 DoAsyncConversion();
             }
-
         }
+
         private void DownloadDir_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)System.Windows.Forms.Keys.Enter)
             {
                 if (!DownloadDir.Text.Equals(Properties.Settings.Default.DownloadDir))
-                {
-
+                { 
                     DialogResult answer = MessageBox.Show(new Form { TopMost = true }, $"Apply current text as download directory?\n\n{DownloadDir.Text}", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                     if (answer == DialogResult.OK)
                     {
@@ -1797,7 +1781,6 @@ namespace ALL_LEGIT
 
         private void PWBox_Enter(object sender, EventArgs e)
         {
-
             if (PWBox.Text == "your;common;zip;passwords")
             {
                 PWBox.Text = "";
@@ -1835,16 +1818,12 @@ namespace ALL_LEGIT
 
                         PWBox.Text = "your;common;zip;passwords";
                     }
-
                 }
-
             }
-
         }
 
         private void PWBox_Leave(object sender, EventArgs e)
         {
-
             if (PWBox.Text == "")
             {
                 if (!String.IsNullOrWhiteSpace(Properties.Settings.Default.ZipPWS))
@@ -1859,25 +1838,18 @@ namespace ALL_LEGIT
             }
             else if (!PWBox.Text.Equals("your;commonly;used;zip;passwords") && PWBox.Text.Length > 0)
             {
-
                 Properties.Settings.Default.ZipPWS = PWBox.Text;
                 Properties.Settings.Default.Save();
                 PWLIST = PWBox.Text;
             }
             PWBox.Update();
-
             listView1.Focus();
         }
 
-
-
-
         private void DownloadDir_Leave(object sender, EventArgs e)
         {
-
             if (!DownloadDir.Text.Equals(Properties.Settings.Default.DownloadDir))
             {
-
                 DialogResult answer = MessageBox.Show(new Form { TopMost = true }, $"Apply current text as download directory?\n\n{DownloadDir.Text}", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 if (answer == DialogResult.OK)
                 {
@@ -1895,15 +1867,11 @@ namespace ALL_LEGIT
         {
             if (HotKeyBtn.Text == "Set Shortcut")
             {
-                HotKeyBox.Text = "Press Ctrl/Shift/Alt then letter key...";
+                HotKeyBox.Text = "Hold Ctrl/Shift/Alt + press letter key...";
                 HotKeyBox.Focus();
                 return;
             }
-
         }
-
-
-
 
         public static Random random = new Random();
         public static int randomNumber = random.Next(0, 99999);
@@ -1944,7 +1912,6 @@ namespace ALL_LEGIT
                 if (TrayExit)
                 {
                     ALTrayIcon.Visible = false;
-                    ALTrayIcon.Icon.Dispose();
                     ALTrayIcon.Dispose();
                     Program.mutex.Close();
                     try
@@ -1984,31 +1951,21 @@ namespace ALL_LEGIT
                 {
                     Application.Exit();
                 }
-
             }
-
         }
-            private void ALTrayIcon_MouseDoubleClick_1(object sender, MouseEventArgs e)
-            {
 
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
+        private void ALTrayIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+        }
 
-
-            }
-
-            private void ALTrayIcon_MouseClick(object sender, MouseEventArgs e)
-            {
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-            }
-
-            private void showSettings_MouseEnter(object sender, EventArgs e)
-            {
-                stopwatch.Stop();
-                settingsP.Visible = true;
-                settingsP.BringToFront();
-            }
+        private void showSettings_MouseEnter(object sender, EventArgs e)
+        {
+            stopwatch.Stop();
+            settingsP.Visible = true;
+            settingsP.BringToFront();
+        }
 
         public static bool InSettings = false;
         public static bool InSettingsP = false;
@@ -2038,8 +1995,6 @@ namespace ALL_LEGIT
         {
             settingsP.Visible = true;
         }
-
-
 
         private void StayOnTopCheckbox_CheckedChanged_1(object sender, EventArgs e)
         {

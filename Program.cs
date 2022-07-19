@@ -20,33 +20,25 @@ namespace ALL_LEGIT
         [STAThread]
         static void Main()
         {
-
             bool mutexCreated = false;
             mutex = new System.Threading.Mutex(false, "All Legit.exe", out mutexCreated);
 
             if (!mutexCreated)
             {
-                MessageBox.Show(new Form { TopMost = true },"All Legit is already running!!! try again!", "Already Runing!", MessageBoxButtons.OK, MessageBoxIcon.Error)
-;
+                MessageBox.Show(new Form { TopMost = true }, "All Legit is already running!!! try again!", "Already Runing!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 mutex.Close();
                 Application.Exit();
                 return;
             }
             try
             {
-
                 // Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 form = new MainWindow();
-             
                 Application.Run(form);
-         
                 Application.Exit();
-
             }
             catch { }
         }
-
     }
-
 }
