@@ -164,7 +164,7 @@ namespace ALL_LEGIT
         private async void MainWindow_Load(object sender, EventArgs e)
         {
             Updater.Update();
-            SplashText.Text = $"All Legit v{Updater.currentVersion}\nby HarryEffinPottter/YSG\n\nGlobal hot key works everywhere,\neven when app is minimized.\n\nCTRL + V or Paste button while in app.";
+            SplashText.Text = $"All Legit v{Updater.currentVersion}\nby HarryEffinPottter/YSG\n- Mega.nz links now work properly!\n\nGlobal hot key works everywhere,\neven when app is minimized.\n\nCTRL + V or Paste button while in app.";
             var converter = new KeysConverter();
             HotKeyBox.Text = converter.ConvertToString(Properties.Settings.Default.HotKeyKeyData);
             OpenDirBox.Checked = Properties.Settings.Default.OpenDir;
@@ -220,7 +220,9 @@ namespace ALL_LEGIT
         {
             try
             {
-                var client = new RestClient($"https://api.alldebrid.com/v4/");
+                string BaseURL = "https://api.alldebrid.com/v4/";
+                var client = new RestClient(BaseURL);
+                Console.WriteLine($"Requesting: {BaseURL}{requestURL}");
                 var request = new RestRequest(requestURL, Method.Get);
                 request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
                 var queryResult = client.Execute(request);
@@ -1151,7 +1153,9 @@ namespace ALL_LEGIT
                                 cancel = false;
                                 return;
                             }
-                            var obj = getJson($"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={s}");
+                            string s2 = Uri.EscapeDataString(s);
+                            string unlockString = $"link/unlock?agent={apiNAME}&apikey={APIKEY}&link={s2}";
+                            var obj = getJson(unlockString);
                             if (obj.status.ToString().Equals("error"))
                             {
                                 isErrors = true;

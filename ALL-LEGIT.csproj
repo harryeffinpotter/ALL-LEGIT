@@ -436,6 +436,7 @@
       <DependentUpon>WebFormForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="version" />
     <None Include="_bin\CHANGELOG.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
