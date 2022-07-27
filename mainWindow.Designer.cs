@@ -179,7 +179,7 @@
             this.PWBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
             this.PWBox.Enabled = false;
             this.PWBox.ForeColor = System.Drawing.Color.White;
-            this.PWBox.Location = new System.Drawing.Point(46, 379);
+            this.PWBox.Location = new System.Drawing.Point(35, 379);
             this.PWBox.Name = "PWBox";
             this.PWBox.Size = new System.Drawing.Size(414, 26);
             this.PWBox.TabIndex = 4;
@@ -223,7 +223,7 @@
             this.AutoDLBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.AutoDLBox.Location = new System.Drawing.Point(45, 91);
             this.AutoDLBox.Name = "AutoDLBox";
-            this.AutoDLBox.Size = new System.Drawing.Size(417, 26);
+            this.AutoDLBox.Size = new System.Drawing.Size(394, 26);
             this.AutoDLBox.TabIndex = 0;
             this.AutoDLBox.Text = "Auto download";
             this.AutoDLBox.UseVisualStyleBackColor = false;
@@ -240,7 +240,7 @@
             this.AutoOverwrite.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.AutoOverwrite.Location = new System.Drawing.Point(45, 117);
             this.AutoOverwrite.Name = "AutoOverwrite";
-            this.AutoOverwrite.Size = new System.Drawing.Size(417, 26);
+            this.AutoOverwrite.Size = new System.Drawing.Size(394, 26);
             this.AutoOverwrite.TabIndex = 0;
             this.AutoOverwrite.Text = "Overwrite existing";
             this.AutoOverwrite.UseVisualStyleBackColor = false;
@@ -277,10 +277,10 @@
             this.settingsP.Controls.Add(this.AutoDLBox);
             this.settingsP.Controls.Add(this.RemDL);
             this.settingsP.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.settingsP.Location = new System.Drawing.Point(320, 5);
+            this.settingsP.Location = new System.Drawing.Point(321, 12);
             this.settingsP.Name = "settingsP";
             this.settingsP.Padding = new System.Windows.Forms.Padding(45, 65, 45, 45);
-            this.settingsP.Size = new System.Drawing.Size(511, 433);
+            this.settingsP.Size = new System.Drawing.Size(488, 433);
             this.settingsP.TabIndex = 13;
             this.settingsP.Visible = false;
             this.settingsP.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
@@ -296,7 +296,7 @@
             this.autoUpdateBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.autoUpdateBox.Location = new System.Drawing.Point(45, 273);
             this.autoUpdateBox.Name = "autoUpdateBox";
-            this.autoUpdateBox.Size = new System.Drawing.Size(417, 26);
+            this.autoUpdateBox.Size = new System.Drawing.Size(394, 26);
             this.autoUpdateBox.TabIndex = 17;
             this.autoUpdateBox.Text = "Automatically update on launch";
             this.autoUpdateBox.UseVisualStyleBackColor = false;
@@ -312,7 +312,7 @@
             this.disableNotiesBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.disableNotiesBox.Location = new System.Drawing.Point(45, 247);
             this.disableNotiesBox.Name = "disableNotiesBox";
-            this.disableNotiesBox.Size = new System.Drawing.Size(417, 26);
+            this.disableNotiesBox.Size = new System.Drawing.Size(394, 26);
             this.disableNotiesBox.TabIndex = 16;
             this.disableNotiesBox.Text = "Disable Windows Notifications";
             this.disableNotiesBox.UseVisualStyleBackColor = false;
@@ -328,7 +328,7 @@
             this.autoDelZips.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.autoDelZips.Location = new System.Drawing.Point(45, 221);
             this.autoDelZips.Name = "autoDelZips";
-            this.autoDelZips.Size = new System.Drawing.Size(417, 26);
+            this.autoDelZips.Size = new System.Drawing.Size(394, 26);
             this.autoDelZips.TabIndex = 15;
             this.autoDelZips.Text = "Delete extracted archives";
             this.autoDelZips.UseVisualStyleBackColor = false;
@@ -345,7 +345,7 @@
             this.extractNested.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.extractNested.Location = new System.Drawing.Point(45, 195);
             this.extractNested.Name = "extractNested";
-            this.extractNested.Size = new System.Drawing.Size(417, 26);
+            this.extractNested.Size = new System.Drawing.Size(394, 26);
             this.extractNested.TabIndex = 14;
             this.extractNested.Text = "Extract nested archives";
             this.extractNested.UseVisualStyleBackColor = false;
@@ -355,15 +355,15 @@
             // 
             this.updateNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.updateNow.BackColor = System.Drawing.Color.Transparent;
-            this.updateNow.FlatAppearance.BorderColor = System.Drawing.Color.MediumSpringGreen;
+            this.updateNow.FlatAppearance.BorderColor = System.Drawing.Color.PaleTurquoise;
             this.updateNow.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkSeaGreen;
             this.updateNow.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkSlateGray;
             this.updateNow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.updateNow.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.updateNow.ForeColor = System.Drawing.Color.MediumSpringGreen;
-            this.updateNow.Location = new System.Drawing.Point(45, 304);
+            this.updateNow.ForeColor = System.Drawing.Color.PaleTurquoise;
+            this.updateNow.Location = new System.Drawing.Point(45, 310);
             this.updateNow.Name = "updateNow";
-            this.updateNow.Size = new System.Drawing.Size(321, 30);
+            this.updateNow.Size = new System.Drawing.Size(212, 28);
             this.updateNow.TabIndex = 2;
             this.updateNow.Text = "Check if update is available now";
             this.updateNow.UseVisualStyleBackColor = false;
@@ -379,7 +379,7 @@
             this.AutoExtract.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.AutoExtract.Location = new System.Drawing.Point(45, 169);
             this.AutoExtract.Name = "AutoExtract";
-            this.AutoExtract.Size = new System.Drawing.Size(417, 26);
+            this.AutoExtract.Size = new System.Drawing.Size(394, 26);
             this.AutoExtract.TabIndex = 10;
             this.AutoExtract.Text = "Extract finished";
             this.AutoExtract.UseVisualStyleBackColor = false;
@@ -391,7 +391,7 @@
             this.zipPWLabel.AutoSize = true;
             this.zipPWLabel.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.zipPWLabel.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.zipPWLabel.Location = new System.Drawing.Point(60, 350);
+            this.zipPWLabel.Location = new System.Drawing.Point(47, 350);
             this.zipPWLabel.Name = "zipPWLabel";
             this.zipPWLabel.Size = new System.Drawing.Size(390, 22);
             this.zipPWLabel.TabIndex = 9;
@@ -410,7 +410,7 @@
             this.Close2Tray.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.Close2Tray.Location = new System.Drawing.Point(45, 143);
             this.Close2Tray.Name = "Close2Tray";
-            this.Close2Tray.Size = new System.Drawing.Size(417, 26);
+            this.Close2Tray.Size = new System.Drawing.Size(394, 26);
             this.Close2Tray.TabIndex = 9;
             this.Close2Tray.Text = "Close to system tray";
             this.Close2Tray.UseVisualStyleBackColor = false;
@@ -421,7 +421,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.label1.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.label1.Location = new System.Drawing.Point(118, 12);
+            this.label1.Location = new System.Drawing.Point(107, 12);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(270, 44);
             this.label1.TabIndex = 9;
@@ -440,7 +440,7 @@
             this.RemDL.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
             this.RemDL.Location = new System.Drawing.Point(45, 65);
             this.RemDL.Name = "RemDL";
-            this.RemDL.Size = new System.Drawing.Size(417, 26);
+            this.RemDL.Size = new System.Drawing.Size(394, 26);
             this.RemDL.TabIndex = 6;
             this.RemDL.Text = "Clear Finished";
             this.RemDL.UseVisualStyleBackColor = false;
@@ -552,7 +552,7 @@
             this.dlProg.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dlProg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
-            this.dlProg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.dlProg.ForeColor = System.Drawing.Color.MediumSpringGreen;
             this.dlProg.Location = new System.Drawing.Point(177, 615);
             this.dlProg.Name = "dlProg";
             this.dlProg.Size = new System.Drawing.Size(472, 25);

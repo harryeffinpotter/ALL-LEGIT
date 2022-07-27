@@ -11,6 +11,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -73,6 +74,54 @@ namespace ALL_LEGIT
             TrayExit = true;
             this.Close();
         }
+        void intToolTips()
+        {
+            try
+            {
+                ToolTip AutoDLBox = new ToolTip();
+                AutoDLBox.SetToolTip(this.AutoDLBox, "Automatically download added links.");
+                
+                ToolTip HKTip = new ToolTip();
+                HKTip.SetToolTip(this.HotKeyBox, "Change global shortcut, global shortcut can be used from anywhere, even if All Legit! is minimized or closed to tray.\n" +
+                    "Simply copy a link and press the global shortcut and All Legit! will parse the links.");
+
+                ToolTip listView1 = new ToolTip();
+                listView1.SetToolTip(this.listView1, "Right click or middle click to remove item.");
+
+                ToolTip StayOnTop = new ToolTip();
+                StayOnTop.SetToolTip(this.StayOnTopCheckbox, "Keep All Legit on top of other programs.");
+
+                ToolTip disableNotiesBox = new ToolTip();
+                disableNotiesBox.SetToolTip(this.disableNotiesBox, "Disable windows notifications.");
+                
+                ToolTip OpenDirBox = new ToolTip();
+                OpenDirBox.SetToolTip(this.OpenDirBox, "Open download directory after downloads/extractions finish.");                
+                
+                ToolTip AutoUpdate = new ToolTip();
+                AutoUpdate.SetToolTip(this.autoUpdateBox, "If update is available install it autommatically at launch.");
+                
+                ToolTip Close2Tray = new ToolTip();
+                Close2Tray.SetToolTip(this.Close2Tray, "Minimize All Legit to taskbar instead of exiting when you close the app.");
+                
+                ToolTip RemDL = new ToolTip();
+                RemDL.SetToolTip(this.RemDL, "Remove downloaded/extracted/copied links.");
+                
+                ToolTip AutoOverwrite = new ToolTip();
+                AutoOverwrite.SetToolTip(this.AutoOverwrite, "If file exists automatically overwrite it without asking.");
+                
+                ToolTip autoDelZips = new ToolTip();
+                autoDelZips.SetToolTip(this.autoDelZips, "Delete zips after they have been successfully extracted.");
+                
+                ToolTip AutoExtract = new ToolTip();
+                AutoExtract.SetToolTip(this.AutoExtract, "Automatically extract downloaded archives.");
+                
+                ToolTip extractNested = new ToolTip();
+                extractNested.SetToolTip(this.extractNested, "If archives exist within extracted archives, extract them to a folder named after the archive.");
+
+
+            }
+            catch { }
+        }
         private System.Windows.Forms.ContextMenu contextMenu1;
         private System.Windows.Forms.MenuItem menuItem1;
         private System.Windows.Forms.MenuItem menuItem2;
@@ -84,6 +133,7 @@ namespace ALL_LEGIT
         public MainWindow()
         {
             InitializeComponent();
+            intToolTips();
             this.TopMost = true;
             this.TopMost = false;
             this.components = new System.ComponentModel.Container();
@@ -162,13 +212,11 @@ namespace ALL_LEGIT
         }
         public static string patchNotes =
 
+            " • Fixed file names containing encoded url symbols (%20, etc) by using UrlDecode.\n" +
             " • MAJOR BUG FIXED - When AllDebrid converts a magnet that has folders of\n" +
             "    files it assigns each file in the folder the same \"filename\" in the API. This\n" +
             "    caused files in folders to lose their actual name, which causes a myriad of\n" +
-            "    issues and it also causes multiple downloads with the same exact file name,\n" +
-            "    meaning if Automatic Overwrite was enabled it would just delete the previously\n" +
-            "    downloaded file. Both issues have now been resolved by using the filename at \n" +
-            "    the end of the unlocked debrid link instead of the name from the API.\n\n" +
+            "    issues, this is now fixed.\n" +
             " • Increased max number of connections, should allow for use of full bandwidth.\n" +
             " • Open when done will first try to open the subdirectory of the last downloaded item,\n" +
             "    if that fails it will open All Legit Download dir as it did before.\n" +
@@ -996,9 +1044,9 @@ namespace ALL_LEGIT
                                                     }
                                                     if (!skip)
                                                     {
-                                           
-                                      
-                                                        string[] row = { Utilities.RemoveEverythingBeforeLast(unlockedLink, "/").Replace("/", ""), unlockedLink, magnetName, FileSizeInt };
+
+
+                                                        string[] row = { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""), unlockedLink, magnetName, FileSizeInt };
                                                         ListViewItem item = new ListViewItem(row);
                                                         listView1.Items.Add(item);
                                                         item.Checked = true;
@@ -1008,12 +1056,11 @@ namespace ALL_LEGIT
                                                     {
                                                         this.Invoke(() =>
                                                         {
-                                                            listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(unlockedLink, "/").Replace("/", ""), unlockedLink, magnetName, FileSizeInt }));
+                                                            listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""),
+                                                                unlockedLink, magnetName, FileSizeInt }));
                                                         });
                                                     }
-
                                                     skip = false;
-
                                                 });
                                             }
                                             catch (Exception ex)
@@ -1283,13 +1330,15 @@ namespace ALL_LEGIT
                                     if (!skip)
                                     {
                                         addedlinks++;
-                                        listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(unlockedLink, "/").Replace("/", ""), unlockedLink, FileNameNoExt, FileSizeInt }));
+                                        listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""),
+                                            unlockedLink, FileNameNoExt, FileSizeInt }));
 
                                     }
                                     if (listView1.Items.Count == 0)
                                     {
                                         addedlinks++;
-                                        listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(unlockedLink, "/").Replace("/", ""), unlockedLink, FileNameNoExt, FileSizeInt }));
+                                        listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""),
+                                            unlockedLink, FileNameNoExt, FileSizeInt }));
 
                                     }
                                     foreach (ListViewItem item in listView1.Items)
