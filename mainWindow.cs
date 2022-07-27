@@ -168,7 +168,8 @@ namespace ALL_LEGIT
             " • Added fix + UI messaging for extraction failures due to incorrect archive password.\n" +
             " • Fixed Stay on Toggle setting not persisting on next launch.\n" +
             " • Added extract nested archives option.\n" +
-            " • Double clicking an item will now remove it from the queue.\n" +
+            " • Right clicking or middle clicking an item will remove it from the queue. If the item\n" +
+            "    is downloading it will stop that download.\n" +
             "\n";
         public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
