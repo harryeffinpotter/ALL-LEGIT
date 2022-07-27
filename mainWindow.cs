@@ -230,7 +230,6 @@ namespace ALL_LEGIT
         public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
         {
-            Certifier.Certify();
             extractNested.Checked = Properties.Settings.Default.extractNested;
             autoUpdateBox.Checked = Properties.Settings.Default.AutoUpdate;
             Updater.Update();
@@ -564,6 +563,7 @@ namespace ALL_LEGIT
 
                 this.Invoke(() =>
                 {
+                    CancelButton.Visible = true;
                     DownloadingText.Text = $"{FILENAME} - {e.ProgressPercentage}% - {DLS}MB\\s";
                     dlProg.Value = e.ProgressPercentage;
                 });
@@ -608,6 +608,7 @@ namespace ALL_LEGIT
                 }
                 this.Invoke(() =>
                 {
+                    CancelButton.Visible = false;
                     DownloadingText.Text = $"Download finished...";
                 });
                 sw.Stop();

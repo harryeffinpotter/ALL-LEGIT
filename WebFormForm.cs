@@ -205,14 +205,8 @@ namespace ALL_LEGIT
 
         }
 
-        private async void WebFormForm_Load(object sender, EventArgs e)
+        private void WebFormForm_Load(object sender, EventArgs e)
         {
-            while (MainWindow.isDownloading)
-            {
-                this.Hide();
-                await Task.Delay(100);
-                this.Show();
-            }
 
             webBrowser1.Visible = true;
             splashCover.Visible = false;
