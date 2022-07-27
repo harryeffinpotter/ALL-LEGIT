@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
+using System.Windows.Forms;
 
 namespace ALL_LEGIT
 {
@@ -11,7 +12,7 @@ namespace ALL_LEGIT
         private static string RawGitHubUrl;
         private static string GitHubUrl;
 
-        static readonly public string LocalVersion = "1.0.2";
+        static readonly public string LocalVersion = "1.0.3";
         public static string currentVersion = "";
         public static string currentHFVersion = "";
         public static string changelog = "";
@@ -36,7 +37,7 @@ namespace ALL_LEGIT
             int.TryParse(Utilities.KeepOnlyNumbers(LocalVersion), out LocalVer);
             return LocalVer < CurrentVer;
         }
-
+        public static bool UpdateNotAvailable = false;
         //Call this to ask the user if they want to update
         public static void Update()
         {
@@ -44,7 +45,22 @@ namespace ALL_LEGIT
             GitHubUrl = $"https://github.com/harryeffinpotter/ALL-LEGIT";
             if (IsUpdateAvailable())
             {
-                doUpdate();
+                if (Properties.Settings.Default.AutoUpdate)
+                {
+                    doUpdate();
+                }
+                else
+                {
+                   DialogResult diag = MessageBox.Show(new Form { TopMost = true }, "Update is available, would you like to update now?", "Update now?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (diag == DialogResult.Yes)
+                    {
+                        doUpdate();
+                    }
+                }
+            }
+            else
+            {
+                UpdateNotAvailable = true;
             }
         }
 

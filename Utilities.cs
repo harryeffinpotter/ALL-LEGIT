@@ -16,8 +16,13 @@ namespace ALL_LEGIT
 {
     class Utilities
     {
-         public static void ExtractFile(string sourceArchive, string destination)
+        public static string FailedExtract = "";
+        public static void ExtractFile(string sourceArchive, string destination)
         {
+            if (!Directory.Exists(destination))
+            {
+                Directory.CreateDirectory(destination);
+            }
             string[] files = Directory.GetFiles(destination);
             string basename = "";
             if (sourceArchive.EndsWith(".rar"))
@@ -29,6 +34,7 @@ namespace ALL_LEGIT
             {
                 basename = Path.GetFileNameWithoutExtension(sourceArchive);
             }
+            System.Diagnostics.Process x2 = new System.Diagnostics.Process();
             ProcessStartInfo pro = new ProcessStartInfo();
             pro.WindowStyle = ProcessWindowStyle.Hidden;
             pro.UseShellExecute = false;
@@ -36,8 +42,8 @@ namespace ALL_LEGIT
             pro.RedirectStandardError = true;
             pro.RedirectStandardOutput = true;
             pro.FileName = $"{Environment.CurrentDirectory}\\7z.exe";
+            string Error = null;
             string[] PWArray = MainWindow.PWLIST.Split(';');
-            int PWArrCount = PWArray.Length;
             int fails = 0;
             foreach (string PW in PWArray)
             {
@@ -45,18 +51,19 @@ namespace ALL_LEGIT
                 try
                 {
                     pro.Arguments = string.Format("x \"{0}\" -aoa -o\"{1}\"", sourceArchive, destination) + $" -p\"{PW}\"";
-                    Process x2 = Process.Start(pro);
+                    x2.StartInfo = pro;
+                    x2.Start();
+                    Error = x2.StandardError.ReadToEnd();
+
                     if (!x2.HasExited)
                         x2.WaitForExit();
                     success = true;
                 }
-                catch (Exception ex2)
+                catch { }
+                if (Error.Contains("Data Error in encrypted file. Wrong password?"))
                 {
-                    if (ex2.Message.Contains("Data Error in encrypted file. Wrong password?"))
-                    {
-                        success = false;
-                        fails++;
-                    }
+                    success = false;
+                    fails++;
                 }
                 if (success && Properties.Settings.Default.DelZips)
                 {
@@ -83,13 +90,48 @@ namespace ALL_LEGIT
                             }
                         }
                     }
+                    if (File.Exists(sourceArchive))
+                    {
+                        File.Delete(sourceArchive);
+                    }
                     Program.form.listView1.EndUpdate();
+                    if (Properties.Settings.Default.extractNested)
+                    {
+                        files = Directory.GetFiles(destination, "*.*", SearchOption.AllDirectories);
+                        foreach (string file in files)
+                        {
+                            if (!FailedExtract.Contains(file))
+                            {
+                                if (file.Contains(".7z.") || file.Contains(".rar.") || file.EndsWith(".7z")
+                                || file.EndsWith(".rar") || file.EndsWith(".zip") || file.Contains(".part"))
+                                {
+                                    string folder = destination + "\\" + Path.GetFileNameWithoutExtension(file);
+                                    if (!Directory.Exists(folder))
+                                    {
+                                        Directory.CreateDirectory(folder);
+                                    }
+                                    ExtractFile(file, folder);
+                                }
+                            }
+                        }
+                    }
                 }
-            }
-            if (fails == PWArrCount)
-            {
-                MessageBox.Show(new Form { TopMost = true }, "Archive is passworded and supplied passwords(if any)" +
-                    " did not work.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (fails == PWArray.Length)
+                {
+                    FailedExtract += sourceArchive;
+                    MessageBox.Show(new Form { TopMost = true }, "Archive is passworded and supplied passwords(if any)" +
+                        " did not work.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    foreach (ListViewItem item in Program.form.listView1.Items)
+                    {
+                        if (Properties.Settings.Default.RemDL)
+                        {
+                            if (sourceArchive.Contains(item.SubItems[0].Text))
+                            {
+                                Program.form.listView1.Items.Remove(item);
+                            }
+                        }
+                    }
+                }
             }
         }
         public static void DecryptDLC()
