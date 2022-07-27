@@ -24,8 +24,6 @@ namespace ALL_LEGIT
             try
             {
                 currentVersion = client.GetStringAsync($"{RawGitHubUrl}/master/version").Result;
-                currentVersion = currentVersion.Trim('\n');
-                currentVersion = currentVersion.Trim('\r');
                 currentVersion = currentVersion.Trim();
                 client.Dispose();
             }

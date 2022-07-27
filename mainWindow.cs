@@ -194,7 +194,7 @@ namespace ALL_LEGIT
             StayOnTopCheckbox.Checked = Properties.Settings.Default.TopMost;
  
  
-            changeLog.Text = $"{Updater.currentVersion} Change log:\n\n";
+            changeLog.Text = $"{Updater.LocalVersion} Change log:\n\n";
             tipsText.Text = " • Click settings cog in top-right corner for auto downloads, auto extraction and more.\n" +
                 $" • Shortcut key works everywhere, even when app is minimized/closed to tray.";
             SplashText.Text = $"{patchNotes}";
@@ -235,7 +235,7 @@ namespace ALL_LEGIT
             {
                 this.Invoke(() =>
                 {
-                    this.Text = $"All-Legit {Updater.currentVersion}: Not Connected";
+                    this.Text = $"All-Legit {Updater.LocalVersion}: Not Connected";
                 });
 
 
@@ -245,7 +245,7 @@ namespace ALL_LEGIT
                 this.Invoke(() =>
                 {
                     isloggingin = false;
-                    this.Text = $"All-Legit {Updater.currentVersion}: Connected";
+                    this.Text = $"All-Legit {Updater.LocalVersion}: Connected";
                 });
             }
         }
