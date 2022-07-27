@@ -655,7 +655,7 @@
             this.splashPanel.Controls.Add(this.tipsHeader);
             this.splashPanel.Controls.Add(this.SplashText);
             this.splashPanel.Controls.Add(this.changeLog);
-            this.splashPanel.Location = new System.Drawing.Point(41, 115);
+            this.splashPanel.Location = new System.Drawing.Point(45, 115);
             this.splashPanel.Name = "splashPanel";
             this.splashPanel.Size = new System.Drawing.Size(731, 467);
             this.splashPanel.TabIndex = 17;
