@@ -72,7 +72,7 @@ namespace ALL_LEGIT
                 var fileClient = new WebClient();
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                fileClient.DownloadFile($"https://github.com/harryeffinpotter/ALL-LEGIT/blob/master/bin/All.Legit.exe", $"All LegitNEW.exe");
+                fileClient.DownloadFile($"https://github.com/harryeffinpotter/ALL-LEGIT/blob/master/All.Legit.exe", $"All LegitNEW.exe");
                 fileClient.Dispose();
                 Program.form.ALTrayIcon.Icon.Dispose();
                 Program.form.ALTrayIcon.Dispose();
