@@ -164,9 +164,9 @@ namespace ALL_LEGIT
 
             " • MAJOR BUG FIXED - When AllDebrid converts a magnet that has folders of\n" +
             "    files it assigns each file in the folder the same \"filename\" in the API. This\n" +
-            "    caused files in folders to lose their acwtual name, which causes a myriad of\n" +
+            "    caused files in folders to lose their actual name, which causes a myriad of\n" +
             "    issues and it also causes multiple downloads with the same exact file name,\n" +
-            "    meaning if Automatic Overwrite was enabled it would  just delete the previously\n" +
+            "    meaning if Automatic Overwrite was enabled it would just delete the previously\n" +
             "    downloaded file. Both issues have now been resolved by using the filename at \n" +
             "    the end of the unlocked debrid link instead of the name from the API.\n\n" +
             " • Increased max number of connections, should allow for use of full bandwidth.\n" +
