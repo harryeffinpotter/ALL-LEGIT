@@ -95,7 +95,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>AllLegitKeyFile.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>FF53EBA25EF2C26F5A3AAA4458E3F9D571E11F46</ManifestCertificateThumbprint>
@@ -465,12 +466,6 @@
     <EmbeddedResource Include="WebFormForm.resx">
       <DependentUpon>WebFormForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="ALL-LEGIT_1_TemporaryKey.pfx" />
-    <None Include="ALL-LEGIT_2_TemporaryKey.pfx" />
-    <None Include="ALL-LEGIT_3_TemporaryKey.pfx" />
-    <None Include="ALL-LEGIT_TemporaryKey.pfx" />
-    <None Include="AllLegitKey.snk" />
-    <None Include="AllLegitKeyFile.pfx" />
     <None Include="app.config" />
     <None Include="version" />
     <None Include="_bin\CHANGELOG.md">
@@ -2091,7 +2086,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="packages\Microsoft.Web.WebView2.1.0.1264.42\lib\net45\Microsoft.Web.WebView2.WinForms.dll" />
-    <Content Include="bin\x86\Release\All.Legit.exe" />
+    <Content Include="All.Legit.exe" />
     <Content Include="x64\7z.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -4900,7 +4895,6 @@
     <TypeScriptCompile Include="_bin\node_modules\npm\node_modules\strip-ansi\index.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\Release\" />
     <Folder Include="_bin\node_modules\.bin\" />
     <Folder Include="_bin\node_modules\npm\tap-snapshots\" />
   </ItemGroup>
