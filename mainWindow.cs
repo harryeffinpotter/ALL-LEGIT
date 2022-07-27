@@ -161,6 +161,14 @@ namespace ALL_LEGIT
 
         }
         public static string patchNotes =
+
+            " • MAJOR BUG FIXED - When AllDebrid converts a magnet that has folders of\n" +
+            "    files it assigns each file in the folder the same \"filename\" in the API. This\n" +
+            "    caused files in folders to lose their acwtual name, which causes a myriad of\n" +
+            "    issues and it also causes multiple downloads with the same exact file name,\n" +
+            "    meaning if Automatic Overwrite was enabled it would  just delete the previously\n" +
+            "    downloaded file. Both issues have now been resolved by using the filename at \n" +
+            "    the end of the unlocked debrid link instead of the name from the API.\n\n" +
             " • Increased max number of connections, should allow for use of full bandwidth.\n" +
             " • Open when done will first try to open the subdirectory of the last downloaded item,\n" +
             "    if that fails it will open All Legit Download dir as it did before.\n" +
@@ -404,12 +412,12 @@ namespace ALL_LEGIT
             warnedthisbatch = false;
             Stopwatch sw = new Stopwatch(); // The stopwatch which we will be using to calculate the download speed
 
-            DIR = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".");
+            DIR = Properties.Settings.Default.DownloadDir + "\\" + MagnetNAME;
             if (!Directory.Exists(DIR))
             {
                 Directory.CreateDirectory(DIR);
             }
-            string DL = Properties.Settings.Default.DownloadDir + "\\" + Utilities.RemoveEverythingAfterLast(MagnetNAME, ".") + "\\" + FILENAME;
+            string DL = Properties.Settings.Default.DownloadDir + "\\" + MagnetNAME + "\\" + FILENAME;
 
             if (File.Exists(DL))
             {
@@ -655,7 +663,7 @@ namespace ALL_LEGIT
             string pasted = Clipboard.GetText();
             bool convertingMag = false;
             fileDownloading += $"{pasted};";
-            if (pasted.ToLower().StartsWith("magnet".ToLower()))
+            if (pasted.ToLower().StartsWith("magnet:?".ToLower()))
             {
                 this.Invoke(() =>
                 {
@@ -967,12 +975,13 @@ namespace ALL_LEGIT
                                                     FileSizeInt = (String.Format("{0:0.00}", (FileSize / 1024 / 1024).ToString("0.00"))) + "MB";
                                                 }
 
+                                                string filename = key2.filename.ToString();
 
                                                 this.Invoke(() =>
                                                 {
                                                     foreach (ListViewItem item in listView1.Items)
                                                     {
-                                                        if (item.SubItems[1].Text.EndsWith(key2.filename.ToString()) && item.SubItems[2].Text.Equals(magnetName))
+                                                        if (item.SubItems[1].Text.Equals(unlockedLink) && item.SubItems[2].Text.Equals(magnetName))
                                                         {
                                                             skip = true;
 
@@ -987,7 +996,9 @@ namespace ALL_LEGIT
                                                     }
                                                     if (!skip)
                                                     {
-                                                        string[] row = { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt };
+                                           
+                                      
+                                                        string[] row = { Utilities.RemoveEverythingBeforeLast(unlockedLink, "/").Replace("/", ""), unlockedLink, magnetName, FileSizeInt };
                                                         ListViewItem item = new ListViewItem(row);
                                                         listView1.Items.Add(item);
                                                         item.Checked = true;
@@ -997,7 +1008,7 @@ namespace ALL_LEGIT
                                                     {
                                                         this.Invoke(() =>
                                                         {
-                                                            listView1.Items.Add(new ListViewItem(new string[] { key2.filename.ToString(), unlockedLink, magnetName, FileSizeInt }));
+                                                            listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(unlockedLink, "/").Replace("/", ""), unlockedLink, magnetName, FileSizeInt }));
                                                         });
                                                     }
 
@@ -1272,18 +1283,18 @@ namespace ALL_LEGIT
                                     if (!skip)
                                     {
                                         addedlinks++;
-                                        listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, FileNameNoExt, FileSizeInt }));
+                                        listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(unlockedLink, "/").Replace("/", ""), unlockedLink, FileNameNoExt, FileSizeInt }));
 
                                     }
                                     if (listView1.Items.Count == 0)
                                     {
                                         addedlinks++;
-                                        listView1.Items.Add(new ListViewItem(new string[] { obj.data.filename.ToString(), unlockedLink, FileNameNoExt, FileSizeInt }));
+                                        listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(unlockedLink, "/").Replace("/", ""), unlockedLink, FileNameNoExt, FileSizeInt }));
 
                                     }
                                     foreach (ListViewItem item in listView1.Items)
                                     {
-                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[1].Text.Equals(unlockedLink))
+                                        if (item.SubItems[1].Text.Equals(unlockedLink))
                                         {
                                             item.Checked = true;
                                         }

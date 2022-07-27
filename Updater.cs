@@ -12,7 +12,7 @@ namespace ALL_LEGIT
         private static string RawGitHubUrl;
         private static string GitHubUrl;
 
-        static readonly public string LocalVersion = "1.0.4";
+        static readonly public string LocalVersion = "1.0.5";
         public static string currentVersion = "";
         public static string currentHFVersion = "";
         public static string changelog = "";
