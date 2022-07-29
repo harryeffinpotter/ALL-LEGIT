@@ -1684,7 +1684,7 @@ namespace ALL_LEGIT
 
                                 }
                             }
-                            isMultiPart = false;
+                     
                             if (Properties.Settings.Default.extractNested)
                             {  
                                 string[] files = Directory.GetFiles(DLDir, "*.*", SearchOption.AllDirectories);
@@ -1721,23 +1721,33 @@ namespace ALL_LEGIT
                         });
                         string[] dirs = Directory.GetDirectories(DLDir);
                         string[] endfiles = Directory.GetFiles(DLDir, "*.*", SearchOption.TopDirectoryOnly);
-                        if (endfiles.Length == 0 && dirs.Length == 1)
+                        if (isMultiPart && endfiles.Length == 0 && dirs.Length == 1)
                         {
                             foreach (string dir in dirs)
                             {
                                 string parent = Utilities.get_parent_dir_path(DLDir);
-                                string parent2 = Utilities.get_parent_dir_path(dir);
                                 string DirName = Path.GetFileName(dir);
                                 DLSDir = parent + "\\" + DirName;
+
+                              
+                                    if (Directory.Exists(DLSDir))
+                                    {
+                                        Directory.Delete(DLSDir, true);
+                                    }
+                              
+                 
+                                Directory.Move(dir, DLSDir + "_temp");
                                 if (Directory.Exists(DLSDir))
                                 {
                                     Directory.Delete(DLSDir, true);
                                 }
-                                Directory.Move(dir, DLSDir);
-                                if (parent2 != DLSDir)
+                                      
+                                if (Directory.Exists(DLDir))
                                 {
-                                    Directory.Delete(parent2, true);
+                                    Directory.Delete(DLDir, true);
                                 }
+                                
+                                Directory.Move(DLSDir + "_temp", DLSDir);
                             }
                         }
 
@@ -1775,7 +1785,7 @@ namespace ALL_LEGIT
 
                     CancelButton.Visible = false;
                 }
-
+                isMultiPart = false;
             }
             fileDownloading = "";
             System.GC.Collect();
