@@ -16,7 +16,48 @@ namespace ALL_LEGIT
 {
     class Utilities
     {
+        public static void ExtractFile2(string sourceArchive, string destination)
+        {
+            try
+            {
+
+
+                if (!File.Exists(Environment.CurrentDirectory + "\\7z.exe") || !File.Exists(Environment.CurrentDirectory + "\\7z.dll"))
+                {
+                    WebClient client = new WebClient();
+                    client.DownloadFile("https://github.com/harryeffinpotter/-Loader/raw/main/7z.exe", "7z.exe");
+                    client.DownloadFile("https://github.com/harryeffinpotter/-Loader/raw/main/7z.dll", "7z.dll");
+                }
+                ProcessStartInfo pro = new ProcessStartInfo();
+                pro.WindowStyle = ProcessWindowStyle.Hidden;
+                pro.FileName = $"{Environment.CurrentDirectory}\\7z.exe";
+                pro.Arguments = string.Format("x \"{0}\" -y -o\"{1}\"", sourceArchive, destination);
+                Process x = Process.Start(pro);
+                if (!x.HasExited)
+                    x.WaitForExit();
+            }
+            catch
+            {
+                MessageBox.Show("Unable to extract updated files. If you have WINRAR try uninstalling it then trying again! If you have not installed FFAIO since version 2.0.13 then ");
+            }
+        }
         public static string FailedExtract = "";
+        public static void GetMissingFiles()
+        {
+            var client = new WebClient();
+            string _bin = $"{Environment.CurrentDirectory}\\_bin";
+            if (!File.Exists($"{_bin}\\transmission-show.exe"))
+            {
+                client.DownloadFile("https://github.com/harryeffinpotter/ALL-LEGIT/raw/main/_bin.7z", "_bin.7z");
+                if (Directory.Exists(_bin))
+                {
+                    Directory.Delete(_bin, true);
+                    Directory.CreateDirectory(_bin);
+                }
+                ExtractFile2(Environment.CurrentDirectory + "\\_bin.7z", _bin);
+                File.Delete(Environment.CurrentDirectory + "\\_bin\\_bin.7z");
+            }
+        }
         public static void ExtractFile(string sourceArchive, string destination)
         {
             if (!Directory.Exists(destination))

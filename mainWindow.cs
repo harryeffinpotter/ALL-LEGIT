@@ -134,6 +134,7 @@ namespace ALL_LEGIT
         {
             InitializeComponent();
             intToolTips();
+            Utilities.GetMissingFiles();
             this.TopMost = true;
             this.TopMost = false;
             this.components = new System.ComponentModel.Container();
@@ -211,10 +212,12 @@ namespace ALL_LEGIT
 
         }
         public static string patchNotes =
-
+           
             " • Added torrent file converter via Select Torrent File button!\n" +
             " • Added option in settings to exclude URL files!\n" +
             " • Fixed bit of code I forgot to update to new filenaming system that broke auto extract.\n" +
+            " • Removed a ton of unnecessary files in _bin\n" +
+            " • Added code to automatically obtain new _bin folder(with new required exe/dlls) and extract it.\n" +
             "\n";
         public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
