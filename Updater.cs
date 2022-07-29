@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Windows.Forms;
@@ -12,7 +14,7 @@ namespace ALL_LEGIT
         private static string RawGitHubUrl;
         private static string GitHubUrl;
 
-        static readonly public string LocalVersion = "1.0.7";
+        static readonly public string LocalVersion = "1.0.8";
         public static string currentVersion = "";
         public static string currentHFVersion = "";
         public static string changelog = "";
@@ -71,6 +73,14 @@ namespace ALL_LEGIT
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 fileClient.DownloadFile($"https://github.com/harryeffinpotter/ALL-LEGIT/raw/master/All.Legit.exe", $"All LegitNEW.exe");
+                fileClient.Dispose();
+
+                string config = $"{Environment.CurrentDirectory}\\All.Legit.exe.config";
+                if (File.Exists(config))
+                {
+                    File.Delete(config);
+                }
+                fileClient.DownloadFile($"https://github.com/harryeffinpotter/ALL-LEGIT/raw/master/All.Legit.exe.config", $"All.Legit.exe.config");
                 fileClient.Dispose();
                 Program.form.ALTrayIcon.Icon.Dispose();
                 Program.form.ALTrayIcon.Dispose();

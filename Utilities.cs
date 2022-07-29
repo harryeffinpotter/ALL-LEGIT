@@ -44,8 +44,11 @@ namespace ALL_LEGIT
         public static string FailedExtract = "";
         public static void GetMissingFiles()
         {
+
             var client = new WebClient();
             string _bin = $"{Environment.CurrentDirectory}\\_bin";
+            string config = $"{Environment.CurrentDirectory}\\All.Legit.exe.config";
+             
             if (!File.Exists($"{_bin}\\transmission-show.exe"))
             {
                 client.DownloadFile("https://github.com/harryeffinpotter/ALL-LEGIT/raw/main/_bin.7z", "_bin.7z");
@@ -58,6 +61,18 @@ namespace ALL_LEGIT
                 File.Delete(Environment.CurrentDirectory + "\\_bin\\_bin.7z");
             }
         }
+        public static string get_parent_dir_path(string path)
+        {
+            // notice that i used two separators windows style "\\" and linux "/" (for bad formed paths)
+            // We make sure to remove extra unneeded characters.
+            int index = path.Trim('/', '\\').LastIndexOfAny(new char[] { '\\', '/' });
+
+            // now if index is >= 0 that means we have at least one parent directory, otherwise the given path is the root most.
+            if (index >= 0)
+                return path.Remove(index);
+            else
+                return "";
+        }
         public static void ExtractFile(string sourceArchive, string destination)
         {
             if (!Directory.Exists(destination))
@@ -65,16 +80,7 @@ namespace ALL_LEGIT
                 Directory.CreateDirectory(destination);
             }
             string[] files = Directory.GetFiles(destination);
-            string basename = "";
-            if (sourceArchive.EndsWith(".rar"))
-            {
-                basename = Path.GetFileNameWithoutExtension(sourceArchive);
-                basename = Path.GetFileNameWithoutExtension(basename);
-            }
-            else
-            {
-                basename = Path.GetFileNameWithoutExtension(sourceArchive);
-            }
+
             System.Diagnostics.Process x2 = new System.Diagnostics.Process();
             ProcessStartInfo pro = new ProcessStartInfo();
             pro.WindowStyle = ProcessWindowStyle.Hidden;
@@ -136,26 +142,7 @@ namespace ALL_LEGIT
                         File.Delete(sourceArchive);
                     }
                     Program.form.listView1.EndUpdate();
-                    if (Properties.Settings.Default.extractNested)
-                    {
-                        files = Directory.GetFiles(destination, "*.*", SearchOption.AllDirectories);
-                        foreach (string file in files)
-                        {
-                            if (!FailedExtract.Contains(file))
-                            {
-                                if (file.Contains(".7z.") || file.Contains(".rar.") || file.EndsWith(".7z")
-                                || file.EndsWith(".rar") || file.EndsWith(".zip") || file.Contains(".part"))
-                                {
-                                    string folder = destination + "\\" + Path.GetFileNameWithoutExtension(file);
-                                    if (!Directory.Exists(folder))
-                                    {
-                                        Directory.CreateDirectory(folder);
-                                    }
-                                    ExtractFile(file, folder);
-                                }
-                            }
-                        }
-                    }
+               
                 }
                 if (fails == PWArray.Length)
                 {
@@ -174,6 +161,7 @@ namespace ALL_LEGIT
                     }
                 }
             }
+          
         }
         public static void DecryptDLC()
         {

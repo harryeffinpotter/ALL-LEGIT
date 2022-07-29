@@ -80,7 +80,7 @@ namespace ALL_LEGIT
             {
                 ToolTip AutoDLBox = new ToolTip();
                 AutoDLBox.SetToolTip(this.AutoDLBox, "Automatically download added links.");
-                
+
                 ToolTip HKTip = new ToolTip();
                 HKTip.SetToolTip(this.HotKeyBox, "Change global shortcut, global shortcut can be used from anywhere, even if All Legit! is minimized or closed to tray.\n" +
                     "Simply copy a link and press the global shortcut and All Legit! will parse the links.");
@@ -93,28 +93,28 @@ namespace ALL_LEGIT
 
                 ToolTip disableNotiesBox = new ToolTip();
                 disableNotiesBox.SetToolTip(this.disableNotiesBox, "Disable windows notifications.");
-                
+
                 ToolTip OpenDirBox = new ToolTip();
-                OpenDirBox.SetToolTip(this.OpenDirBox, "Open download directory after downloads/extractions finish.");                
-                
+                OpenDirBox.SetToolTip(this.OpenDirBox, "Open download directory after downloads/extractions finish.");
+
                 ToolTip AutoUpdate = new ToolTip();
                 AutoUpdate.SetToolTip(this.autoUpdateBox, "If update is available install it autommatically at launch.");
-                
+
                 ToolTip Close2Tray = new ToolTip();
                 Close2Tray.SetToolTip(this.Close2Tray, "Minimize All Legit to taskbar instead of exiting when you close the app.");
-                
+
                 ToolTip RemDL = new ToolTip();
                 RemDL.SetToolTip(this.RemDL, "Remove downloaded/extracted/copied links.");
-                
+
                 ToolTip AutoOverwrite = new ToolTip();
                 AutoOverwrite.SetToolTip(this.AutoOverwrite, "If file exists automatically overwrite it without asking.");
-                
+
                 ToolTip autoDelZips = new ToolTip();
                 autoDelZips.SetToolTip(this.autoDelZips, "Delete zips after they have been successfully extracted.");
-                
+
                 ToolTip AutoExtract = new ToolTip();
                 AutoExtract.SetToolTip(this.AutoExtract, "Automatically extract downloaded archives.");
-                
+
                 ToolTip extractNested = new ToolTip();
                 extractNested.SetToolTip(this.extractNested, "If archives exist within extracted archives, extract them to a folder named after the archive.");
 
@@ -212,7 +212,11 @@ namespace ALL_LEGIT
 
         }
         public static string patchNotes =
-           
+
+
+            " • If extracted zip is not muilti parted it will make a subdir named after it.\n" +
+            " • If extracted multi-part archive creates unnecessary subdir, subdir will be moved up a layer.\n" +
+            " • Now when a zip is extracted that is not muilti parted it will make a subdir named after it.\n" +
             " • Added torrent file converter via Select Torrent File button!\n" +
             " • Added option in settings to exclude URL files!\n" +
             " • Fixed bit of code I forgot to update to new filenaming system that broke auto extract.\n" +
@@ -229,10 +233,10 @@ namespace ALL_LEGIT
             var cme = new System.Net.Configuration.ConnectionManagementElement();
             cme.MaxConnection = 99999;
             System.Net.ServicePointManager.DefaultConnectionLimit = 99999;
- 
+
             StayOnTopCheckbox.Checked = Properties.Settings.Default.TopMost;
- 
- 
+
+
             changeLog.Text = $"{Updater.LocalVersion} Change log:\n\n";
             tipsText.Text = " • Click settings cog in top-right corner for auto downloads, auto extraction and more.\n" +
                 $" • Shortcut key works everywhere, even when app is minimized/closed to tray.";
@@ -800,7 +804,7 @@ namespace ALL_LEGIT
                             string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}&id={magnetID}";
 
                             //WHILE LOOP START
-                  
+
 
 
                             obj = getJson(MagnetPoll);
@@ -1072,8 +1076,8 @@ namespace ALL_LEGIT
                                                         item.Checked = true;
                                                     }
 
-                                                    if (listView1.Items.Count == 0 && !skip) 
-                                                    {        
+                                                    if (listView1.Items.Count == 0 && !skip)
+                                                    {
                                                         this.Invoke(() =>
                                                         {
                                                             listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""),
@@ -1341,7 +1345,7 @@ namespace ALL_LEGIT
                                 {
                                     foreach (ListViewItem item in listView1.Items)
                                     {
-                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Text.Equals(FileNameNoExt) || 
+                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Text.Equals(FileNameNoExt) ||
                                         unlockedLink.EndsWith(".url"))
                                         {
                                             skip = true;
@@ -1353,7 +1357,7 @@ namespace ALL_LEGIT
                                         listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""),
                                             unlockedLink, FileNameNoExt, FileSizeInt }));
                                     }
-                                    
+
                                     foreach (ListViewItem item in listView1.Items)
                                     {
                                         if (item.SubItems[1].Text.Equals(unlockedLink))
@@ -1505,6 +1509,8 @@ namespace ALL_LEGIT
         public static string dlsPara = "";
         public static string DLSDir = "";
         public static bool isDownloading = false;
+        public static bool isMultiPart = false;
+
         public async void startDownloads_Click(object sender, EventArgs e)
         {
 
@@ -1585,6 +1591,8 @@ namespace ALL_LEGIT
 
                     if (AutoExtract.Checked && !isDownloading)
                     {
+
+                        string DLDir = "";
                         this.Invoke(() =>
                         {
                             if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
@@ -1604,49 +1612,38 @@ namespace ALL_LEGIT
                                 {
 
                                     string[] DLS = FullDL.Split(';');
-                                    bool Extract = false;
-                                    if (DLS[0].ToString().ToLower().EndsWith(".rar"))
+                                    DLDir = Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString();
+                                    if (DLS.ToString().Contains(".rar") && DLS.ToString().Contains(".01"))
                                     {
-                                        try
-                                        {
-
-                                            using (var archive = RarArchive.Open(Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString() + "\\" + DLS[0].ToString()))
-                                            {
-                                                if (archive.IsMultipartVolume())
-                                                {
-                                                    if (!archive.IsFirstVolume())
-                                                    {
-                                                        Extract = false;
-                                                        continue;
-                                                    }
-                                                    else
-                                                    {
-                                                        Extract = true;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    Extract = true;
-
-                                                }
-
-                                            }
-                                        }
-                                        catch
-                                        {
-
-                                            Extract = true;
-
-                                        }
+                                        isMultiPart = true;
                                     }
-
-
-
-                                    else if (DLS[0].ToString().Contains(".001") && DLS[0].ToString().Contains("7z") || DLS[0].ToString().Contains(".01") && DLS[0].ToString().Contains("7z")
-                                        || DLS[0].ToString().EndsWith(".7z") || DLS[0].ToString().EndsWith(".zip") || DLS[0].ToString().EndsWith(".rar"))
+                                    bool Extract = false;
+                                    string DLSExtension = Path.GetExtension(DLS[0]);
+                                    if (DLSExtension.Contains("0") && !DLSExtension.EndsWith("01") ||
+                                    DLS[0].Contains("part") && !DLS[0].Contains("part1"))
+                                    {
+                                        isMultiPart = true;
+                                        Extract = false;
+                                    }
+                                    else if (DLSExtension.Contains("0") && DLSExtension.EndsWith("01") ||
+                                    DLS[0].Contains("part") && DLS[0].Contains("part1"))
                                     {
                                         Extract = true;
+                                        isMultiPart = true;
                                     }
+
+                                    else if (!isMultiPart && DLSExtension.Equals(".7z") || DLSExtension.Equals(".zip") || DLSExtension.Equals(".rar")
+                                        || DLSExtension.Equals(".gz") || DLSExtension.Equals(".tar"))
+                                    {
+                                        Extract = true;
+
+                                    }
+                                    else if (isMultiPart && DLSExtension.Equals(".rar") && !DLS[0].Contains("part"))
+                                    {
+                                        isMultiPart = true;
+                                        Extract = true;
+                                    }
+
                                     if (Extract && !muteoutputcancelled)
                                     {
                                         this.Invoke(() =>
@@ -1654,14 +1651,26 @@ namespace ALL_LEGIT
                                             DownloadingText.Text = $"Extracting archives...";
                                         });
 
-                                        string DLDir = Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString();
                                         string DL = DLDir + "\\" + DLS[0].ToString();
                                         if (!Directory.Exists(DLDir))
                                         {
                                             Directory.CreateDirectory(DLDir);
                                         }
 
+                                        string FileName = Path.GetFileNameWithoutExtension(DL);
+                                        if (FileName.Contains(".part"))
+                                        {
+                                            FileName = Utilities.RemoveEverythingAfterLast(FileName, ".").Replace(".", "");
+                                        }
                                         string ArchiveDIR = DLDir;
+                                        if (!isMultiPart)
+                                        {
+                                            ArchiveDIR = ArchiveDIR + "\\" + FileName;
+                                        }
+                                        else
+                                        {
+                                            ArchiveDIR = DLDir;
+                                        }
                                         if (!Directory.Exists(ArchiveDIR))
                                         {
                                             Directory.CreateDirectory(ArchiveDIR);
@@ -1671,10 +1680,59 @@ namespace ALL_LEGIT
 
                                     }
 
+                                    Extract = false;
 
                                 }
                             }
+                            isMultiPart = false;
+                            if (Properties.Settings.Default.extractNested)
+                            {  
+                                string[] files = Directory.GetFiles(DLDir, "*.*", SearchOption.AllDirectories);
+                                foreach (string file in files)
+                                {
+                                    if (!Utilities.FailedExtract.Contains(file))
+                                    {
+                                        if (file.Contains(".7z.") || file.Contains(".rar.") || file.EndsWith(".7z")
+                                        || file.EndsWith(".rar") || file.EndsWith(".zip") || file.Contains(".part"))
+                                        {
+                                            string folder = DLDir + "\\" + Path.GetFileNameWithoutExtension(file);
+                                            if (!Directory.Exists(folder))
+                                            {
+                                                Directory.CreateDirectory(folder);
+                                            }
+                                            Utilities.ExtractFile(file, folder);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Utilities.FailedExtract = Utilities.FailedExtract.Replace(file, "");
+
+                                    }
+                                }
+                            }
+
                         });
+                        string[] dirs = Directory.GetDirectories(DLDir);
+                        string[] endfiles = Directory.GetFiles(DLDir, "*.*", SearchOption.TopDirectoryOnly);
+                        if (endfiles.Length == 0 && dirs.Length == 1)
+                        {
+                            foreach (string dir in dirs)
+                            {
+                                string parent = Utilities.get_parent_dir_path(DLDir);
+                                string parent2 = Utilities.get_parent_dir_path(dir);
+                                string DirName = Path.GetFileName(dir);
+                                DLSDir = parent + "\\" + DirName;
+                                if (Directory.Exists(DLSDir))
+                                {
+                                    Directory.Delete(DLSDir, true);
+                                }
+                                Directory.Move(dir, DLSDir);
+                                if (parent2 != DLSDir)
+                                {
+                                    Directory.Delete(parent2, true);
+                                }
+                            }
+                        }
 
 
                     }
@@ -2189,7 +2247,7 @@ namespace ALL_LEGIT
 
         private void AutoExtract_CheckedChanged_1(object sender, EventArgs e)
         {
-  
+
             if (AutoExtract.Checked)
             {
 
@@ -2506,7 +2564,7 @@ namespace ALL_LEGIT
         {
             if (e.Button == MouseButtons.Middle || e.Button == MouseButtons.Right)
             {
-                var info = listView1.HitTest(e.X,e.Y);
+                var info = listView1.HitTest(e.X, e.Y);
                 if (info.Item == null)
                 {
                     return;
