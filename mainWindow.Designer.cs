@@ -41,22 +41,8 @@
             this.CancelButton = new System.Windows.Forms.Button();
             this.PasteButton = new System.Windows.Forms.Button();
             this.StayOnTopCheckbox = new System.Windows.Forms.CheckBox();
-            this.PWBox = new System.Windows.Forms.TextBox();
             this.HotKeyBox = new System.Windows.Forms.TextBox();
-            this.AutoDLBox = new System.Windows.Forms.CheckBox();
-            this.AutoOverwrite = new System.Windows.Forms.CheckBox();
             this.ALTrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.settingsP = new System.Windows.Forms.Panel();
-            this.autoUpdateBox = new System.Windows.Forms.CheckBox();
-            this.disableNotiesBox = new System.Windows.Forms.CheckBox();
-            this.autoDelZips = new System.Windows.Forms.CheckBox();
-            this.extractNested = new System.Windows.Forms.CheckBox();
-            this.updateNow = new System.Windows.Forms.Button();
-            this.AutoExtract = new System.Windows.Forms.CheckBox();
-            this.zipPWLabel = new System.Windows.Forms.Label();
-            this.Close2Tray = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.RemDL = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.HotKeyBtn = new System.Windows.Forms.Button();
             this.DownloadingText = new System.Windows.Forms.Label();
@@ -77,11 +63,27 @@
             this.tipsHeader = new System.Windows.Forms.Label();
             this.SplashText = new System.Windows.Forms.Label();
             this.changeLog = new System.Windows.Forms.Label();
-            this.settingsP.SuspendLayout();
+            this.RemDL = new System.Windows.Forms.CheckBox();
+            this.AutoDLBox = new System.Windows.Forms.CheckBox();
+            this.AutoOverwrite = new System.Windows.Forms.CheckBox();
+            this.PWBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.Close2Tray = new System.Windows.Forms.CheckBox();
+            this.zipPWLabel = new System.Windows.Forms.Label();
+            this.AutoExtract = new System.Windows.Forms.CheckBox();
+            this.updateNow = new System.Windows.Forms.Button();
+            this.extractNested = new System.Windows.Forms.CheckBox();
+            this.autoDelZips = new System.Windows.Forms.CheckBox();
+            this.disableNotiesBox = new System.Windows.Forms.CheckBox();
+            this.removeURLs = new System.Windows.Forms.CheckBox();
+            this.autoUpdateBox = new System.Windows.Forms.CheckBox();
+            this.settingsP = new System.Windows.Forms.Panel();
+            this.selectTorrent = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncheckAll)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CheckAll)).BeginInit();
             this.splashPanel.SuspendLayout();
+            this.settingsP.SuspendLayout();
             this.SuspendLayout();
             // 
             // DownloadDir
@@ -174,23 +176,6 @@
             this.StayOnTopCheckbox.CheckedChanged += new System.EventHandler(this.StayOnTopCheckbox_CheckedChanged_1);
             this.StayOnTopCheckbox.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
-            // PWBox
-            // 
-            this.PWBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
-            this.PWBox.Enabled = false;
-            this.PWBox.ForeColor = System.Drawing.Color.White;
-            this.PWBox.Location = new System.Drawing.Point(35, 379);
-            this.PWBox.Name = "PWBox";
-            this.PWBox.Size = new System.Drawing.Size(414, 26);
-            this.PWBox.TabIndex = 4;
-            this.PWBox.Text = "Your;Commonly;Used;Zip;passwords";
-            this.PWBox.Click += new System.EventHandler(this.PWBox_Enter);
-            this.PWBox.Enter += new System.EventHandler(this.PWBox_Enter);
-            this.PWBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PWBox_KeyPress);
-            this.PWBox.Leave += new System.EventHandler(this.PWBox_Leave);
-            this.PWBox.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
-            this.PWBox.MouseHover += new System.EventHandler(this.showSettings_MouseHover);
-            // 
             // HotKeyBox
             // 
             this.HotKeyBox.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
@@ -213,41 +198,6 @@
             this.HotKeyBox.Leave += new System.EventHandler(this.HotKeyBox_Leave);
             this.HotKeyBox.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
-            // AutoDLBox
-            // 
-            this.AutoDLBox.AutoSize = true;
-            this.AutoDLBox.BackColor = System.Drawing.Color.Transparent;
-            this.AutoDLBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.AutoDLBox.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
-            this.AutoDLBox.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.AutoDLBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.AutoDLBox.Location = new System.Drawing.Point(45, 91);
-            this.AutoDLBox.Name = "AutoDLBox";
-            this.AutoDLBox.Size = new System.Drawing.Size(394, 26);
-            this.AutoDLBox.TabIndex = 0;
-            this.AutoDLBox.Text = "Auto download";
-            this.AutoDLBox.UseVisualStyleBackColor = false;
-            this.AutoDLBox.CheckedChanged += new System.EventHandler(this.AutoDLBox_CheckedChanged);
-            this.AutoDLBox.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
-            // 
-            // AutoOverwrite
-            // 
-            this.AutoOverwrite.AutoSize = true;
-            this.AutoOverwrite.BackColor = System.Drawing.Color.Transparent;
-            this.AutoOverwrite.Dock = System.Windows.Forms.DockStyle.Top;
-            this.AutoOverwrite.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
-            this.AutoOverwrite.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.AutoOverwrite.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.AutoOverwrite.Location = new System.Drawing.Point(45, 117);
-            this.AutoOverwrite.Name = "AutoOverwrite";
-            this.AutoOverwrite.Size = new System.Drawing.Size(394, 26);
-            this.AutoOverwrite.TabIndex = 0;
-            this.AutoOverwrite.Text = "Overwrite existing";
-            this.AutoOverwrite.UseVisualStyleBackColor = false;
-            this.AutoOverwrite.CheckedChanged += new System.EventHandler(this.AutoDelete_CheckedChanged);
-            this.AutoOverwrite.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
-            this.AutoOverwrite.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
-            // 
             // ALTrayIcon
             // 
             this.ALTrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("ALTrayIcon.Icon")));
@@ -257,195 +207,6 @@
             this.ALTrayIcon.BalloonTipClicked += new System.EventHandler(this.ALTrayIcon_BalloonTipClicked);
             this.ALTrayIcon.Click += new System.EventHandler(this.ALTrayIcon_Click);
             this.ALTrayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ALTrayIcon_MouseClick);
-            // 
-            // settingsP
-            // 
-            this.settingsP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.settingsP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
-            this.settingsP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.settingsP.Controls.Add(this.autoUpdateBox);
-            this.settingsP.Controls.Add(this.disableNotiesBox);
-            this.settingsP.Controls.Add(this.autoDelZips);
-            this.settingsP.Controls.Add(this.extractNested);
-            this.settingsP.Controls.Add(this.updateNow);
-            this.settingsP.Controls.Add(this.AutoExtract);
-            this.settingsP.Controls.Add(this.zipPWLabel);
-            this.settingsP.Controls.Add(this.Close2Tray);
-            this.settingsP.Controls.Add(this.label1);
-            this.settingsP.Controls.Add(this.PWBox);
-            this.settingsP.Controls.Add(this.AutoOverwrite);
-            this.settingsP.Controls.Add(this.AutoDLBox);
-            this.settingsP.Controls.Add(this.RemDL);
-            this.settingsP.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.settingsP.Location = new System.Drawing.Point(321, 12);
-            this.settingsP.Name = "settingsP";
-            this.settingsP.Padding = new System.Windows.Forms.Padding(45, 65, 45, 45);
-            this.settingsP.Size = new System.Drawing.Size(488, 433);
-            this.settingsP.TabIndex = 13;
-            this.settingsP.Visible = false;
-            this.settingsP.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
-            this.settingsP.MouseHover += new System.EventHandler(this.showSettings_MouseHover);
-            // 
-            // autoUpdateBox
-            // 
-            this.autoUpdateBox.AutoSize = true;
-            this.autoUpdateBox.BackColor = System.Drawing.Color.Transparent;
-            this.autoUpdateBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.autoUpdateBox.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
-            this.autoUpdateBox.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.autoUpdateBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.autoUpdateBox.Location = new System.Drawing.Point(45, 273);
-            this.autoUpdateBox.Name = "autoUpdateBox";
-            this.autoUpdateBox.Size = new System.Drawing.Size(394, 26);
-            this.autoUpdateBox.TabIndex = 17;
-            this.autoUpdateBox.Text = "Automatically update on launch";
-            this.autoUpdateBox.UseVisualStyleBackColor = false;
-            this.autoUpdateBox.CheckedChanged += new System.EventHandler(this.autoUpdateBox_CheckedChanged);
-            // 
-            // disableNotiesBox
-            // 
-            this.disableNotiesBox.AutoSize = true;
-            this.disableNotiesBox.BackColor = System.Drawing.Color.Transparent;
-            this.disableNotiesBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.disableNotiesBox.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
-            this.disableNotiesBox.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.disableNotiesBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.disableNotiesBox.Location = new System.Drawing.Point(45, 247);
-            this.disableNotiesBox.Name = "disableNotiesBox";
-            this.disableNotiesBox.Size = new System.Drawing.Size(394, 26);
-            this.disableNotiesBox.TabIndex = 16;
-            this.disableNotiesBox.Text = "Disable Windows Notifications";
-            this.disableNotiesBox.UseVisualStyleBackColor = false;
-            this.disableNotiesBox.CheckedChanged += new System.EventHandler(this.disableNotiesBox_CheckedChanged);
-            // 
-            // autoDelZips
-            // 
-            this.autoDelZips.AutoSize = true;
-            this.autoDelZips.BackColor = System.Drawing.Color.Transparent;
-            this.autoDelZips.Dock = System.Windows.Forms.DockStyle.Top;
-            this.autoDelZips.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
-            this.autoDelZips.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.autoDelZips.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.autoDelZips.Location = new System.Drawing.Point(45, 221);
-            this.autoDelZips.Name = "autoDelZips";
-            this.autoDelZips.Size = new System.Drawing.Size(394, 26);
-            this.autoDelZips.TabIndex = 15;
-            this.autoDelZips.Text = "Delete extracted archives";
-            this.autoDelZips.UseVisualStyleBackColor = false;
-            this.autoDelZips.CheckedChanged += new System.EventHandler(this.autoDelZips_CheckedChanged_1);
-            // 
-            // extractNested
-            // 
-            this.extractNested.AutoSize = true;
-            this.extractNested.BackColor = System.Drawing.Color.Transparent;
-            this.extractNested.Dock = System.Windows.Forms.DockStyle.Top;
-            this.extractNested.Enabled = false;
-            this.extractNested.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
-            this.extractNested.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.extractNested.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.extractNested.Location = new System.Drawing.Point(45, 195);
-            this.extractNested.Name = "extractNested";
-            this.extractNested.Size = new System.Drawing.Size(394, 26);
-            this.extractNested.TabIndex = 14;
-            this.extractNested.Text = "Extract nested archives";
-            this.extractNested.UseVisualStyleBackColor = false;
-            this.extractNested.CheckedChanged += new System.EventHandler(this.extractNested_CheckedChanged);
-            // 
-            // updateNow
-            // 
-            this.updateNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.updateNow.BackColor = System.Drawing.Color.Transparent;
-            this.updateNow.FlatAppearance.BorderColor = System.Drawing.Color.PaleTurquoise;
-            this.updateNow.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkSeaGreen;
-            this.updateNow.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkSlateGray;
-            this.updateNow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.updateNow.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.updateNow.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.updateNow.Location = new System.Drawing.Point(45, 310);
-            this.updateNow.Name = "updateNow";
-            this.updateNow.Size = new System.Drawing.Size(212, 28);
-            this.updateNow.TabIndex = 2;
-            this.updateNow.Text = "Check if update is available now";
-            this.updateNow.UseVisualStyleBackColor = false;
-            this.updateNow.Click += new System.EventHandler(this.updateNow_Click);
-            // 
-            // AutoExtract
-            // 
-            this.AutoExtract.AutoSize = true;
-            this.AutoExtract.BackColor = System.Drawing.Color.Transparent;
-            this.AutoExtract.Dock = System.Windows.Forms.DockStyle.Top;
-            this.AutoExtract.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
-            this.AutoExtract.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.AutoExtract.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.AutoExtract.Location = new System.Drawing.Point(45, 169);
-            this.AutoExtract.Name = "AutoExtract";
-            this.AutoExtract.Size = new System.Drawing.Size(394, 26);
-            this.AutoExtract.TabIndex = 10;
-            this.AutoExtract.Text = "Extract finished";
-            this.AutoExtract.UseVisualStyleBackColor = false;
-            this.AutoExtract.CheckedChanged += new System.EventHandler(this.AutoExtract_CheckedChanged_1);
-            this.AutoExtract.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
-            // 
-            // zipPWLabel
-            // 
-            this.zipPWLabel.AutoSize = true;
-            this.zipPWLabel.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.zipPWLabel.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.zipPWLabel.Location = new System.Drawing.Point(47, 350);
-            this.zipPWLabel.Name = "zipPWLabel";
-            this.zipPWLabel.Size = new System.Drawing.Size(390, 22);
-            this.zipPWLabel.TabIndex = 9;
-            this.zipPWLabel.Text = "Archive passwords - Use ; to separate.";
-            this.zipPWLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.zipPWLabel.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
-            this.zipPWLabel.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
-            // 
-            // Close2Tray
-            // 
-            this.Close2Tray.AutoSize = true;
-            this.Close2Tray.BackColor = System.Drawing.Color.Transparent;
-            this.Close2Tray.Dock = System.Windows.Forms.DockStyle.Top;
-            this.Close2Tray.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
-            this.Close2Tray.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.Close2Tray.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.Close2Tray.Location = new System.Drawing.Point(45, 143);
-            this.Close2Tray.Name = "Close2Tray";
-            this.Close2Tray.Size = new System.Drawing.Size(394, 26);
-            this.Close2Tray.TabIndex = 9;
-            this.Close2Tray.Text = "Close to system tray";
-            this.Close2Tray.UseVisualStyleBackColor = false;
-            this.Close2Tray.CheckedChanged += new System.EventHandler(this.Close2Tray_CheckedChanged_1);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.label1.Location = new System.Drawing.Point(107, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(270, 44);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "All Legit Settings\r\n(These save automatically)";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label1.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
-            this.label1.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
-            // 
-            // RemDL
-            // 
-            this.RemDL.AutoSize = true;
-            this.RemDL.BackColor = System.Drawing.Color.Transparent;
-            this.RemDL.Dock = System.Windows.Forms.DockStyle.Top;
-            this.RemDL.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
-            this.RemDL.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
-            this.RemDL.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
-            this.RemDL.Location = new System.Drawing.Point(45, 65);
-            this.RemDL.Name = "RemDL";
-            this.RemDL.Size = new System.Drawing.Size(394, 26);
-            this.RemDL.TabIndex = 6;
-            this.RemDL.Text = "Clear Finished";
-            this.RemDL.UseVisualStyleBackColor = false;
-            this.RemDL.CheckedChanged += new System.EventHandler(this.RemDL_CheckedChanged);
-            this.RemDL.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
             // 
             // pictureBox1
             // 
@@ -657,7 +418,7 @@
             this.splashPanel.Controls.Add(this.changeLog);
             this.splashPanel.Location = new System.Drawing.Point(45, 101);
             this.splashPanel.Name = "splashPanel";
-            this.splashPanel.Size = new System.Drawing.Size(731, 503);
+            this.splashPanel.Size = new System.Drawing.Size(731, 501);
             this.splashPanel.TabIndex = 17;
             this.splashPanel.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
@@ -721,6 +482,282 @@
             this.changeLog.TabIndex = 12;
             this.changeLog.Text = "Change log:\r\n";
             // 
+            // RemDL
+            // 
+            this.RemDL.AutoSize = true;
+            this.RemDL.BackColor = System.Drawing.Color.Transparent;
+            this.RemDL.Dock = System.Windows.Forms.DockStyle.Top;
+            this.RemDL.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
+            this.RemDL.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.RemDL.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.RemDL.Location = new System.Drawing.Point(45, 65);
+            this.RemDL.Name = "RemDL";
+            this.RemDL.Size = new System.Drawing.Size(394, 26);
+            this.RemDL.TabIndex = 6;
+            this.RemDL.Text = "Clear Finished";
+            this.RemDL.UseVisualStyleBackColor = false;
+            this.RemDL.CheckedChanged += new System.EventHandler(this.RemDL_CheckedChanged);
+            this.RemDL.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            // 
+            // AutoDLBox
+            // 
+            this.AutoDLBox.AutoSize = true;
+            this.AutoDLBox.BackColor = System.Drawing.Color.Transparent;
+            this.AutoDLBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.AutoDLBox.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
+            this.AutoDLBox.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.AutoDLBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.AutoDLBox.Location = new System.Drawing.Point(45, 91);
+            this.AutoDLBox.Name = "AutoDLBox";
+            this.AutoDLBox.Size = new System.Drawing.Size(394, 26);
+            this.AutoDLBox.TabIndex = 0;
+            this.AutoDLBox.Text = "Auto download";
+            this.AutoDLBox.UseVisualStyleBackColor = false;
+            this.AutoDLBox.CheckedChanged += new System.EventHandler(this.AutoDLBox_CheckedChanged);
+            this.AutoDLBox.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            // 
+            // AutoOverwrite
+            // 
+            this.AutoOverwrite.AutoSize = true;
+            this.AutoOverwrite.BackColor = System.Drawing.Color.Transparent;
+            this.AutoOverwrite.Dock = System.Windows.Forms.DockStyle.Top;
+            this.AutoOverwrite.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
+            this.AutoOverwrite.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.AutoOverwrite.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.AutoOverwrite.Location = new System.Drawing.Point(45, 117);
+            this.AutoOverwrite.Name = "AutoOverwrite";
+            this.AutoOverwrite.Size = new System.Drawing.Size(394, 26);
+            this.AutoOverwrite.TabIndex = 0;
+            this.AutoOverwrite.Text = "Overwrite existing";
+            this.AutoOverwrite.UseVisualStyleBackColor = false;
+            this.AutoOverwrite.CheckedChanged += new System.EventHandler(this.AutoDelete_CheckedChanged);
+            this.AutoOverwrite.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            this.AutoOverwrite.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
+            // 
+            // PWBox
+            // 
+            this.PWBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
+            this.PWBox.Enabled = false;
+            this.PWBox.ForeColor = System.Drawing.Color.White;
+            this.PWBox.Location = new System.Drawing.Point(35, 414);
+            this.PWBox.Name = "PWBox";
+            this.PWBox.Size = new System.Drawing.Size(414, 26);
+            this.PWBox.TabIndex = 4;
+            this.PWBox.Text = "Your;Commonly;Used;Zip;passwords";
+            this.PWBox.Click += new System.EventHandler(this.PWBox_Enter);
+            this.PWBox.Enter += new System.EventHandler(this.PWBox_Enter);
+            this.PWBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PWBox_KeyPress);
+            this.PWBox.Leave += new System.EventHandler(this.PWBox_Leave);
+            this.PWBox.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            this.PWBox.MouseHover += new System.EventHandler(this.showSettings_MouseHover);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.label1.ForeColor = System.Drawing.Color.PaleTurquoise;
+            this.label1.Location = new System.Drawing.Point(107, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(270, 44);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "All Legit Settings\r\n(These save automatically)";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label1.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            this.label1.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
+            // 
+            // Close2Tray
+            // 
+            this.Close2Tray.AutoSize = true;
+            this.Close2Tray.BackColor = System.Drawing.Color.Transparent;
+            this.Close2Tray.Dock = System.Windows.Forms.DockStyle.Top;
+            this.Close2Tray.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
+            this.Close2Tray.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.Close2Tray.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.Close2Tray.Location = new System.Drawing.Point(45, 143);
+            this.Close2Tray.Name = "Close2Tray";
+            this.Close2Tray.Size = new System.Drawing.Size(394, 26);
+            this.Close2Tray.TabIndex = 9;
+            this.Close2Tray.Text = "Close to system tray";
+            this.Close2Tray.UseVisualStyleBackColor = false;
+            this.Close2Tray.CheckedChanged += new System.EventHandler(this.Close2Tray_CheckedChanged_1);
+            // 
+            // zipPWLabel
+            // 
+            this.zipPWLabel.AutoSize = true;
+            this.zipPWLabel.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.zipPWLabel.ForeColor = System.Drawing.Color.PaleTurquoise;
+            this.zipPWLabel.Location = new System.Drawing.Point(47, 382);
+            this.zipPWLabel.Name = "zipPWLabel";
+            this.zipPWLabel.Size = new System.Drawing.Size(390, 22);
+            this.zipPWLabel.TabIndex = 9;
+            this.zipPWLabel.Text = "Archive passwords - Use ; to separate.";
+            this.zipPWLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.zipPWLabel.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            this.zipPWLabel.MouseHover += new System.EventHandler(this.settingsP_MouseHover);
+            // 
+            // AutoExtract
+            // 
+            this.AutoExtract.AutoSize = true;
+            this.AutoExtract.BackColor = System.Drawing.Color.Transparent;
+            this.AutoExtract.Dock = System.Windows.Forms.DockStyle.Top;
+            this.AutoExtract.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
+            this.AutoExtract.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.AutoExtract.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.AutoExtract.Location = new System.Drawing.Point(45, 169);
+            this.AutoExtract.Name = "AutoExtract";
+            this.AutoExtract.Size = new System.Drawing.Size(394, 26);
+            this.AutoExtract.TabIndex = 10;
+            this.AutoExtract.Text = "Extract finished";
+            this.AutoExtract.UseVisualStyleBackColor = false;
+            this.AutoExtract.CheckedChanged += new System.EventHandler(this.AutoExtract_CheckedChanged_1);
+            this.AutoExtract.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            // 
+            // updateNow
+            // 
+            this.updateNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.updateNow.BackColor = System.Drawing.Color.Transparent;
+            this.updateNow.FlatAppearance.BorderColor = System.Drawing.Color.PaleTurquoise;
+            this.updateNow.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkSeaGreen;
+            this.updateNow.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkSlateGray;
+            this.updateNow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.updateNow.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
+            this.updateNow.ForeColor = System.Drawing.Color.PaleTurquoise;
+            this.updateNow.Location = new System.Drawing.Point(45, 329);
+            this.updateNow.Name = "updateNow";
+            this.updateNow.Size = new System.Drawing.Size(212, 28);
+            this.updateNow.TabIndex = 2;
+            this.updateNow.Text = "Check if update is available now";
+            this.updateNow.UseVisualStyleBackColor = false;
+            this.updateNow.Click += new System.EventHandler(this.updateNow_Click);
+            // 
+            // extractNested
+            // 
+            this.extractNested.AutoSize = true;
+            this.extractNested.BackColor = System.Drawing.Color.Transparent;
+            this.extractNested.Dock = System.Windows.Forms.DockStyle.Top;
+            this.extractNested.Enabled = false;
+            this.extractNested.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
+            this.extractNested.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.extractNested.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.extractNested.Location = new System.Drawing.Point(45, 195);
+            this.extractNested.Name = "extractNested";
+            this.extractNested.Size = new System.Drawing.Size(394, 26);
+            this.extractNested.TabIndex = 14;
+            this.extractNested.Text = "Extract nested archives";
+            this.extractNested.UseVisualStyleBackColor = false;
+            this.extractNested.CheckedChanged += new System.EventHandler(this.extractNested_CheckedChanged);
+            // 
+            // autoDelZips
+            // 
+            this.autoDelZips.AutoSize = true;
+            this.autoDelZips.BackColor = System.Drawing.Color.Transparent;
+            this.autoDelZips.Dock = System.Windows.Forms.DockStyle.Top;
+            this.autoDelZips.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
+            this.autoDelZips.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.autoDelZips.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.autoDelZips.Location = new System.Drawing.Point(45, 221);
+            this.autoDelZips.Name = "autoDelZips";
+            this.autoDelZips.Size = new System.Drawing.Size(394, 26);
+            this.autoDelZips.TabIndex = 15;
+            this.autoDelZips.Text = "Delete extracted archives";
+            this.autoDelZips.UseVisualStyleBackColor = false;
+            this.autoDelZips.CheckedChanged += new System.EventHandler(this.autoDelZips_CheckedChanged_1);
+            // 
+            // disableNotiesBox
+            // 
+            this.disableNotiesBox.AutoSize = true;
+            this.disableNotiesBox.BackColor = System.Drawing.Color.Transparent;
+            this.disableNotiesBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.disableNotiesBox.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
+            this.disableNotiesBox.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.disableNotiesBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.disableNotiesBox.Location = new System.Drawing.Point(45, 247);
+            this.disableNotiesBox.Name = "disableNotiesBox";
+            this.disableNotiesBox.Size = new System.Drawing.Size(394, 26);
+            this.disableNotiesBox.TabIndex = 16;
+            this.disableNotiesBox.Text = "Disable Windows Notifications";
+            this.disableNotiesBox.UseVisualStyleBackColor = false;
+            this.disableNotiesBox.CheckedChanged += new System.EventHandler(this.disableNotiesBox_CheckedChanged);
+            // 
+            // removeURLs
+            // 
+            this.removeURLs.AutoSize = true;
+            this.removeURLs.BackColor = System.Drawing.Color.Transparent;
+            this.removeURLs.Dock = System.Windows.Forms.DockStyle.Top;
+            this.removeURLs.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
+            this.removeURLs.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.removeURLs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.removeURLs.Location = new System.Drawing.Point(45, 273);
+            this.removeURLs.Name = "removeURLs";
+            this.removeURLs.Size = new System.Drawing.Size(394, 26);
+            this.removeURLs.TabIndex = 18;
+            this.removeURLs.Text = "Don\'t download URL files";
+            this.removeURLs.UseVisualStyleBackColor = false;
+            this.removeURLs.CheckedChanged += new System.EventHandler(this.removeURLs_CheckedChanged);
+            // 
+            // autoUpdateBox
+            // 
+            this.autoUpdateBox.AutoSize = true;
+            this.autoUpdateBox.BackColor = System.Drawing.Color.Transparent;
+            this.autoUpdateBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.autoUpdateBox.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlText;
+            this.autoUpdateBox.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
+            this.autoUpdateBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(80)))));
+            this.autoUpdateBox.Location = new System.Drawing.Point(45, 299);
+            this.autoUpdateBox.Name = "autoUpdateBox";
+            this.autoUpdateBox.Size = new System.Drawing.Size(394, 26);
+            this.autoUpdateBox.TabIndex = 19;
+            this.autoUpdateBox.Text = "Automatically update on launch";
+            this.autoUpdateBox.UseVisualStyleBackColor = false;
+            this.autoUpdateBox.CheckedChanged += new System.EventHandler(this.autoUpdateBox_CheckedChanged);
+            // 
+            // settingsP
+            // 
+            this.settingsP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.settingsP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(10)))), ((int)(((byte)(5)))));
+            this.settingsP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.settingsP.Controls.Add(this.autoUpdateBox);
+            this.settingsP.Controls.Add(this.removeURLs);
+            this.settingsP.Controls.Add(this.disableNotiesBox);
+            this.settingsP.Controls.Add(this.autoDelZips);
+            this.settingsP.Controls.Add(this.extractNested);
+            this.settingsP.Controls.Add(this.updateNow);
+            this.settingsP.Controls.Add(this.AutoExtract);
+            this.settingsP.Controls.Add(this.zipPWLabel);
+            this.settingsP.Controls.Add(this.Close2Tray);
+            this.settingsP.Controls.Add(this.label1);
+            this.settingsP.Controls.Add(this.PWBox);
+            this.settingsP.Controls.Add(this.AutoOverwrite);
+            this.settingsP.Controls.Add(this.AutoDLBox);
+            this.settingsP.Controls.Add(this.RemDL);
+            this.settingsP.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.settingsP.Location = new System.Drawing.Point(321, 12);
+            this.settingsP.Name = "settingsP";
+            this.settingsP.Padding = new System.Windows.Forms.Padding(45, 65, 45, 45);
+            this.settingsP.Size = new System.Drawing.Size(488, 472);
+            this.settingsP.TabIndex = 13;
+            this.settingsP.Visible = false;
+            this.settingsP.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
+            this.settingsP.MouseHover += new System.EventHandler(this.showSettings_MouseHover);
+            // 
+            // selectTorrent
+            // 
+            this.selectTorrent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.selectTorrent.BackColor = System.Drawing.Color.Transparent;
+            this.selectTorrent.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.selectTorrent.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkSeaGreen;
+            this.selectTorrent.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkSlateGray;
+            this.selectTorrent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.selectTorrent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
+            this.selectTorrent.ForeColor = System.Drawing.SystemColors.Control;
+            this.selectTorrent.Location = new System.Drawing.Point(12, 644);
+            this.selectTorrent.Name = "selectTorrent";
+            this.selectTorrent.Size = new System.Drawing.Size(159, 25);
+            this.selectTorrent.TabIndex = 2;
+            this.selectTorrent.Text = "Select torrent file";
+            this.selectTorrent.UseVisualStyleBackColor = false;
+            this.selectTorrent.Click += new System.EventHandler(this.selectTorrent_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -743,6 +780,7 @@
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.PasteButton);
+            this.Controls.Add(this.selectTorrent);
             this.Controls.Add(this.CopyLinks);
             this.Controls.Add(this.startDownloads);
             this.Controls.Add(this.listView1);
@@ -761,13 +799,13 @@
             this.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             this.MouseLeave += new System.EventHandler(this.settingsP_MouseLeave);
             this.Resize += new System.EventHandler(this.MainWindow_Resize_1);
-            this.settingsP.ResumeLayout(false);
-            this.settingsP.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncheckAll)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CheckAll)).EndInit();
             this.splashPanel.ResumeLayout(false);
             this.splashPanel.PerformLayout();
+            this.settingsP.ResumeLayout(false);
+            this.settingsP.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -778,33 +816,19 @@
         private System.Windows.Forms.Button SetDLDIR;
         private System.Windows.Forms.Button PasteButton;
         private System.Windows.Forms.CheckBox StayOnTopCheckbox;
-        private System.Windows.Forms.TextBox PWBox;
         private System.Windows.Forms.TextBox HotKeyBox;
-        private System.Windows.Forms.CheckBox AutoDLBox;
-        private System.Windows.Forms.CheckBox AutoOverwrite;
-        private System.Windows.Forms.Panel settingsP;
-        private System.Windows.Forms.CheckBox RemDL;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button HotKeyBtn;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button startDownloads;
         private System.Windows.Forms.Button CopyLinks;
         private System.Windows.Forms.Button ClearButton;
         private System.Windows.Forms.ProgressBar dlProg;
-        private System.Windows.Forms.CheckBox AutoExtract;
-        private System.Windows.Forms.CheckBox Close2Tray;
         private System.Windows.Forms.PictureBox UncheckAll;
         private System.Windows.Forms.PictureBox CheckAll;
         public new System.Windows.Forms.Button CancelButton;
-        private System.Windows.Forms.Label zipPWLabel;
         public System.Windows.Forms.Label DownloadingText;
         private System.Windows.Forms.CheckBox OpenDirBox;
         public System.Windows.Forms.NotifyIcon ALTrayIcon;
-        private System.Windows.Forms.Button updateNow;
-        private System.Windows.Forms.CheckBox autoUpdateBox;
-        private System.Windows.Forms.CheckBox disableNotiesBox;
-        private System.Windows.Forms.CheckBox autoDelZips;
-        private System.Windows.Forms.CheckBox extractNested;
         private System.Windows.Forms.ColumnHeader FileName;
         private System.Windows.Forms.ColumnHeader URL;
         private System.Windows.Forms.ColumnHeader Group;
@@ -815,6 +839,22 @@
         private System.Windows.Forms.Label SplashText;
         private System.Windows.Forms.Label changeLog;
         public System.Windows.Forms.Panel splashPanel;
+        private System.Windows.Forms.CheckBox RemDL;
+        private System.Windows.Forms.CheckBox AutoDLBox;
+        private System.Windows.Forms.CheckBox AutoOverwrite;
+        private System.Windows.Forms.TextBox PWBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox Close2Tray;
+        private System.Windows.Forms.Label zipPWLabel;
+        private System.Windows.Forms.CheckBox AutoExtract;
+        private System.Windows.Forms.Button updateNow;
+        private System.Windows.Forms.CheckBox extractNested;
+        private System.Windows.Forms.CheckBox autoDelZips;
+        private System.Windows.Forms.CheckBox disableNotiesBox;
+        private System.Windows.Forms.CheckBox removeURLs;
+        private System.Windows.Forms.CheckBox autoUpdateBox;
+        private System.Windows.Forms.Panel settingsP;
+        private System.Windows.Forms.Button selectTorrent;
     }
 }
 

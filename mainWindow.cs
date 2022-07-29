@@ -212,20 +212,9 @@ namespace ALL_LEGIT
         }
         public static string patchNotes =
 
-            " • Fixed file names containing encoded url symbols (%20, etc) by using UrlDecode.\n" +
-            " • MAJOR BUG FIXED - When AllDebrid converts a magnet that has folders of\n" +
-            "    files it assigns each file in the folder the same \"filename\" in the API. This\n" +
-            "    caused files in folders to lose their actual name, which causes a myriad of\n" +
-            "    issues, this is now fixed.\n" +
-            " • Increased max number of connections, should allow for use of full bandwidth.\n" +
-            " • Open when done will first try to open the subdirectory of the last downloaded item,\n" +
-            "    if that fails it will open All Legit Download dir as it did before.\n" +
-            " • Added auto update toggle + update now button in settings.\n" +
-            " • Added fix + UI messaging for extraction failures due to incorrect archive password.\n" +
-            " • Fixed Stay on Toggle setting not persisting on next launch.\n" +
-            " • Added extract nested archives option.\n" +
-            " • Right clicking or middle clicking an item will remove it from the queue. If the item\n" +
-            "    is downloading it will stop that download.\n" +
+            " • Added torrent file converter via Select Torrent File button!\n" +
+            " • Added option in settings to exclude URL files!\n" +
+            " • Fixed bit of code I forgot to update to new filenaming system that broke auto extract.\n" +
             "\n";
         public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
@@ -235,8 +224,8 @@ namespace ALL_LEGIT
             Updater.Update();
 
             var cme = new System.Net.Configuration.ConnectionManagementElement();
-            cme.MaxConnection = 1000;
-            System.Net.ServicePointManager.DefaultConnectionLimit = 1000;
+            cme.MaxConnection = 99999;
+            System.Net.ServicePointManager.DefaultConnectionLimit = 99999;
  
             StayOnTopCheckbox.Checked = Properties.Settings.Default.TopMost;
  
@@ -475,7 +464,7 @@ namespace ALL_LEGIT
                 if (!currentGroup.Contains(MagnetNAME) && !Properties.Settings.Default.AutoOverwrite)
                 {
                     currentGroup = MagnetNAME;
-                    DialogResult Overwrite1 = MessageBox.Show(new Form { TopMost = true }, $"Files found, do you want to overwrite all files from this batch of links({Utilities.RemoveEverythingAfterLast(MagnetNAME, ".")})", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult Overwrite1 = MessageBox.Show(new Form { TopMost = true }, $"Files found, do you want to overwrite all files from this batch of links({MagnetNAME})", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (Overwrite1 == DialogResult.Yes)
                     {
                         overwrite = true;
@@ -705,6 +694,7 @@ namespace ALL_LEGIT
             URLDownloadToFile(null, url, destinationFullPathWithName, 0, IntPtr.Zero);
             return new FileInfo(destinationFullPathWithName);
         }
+        public static string LinkType = "";
         public static string currentLink = "";
         public static bool showingconversion = false;
         public async void DoAsyncConversion()
@@ -801,11 +791,13 @@ namespace ALL_LEGIT
                         }
                         else
                         {
+                            LinkType = "M";
                             string magnetName = obj.data.magnets[0].name.ToString();
                             string magnetID = obj.data.magnets[0].id.ToString();
                             string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}&id={magnetID}";
 
                             //WHILE LOOP START
+                  
 
 
                             obj = getJson(MagnetPoll);
@@ -822,6 +814,7 @@ namespace ALL_LEGIT
                                 key = obj.data.magnets;
                                 if (key.id.ToString().Equals(magnetID))
                                 {
+                                    string seeders = key.seeders.ToString();
                                     string MagnetStatus = key.status.ToString();
                                     if (MagnetStatus.Equals("Ready"))
                                     {
@@ -835,27 +828,46 @@ namespace ALL_LEGIT
                                             if (torrentDLING)
                                             {
                                                 getJson($"magnet/delete?agent={apiNAME}&apikey={APIKEY}&id={magnetID}");
-                                                this.Invoke(() =>
+                                                if (int.Parse(seeders) == 0)
                                                 {
-                                                    Program.form.DownloadingText.Text = "Magnet removed from profile!";
-                                                });
-                                                this.Invoke(() =>
-                                                {
-                                                    Program.form.DownloadingText.Text = $"";
-                                                });
-                                                this.Invoke(() =>
-                                                {
-                                                    CancelButton.Visible = false;
-                                                    DownloadingText.Text = $"";
-                                                    dlProg.Value = 0;
-                                                });
-                                                torrentDLING = false;
-                                                cancel = false;
-                                                fileDownloading = "";
-                                                CurrentlyShowingID = 0;
-                                                convertingMag = false;
 
-                                                return;
+                                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                                    {
+                                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Magnet removed from profile!", ToolTipIcon.None);
+
+                                                    }
+                                                    this.Invoke(() =>
+                                                    {
+                                                        Program.form.DownloadingText.Text = "Magnet removed from profile!";
+                                                    });
+                                                    this.Invoke(() =>
+                                                    {
+                                                        Program.form.DownloadingText.Text = $"";
+                                                    });
+                                                    this.Invoke(() =>
+                                                    {
+                                                        CancelButton.Visible = false;
+                                                        DownloadingText.Text = $"";
+                                                        dlProg.Value = 0;
+                                                    });
+                                                    torrentDLING = false;
+                                                    cancel = false;
+                                                    fileDownloading = "";
+                                                    CurrentlyShowingID = 0;
+                                                    convertingMag = false;
+                                                }
+                                                else
+                                                {
+                                                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                                                    {
+                                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Cannot remove magnet that has already started downloading!", ToolTipIcon.None);
+
+                                                    }
+                                                    this.Invoke(() =>
+                                                    {
+                                                        Program.form.DownloadingText.Text = "Cannot remove magnet that has already started downloading!";
+                                                    });
+                                                }
                                             }
                                             await Task.Delay(5000);
                                         }
@@ -907,7 +919,7 @@ namespace ALL_LEGIT
 
                                                 });
 
-                                                string seeders = key.seeders.ToString();
+                                                seeders = key.seeders.ToString();
                                                 DownloadSpeed = double.Parse(key.downloadSpeed.ToString());
                                                 double DownloadSpeed2 = (DownloadSpeed / 1024) / 1024;
                                                 string DLS;
@@ -1030,6 +1042,13 @@ namespace ALL_LEGIT
                                                 {
                                                     foreach (ListViewItem item in listView1.Items)
                                                     {
+                                                        if (Properties.Settings.Default.ExcludeURLS)
+                                                        {
+                                                            if (unlockedLink.EndsWith("url"))
+                                                            {
+                                                                skip = true;
+                                                            }
+                                                        }
                                                         if (item.SubItems[1].Text.Equals(unlockedLink) && item.SubItems[2].Text.Equals(magnetName))
                                                         {
                                                             skip = true;
@@ -1041,20 +1060,17 @@ namespace ALL_LEGIT
                                                                     Program.form.DownloadingText.Text = "Already in the queue! Skipping...";
                                                                 });
                                                         }
-
                                                     }
                                                     if (!skip)
                                                     {
-
-
                                                         string[] row = { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""), unlockedLink, magnetName, FileSizeInt };
                                                         ListViewItem item = new ListViewItem(row);
                                                         listView1.Items.Add(item);
                                                         item.Checked = true;
                                                     }
 
-                                                    if (listView1.Items.Count == 0)
-                                                    {
+                                                    if (listView1.Items.Count == 0 && !skip) 
+                                                    {        
                                                         this.Invoke(() =>
                                                         {
                                                             listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""),
@@ -1089,7 +1105,6 @@ namespace ALL_LEGIT
                                         {
                                             Program.form.DownloadingText.Text = "";
                                         });
-
                                     }
                                 }
                             }
@@ -1323,7 +1338,8 @@ namespace ALL_LEGIT
                                 {
                                     foreach (ListViewItem item in listView1.Items)
                                     {
-                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Text.Equals(FileNameNoExt))
+                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Text.Equals(FileNameNoExt) || 
+                                        unlockedLink.EndsWith(".url"))
                                         {
                                             skip = true;
                                         }
@@ -1333,15 +1349,8 @@ namespace ALL_LEGIT
                                         addedlinks++;
                                         listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""),
                                             unlockedLink, FileNameNoExt, FileSizeInt }));
-
                                     }
-                                    if (listView1.Items.Count == 0)
-                                    {
-                                        addedlinks++;
-                                        listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""),
-                                            unlockedLink, FileNameNoExt, FileSizeInt }));
-
-                                    }
+                                    
                                     foreach (ListViewItem item in listView1.Items)
                                     {
                                         if (item.SubItems[1].Text.Equals(unlockedLink))
@@ -1349,6 +1358,7 @@ namespace ALL_LEGIT
                                             item.Checked = true;
                                         }
                                     }
+                                    skip = false;
                                 });
                             }
 
@@ -1563,8 +1573,8 @@ namespace ALL_LEGIT
 
                     if (AutoExtract.Checked)
                     {
-                        dlsPara += $"{Properties.Settings.Default.DownloadDir}\\{Utilities.RemoveEverythingAfterLast(item.SubItems[2].Text, ".")}\\{item.SubItems[0].Text}";
-                        DLList += $"{item.SubItems[0].Text};{Utilities.RemoveEverythingAfterLast(item.SubItems[2].Text, ".")}\n";
+                        dlsPara += $"{Properties.Settings.Default.DownloadDir}\\{item.SubItems[2].Text}\\{item.SubItems[0].Text}";
+                        DLList += $"{item.SubItems[0].Text};{item.SubItems[2].Text}\n";
                     }
                 }
                 if (!muteoutputcancelled)
@@ -2513,6 +2523,59 @@ namespace ALL_LEGIT
                     }
                     listView1.EndUpdate();
                 }
+            }
+        }
+
+        private void removeURLs_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ExcludeURLS = removeURLs.Checked;
+            Properties.Settings.Default.Save();
+            if (removeURLs.Checked)
+            {
+                removeURLs.ForeColor = Color.FromArgb(192, 255, 192);
+            }
+            else
+            {
+                removeURLs.ForeColor = Color.FromArgb(0, 100, 80);
+            }
+        }
+
+        private void selectTorrent_Click(object sender, EventArgs e)
+        {
+            string Error = "";
+            string Output = "";
+            OpenFileDialog openDialog = new OpenFileDialog();
+            openDialog.Title = "Select A Torrent File";
+            openDialog.Filter = "Torrent Files (*.torrent)|*.torrent";
+            if (openDialog.ShowDialog() == DialogResult.OK)
+            {
+                string file = openDialog.FileName;
+
+                System.Diagnostics.Process x2 = new System.Diagnostics.Process();
+                ProcessStartInfo pro = new ProcessStartInfo();
+                pro.WindowStyle = ProcessWindowStyle.Hidden;
+                pro.UseShellExecute = false;
+                pro.CreateNoWindow = true;
+                pro.RedirectStandardError = true;
+                pro.RedirectStandardOutput = true;
+                pro.FileName = $"{Environment.CurrentDirectory}\\_bin\\transmission-show.exe";
+                pro.Arguments = $"-m \"{file}\"";
+                x2.StartInfo = pro;
+                x2.Start();
+                Error = x2.StandardError.ReadToEnd();
+                Output = x2.StandardOutput.ReadToEnd();
+                if (!x2.HasExited)
+                    x2.WaitForExit();
+                if (String.IsNullOrEmpty(Error))
+                {
+                    Clipboard.SetText(Output);
+                    DoAsyncConversion();
+                }
+
+            }
+            else
+            {
+                return;
             }
         }
     }

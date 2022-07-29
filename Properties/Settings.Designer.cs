@@ -262,5 +262,17 @@ namespace ALL_LEGIT.Properties {
                 this["extractNested"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ExcludeURLS {
+            get {
+                return ((bool)(this["ExcludeURLS"]));
+            }
+            set {
+                this["ExcludeURLS"] = value;
+            }
+        }
     }
 }
