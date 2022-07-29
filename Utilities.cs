@@ -141,11 +141,20 @@ namespace ALL_LEGIT
                     {
                         File.Delete(sourceArchive);
                     }
+                    if (Directory.GetFiles(destination, "*.*", SearchOption.AllDirectories).Length == 0)
+                        {
+                            Directory.Delete(destination, true);
+                        }
                     Program.form.listView1.EndUpdate();
                
                 }
                 if (fails == PWArray.Length)
                 {
+                    if (Directory.GetFiles(destination, "*.*", SearchOption.AllDirectories).Length == 0)
+                    {
+                        Directory.Delete(destination, true);
+                    }
+
                     FailedExtract += sourceArchive;
                     MessageBox.Show(new Form { TopMost = true }, "Archive is passworded and supplied passwords(if any)" +
                         " did not work.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);

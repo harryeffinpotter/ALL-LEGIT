@@ -1708,7 +1708,14 @@ namespace ALL_LEGIT
                                         Utilities.FailedExtract = Utilities.FailedExtract.Replace(file, "");
 
                                     }
+                                    string parent = Utilities.get_parent_dir_path(file);
+                                   if (Directory.GetFiles(parent, "*.*", SearchOption.AllDirectories).Length == 0)
+                                    {
+                                        Directory.Delete(parent, true);
+                                    }
                                 }
+
+      
                             }
 
                         });
