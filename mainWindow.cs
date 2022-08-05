@@ -220,7 +220,7 @@ namespace ALL_LEGIT
             " • Fixed bug that caused torrent files to download multiple times.\n" +
             " • Fixed crash caused by All Legit attempting to delete zip while it is still extracting.\n" +
             " • Fixed auto download when posting multiple magnets.\n" +
-            " • Fixed No Internet crash." +
+            " • Fixed No Internet crash.\n" +
             "\n";
         public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
