@@ -766,6 +766,7 @@
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(30)))), ((int)(((byte)(20)))));
             this.ClientSize = new System.Drawing.Size(821, 679);
+            this.Controls.Add(this.settingsP);
             this.Controls.Add(this.splashPanel);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.CheckAll);
@@ -785,7 +786,6 @@
             this.Controls.Add(this.startDownloads);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.DownloadingText);
-            this.Controls.Add(this.settingsP);
             this.ForeColor = System.Drawing.Color.NavajoWhite;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(723, 508);

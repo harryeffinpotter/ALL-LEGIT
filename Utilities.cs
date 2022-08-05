@@ -73,7 +73,8 @@ namespace ALL_LEGIT
             else
                 return "";
         }
-        public static void ExtractFile(string sourceArchive, string destination)
+        public static bool IsExtracting = false;
+        public static async void ExtractFile(string sourceArchive, string destination)
         {
             if (!Directory.Exists(destination))
             {
@@ -99,11 +100,13 @@ namespace ALL_LEGIT
                 {
                     pro.Arguments = string.Format("x \"{0}\" -aoa -o\"{1}\"", sourceArchive, destination) + $" -p\"{PW}\"";
                     x2.StartInfo = pro;
+                    IsExtracting = true;
                     x2.Start();
                     Error = x2.StandardError.ReadToEnd();
 
                     if (!x2.HasExited)
                         x2.WaitForExit();
+                    IsExtracting = false;
                     success = true;
                 }
                 catch { }
@@ -121,6 +124,7 @@ namespace ALL_LEGIT
                         if (file.Contains(".7z.") || file.Contains(".rar.") || file.EndsWith(".7z")
                                 || file.EndsWith(".rar") || file.EndsWith(".zip") || file.StartsWith(filenopath) || file.Contains(".part"))
                         {
+                          
                             if (File.Exists(file))
                             {
                                 File.Delete(file);
@@ -136,6 +140,10 @@ namespace ALL_LEGIT
                                 }
                             }
                         }
+                    }
+                    while (IsExtracting)
+                    {
+                        await Task.Delay(100);
                     }
                     if (File.Exists(sourceArchive))
                     {

@@ -214,14 +214,13 @@ namespace ALL_LEGIT
         public static string patchNotes =
 
 
-            " • If extracted zip is not muilti parted it will make a subdir named after it.\n" +
-            " • If extracted multi-part archive creates unnecessary subdir, subdir will be moved up a layer.\n" +
-            " • Now when a zip is extracted that is not muilti parted it will make a subdir named after it.\n" +
-            " • Added torrent file converter via Select Torrent File button!\n" +
-            " • Added option in settings to exclude URL files!\n" +
-            " • Fixed bit of code I forgot to update to new filenaming system that broke auto extract.\n" +
-            " • Removed a ton of unnecessary files in _bin\n" +
-            " • Added code to automatically obtain new _bin folder(with new required exe/dlls) and extract it.\n" +
+            " • Fixed bug that would stop Auto Download from working after torrent conversion.\n" +
+            " • Fiixed Exclude URLs setting.\n" +
+            " • Fixed bug that caused Always on Top to always be on at launch(please check/uncheck setting to reset it!)\n" +
+            " • Fixed bug that caused torrent files to download multiple times.\n" +
+            " • Fixed crash caused by All Legit attempting to delete zip while it is still extracting.\n" +
+            " • Fixed auto download when posting multiple magnets.\n" +
+            " • Fixed No Internet crash." +
             "\n";
         public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
@@ -242,6 +241,7 @@ namespace ALL_LEGIT
                 $" • Shortcut key works everywhere, even when app is minimized/closed to tray.";
             SplashText.Text = $"{patchNotes}";
             var converter = new KeysConverter();
+            removeURLs.Checked = Properties.Settings.Default.ExcludeURLS;
             HotKeyBox.Text = converter.ConvertToString(Properties.Settings.Default.HotKeyKeyData);
             OpenDirBox.Checked = Properties.Settings.Default.OpenDir;
             disableNotiesBox.Checked = Properties.Settings.Default.DisableNotifies;
@@ -308,12 +308,7 @@ namespace ALL_LEGIT
             }
             catch
             {
-                if (!cancel)
-                {
-                    MessageBox.Show(new Form { TopMost = true }, "Not able to access the internet, so cannot login... Exiting program.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    MessageBox.Show("Cant get online!");
-                    return null;
-                }
+             
                 return null;
             }
         }
@@ -521,7 +516,6 @@ namespace ALL_LEGIT
                             }
                         }
                         listView1.EndUpdate();
-                        listView1.Refresh();
 
 
                     }
@@ -630,7 +624,6 @@ namespace ALL_LEGIT
                         }
                     }
                     listView1.EndUpdate();
-                    listView1.Refresh();
                 });
 
 
@@ -653,7 +646,6 @@ namespace ALL_LEGIT
             isDownloading = false;
             fileDownloading = "";
             torrentDLING = false;
-            listView1.Refresh();
         }
 
         public static bool notdone = true;
@@ -1031,6 +1023,13 @@ namespace ALL_LEGIT
                                             try
                                             {
                                                 string unlockedLink = result.data.link.ToString();
+                                                if (Properties.Settings.Default.ExcludeURLS)
+                                                {
+                                                    if (unlockedLink.ToLower().EndsWith("url".ToLower()))
+                                                    {
+                                                        skip = true;
+                                                    }
+                                                }
                                                 double FileSize = double.Parse(result.data.filesize.ToString());
                                                 string FileSizeInt = "";
                                                 if ((FileSize / 1024 / 1024) > 1000)
@@ -1049,13 +1048,7 @@ namespace ALL_LEGIT
                                                 {
                                                     foreach (ListViewItem item in listView1.Items)
                                                     {
-                                                        if (Properties.Settings.Default.ExcludeURLS)
-                                                        {
-                                                            if (unlockedLink.EndsWith("url"))
-                                                            {
-                                                                skip = true;
-                                                            }
-                                                        }
+                                                    
                                                         if (item.SubItems[1].Text.Equals(unlockedLink) && item.SubItems[2].Text.Equals(magnetName))
                                                         {
                                                             skip = true;
@@ -1097,8 +1090,10 @@ namespace ALL_LEGIT
                                             dlProg.Value = 0;
                                         });
                                         convertingMag = false;
+
                                         torrentDLING = false;
                                         notdone = false;
+                                    
                                         Thread t35 = new Thread(() =>
                                         {
                                             Thread.Sleep(3000);
@@ -1108,6 +1103,7 @@ namespace ALL_LEGIT
                                         {
                                             await Task.Delay(100);
                                         }
+                                    
                                         this.Invoke(() =>
                                         {
                                             Program.form.DownloadingText.Text = "";
@@ -1177,8 +1173,7 @@ namespace ALL_LEGIT
                     }
                     await Task.Delay(100);
                 }
-
-
+         
             }
             cancel = false;
 
@@ -1236,6 +1231,9 @@ namespace ALL_LEGIT
                     Utilities.DecryptDLC();
 
                 }
+              
+     
+                
             }
             else if (pasted.ToLower().StartsWith("https://".ToLower()))
             {
@@ -1343,10 +1341,13 @@ namespace ALL_LEGIT
                                 bool skip = false;
                                 this.Invoke(() =>
                                 {
+                                    if (Properties.Settings.Default.ExcludeURLS && unlockedLink.ToLower().EndsWith(".url".ToLower()))
+                                    {
+                                        skip = true;
+                                    }
                                     foreach (ListViewItem item in listView1.Items)
                                     {
-                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Text.Equals(FileNameNoExt) ||
-                                        unlockedLink.EndsWith(".url"))
+                                        if (item.SubItems[0].Text.Equals(obj.data.filename.ToString()) && item.SubItems[2].Text.Equals(FileNameNoExt))
                                         {
                                             skip = true;
                                         }
@@ -1437,15 +1438,12 @@ namespace ALL_LEGIT
                             DownloadingText.Text = "Pasted information is not suppported.";
                     });
                 }
+                
+      
+                
             }
 
-            this.Invoke(() =>
-            {
-                listView1.Update();
-            });
-
-
-
+   
             if (filecryptinprog)
             {
                 string[] files = Directory.GetFiles($"{Environment.CurrentDirectory}\\_bin", "*.txt", SearchOption.TopDirectoryOnly);
@@ -1473,17 +1471,10 @@ namespace ALL_LEGIT
                     linkstoget = "";
                     filecryptinprog = false;
                 }
+
             }
             CancelButton.Visible = false;
-            if (listView1.CheckedItems.Count > 0 && !isDownloading)
-            {
-                if (Properties.Settings.Default.AutoDL)
-                {
-                    object sender = null;
-                    EventArgs e = new EventArgs();
-                    startDownloads_Click(sender, e);
-                }
-            }
+     
             Thread t34 = new Thread(() =>
             {
                 Thread.Sleep(3000);
@@ -1494,6 +1485,12 @@ namespace ALL_LEGIT
                 await Task.Delay(100);
             }
             DownloadingText.Text = "";
+            if (Properties.Settings.Default.AutoDL)
+            {
+                object sender = null;
+                EventArgs e = new EventArgs();
+                startDownloads_Click(sender, e);
+            }
         }
 
 
@@ -1513,17 +1510,18 @@ namespace ALL_LEGIT
 
         public async void startDownloads_Click(object sender, EventArgs e)
         {
-
-            endreached = false;
-
-            if (listView1.CheckedItems.Count == 0)
-            {
-                endreached = true;
-                return;
-            }
-
             string DLList = "";
-            CancelButton.Visible = true;
+            endreached = false;
+            this.Invoke(() =>
+            {
+                if (listView1.CheckedItems.Count == 0)
+                {
+                    endreached = true;
+                    return;
+                }
+                CancelButton.Visible = true;
+            });
+
             if (listView1.CheckedItems.Count > 0)
             {
                 if (Properties.Settings.Default.AutoOverwrite)
@@ -1550,8 +1548,8 @@ namespace ALL_LEGIT
                         //
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-                        await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text);
-                        DLSDir = Properties.Settings.Default.DownloadDir + "\\" + item.SubItems[2].Text;
+                        await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text.Replace(";", ""));
+                        DLSDir = Properties.Settings.Default.DownloadDir + "\\" + item.SubItems[2].Text.Replace(";", "");
                         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //
@@ -1582,8 +1580,8 @@ namespace ALL_LEGIT
 
                     if (AutoExtract.Checked)
                     {
-                        dlsPara += $"{Properties.Settings.Default.DownloadDir}\\{item.SubItems[2].Text}\\{item.SubItems[0].Text}";
-                        DLList += $"{item.SubItems[0].Text};{item.SubItems[2].Text}\n";
+                        dlsPara += $"{Properties.Settings.Default.DownloadDir}\\{item.SubItems[2].Text.Replace(";", "")}\\{item.SubItems[0].Text}";
+                        DLList += $"{item.SubItems[0].Text};{item.SubItems[2].Text.Replace(";", "")}\n";
                     }
                 }
                 if (!muteoutputcancelled)
@@ -1612,7 +1610,7 @@ namespace ALL_LEGIT
                                 {
 
                                     string[] DLS = FullDL.Split(';');
-                                    DLDir = Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString();
+                                    DLDir = Properties.Settings.Default.DownloadDir + "\\" + DLS[1].ToString().Replace(";", "");
                                     if (DLS.ToString().Contains(".rar") && DLS.ToString().Contains(".01"))
                                     {
                                         isMultiPart = true;
@@ -1687,7 +1685,7 @@ namespace ALL_LEGIT
                      
                             if (Properties.Settings.Default.extractNested)
                             {  
-                                string[] files = Directory.GetFiles(DLDir, "*.*", SearchOption.AllDirectories);
+                                string[] files = Directory.GetFiles(Properties.Settings.Default.DownloadDir, "*.*", SearchOption.AllDirectories);
                                 foreach (string file in files)
                                 {
                                     if (!Utilities.FailedExtract.Contains(file))
@@ -1765,12 +1763,16 @@ namespace ALL_LEGIT
                                 DownloadingText.Text = $"Downloads finished!";
                         });
                     }
-                    Thread t34 = new Thread(() =>
+                    Thread t35 = new Thread(() =>
                     {
+                        this.Invoke(() =>
+                        {
+                            listView1.Refresh();
+                        });
                         Thread.Sleep(3000);
                     });
-                    t34.Start();
-                    while (t34.IsAlive)
+                    t35.Start();
+                    while (t35.IsAlive)
                     {
                         await Task.Delay(100);
                     }
@@ -1787,11 +1789,18 @@ namespace ALL_LEGIT
                 }
                 isMultiPart = false;
             }
+            if (Properties.Settings.Default.AutoDL)
+            {
+                if (listView1.CheckedItems.Count > 0)
+                {
+                    startDownloads_Click(sender, e);
+                    return;
+                }
+            }
             fileDownloading = "";
             System.GC.Collect();
             System.GC.WaitForPendingFinalizers();
             muteoutputcancelled = false;
-            isDownloading = false;
             fileDownloading = "";
             currentGroup = "";
             cancelledGroup = "";
@@ -1799,6 +1808,15 @@ namespace ALL_LEGIT
             cancel = false;
             Utilities.FailedExtract = "";
             startDownloads.Enabled = true;
+            Thread t34 = new Thread(() =>
+            {
+                Thread.Sleep(3000);
+            });
+            t34.Start();
+            while (t34.IsAlive)
+            {
+                await Task.Delay(100);
+            }
             if (listView1.CheckedItems.Count == 0)
             {
                 this.Invoke(() =>
@@ -1864,7 +1882,6 @@ namespace ALL_LEGIT
                     }
                 }
                 listView1.EndUpdate();
-                listView1.Refresh();
                 forclip = forclip.Trim('\r', '\n');
                 try
                 {
@@ -1975,8 +1992,6 @@ namespace ALL_LEGIT
                     }
                 }
                 listView1.EndUpdate();
-                listView1.Update();
-                listView1.Refresh();
             }
             startDownloads.Enabled = true;
             Thread t1 = new Thread(() =>
@@ -2209,6 +2224,9 @@ namespace ALL_LEGIT
         public static bool InSettingsP = false;
         public static bool TrayNotify = false;
         public Stopwatch stopwatch = Stopwatch.StartNew();
+        private EventArgs e;
+        private object sender;
+
         public async void settingsP_MouseLeave(object sender, EventArgs e)
         {
             TrayNotify = true;
@@ -2237,6 +2255,7 @@ namespace ALL_LEGIT
         private void StayOnTopCheckbox_CheckedChanged_1(object sender, EventArgs e)
         {
             Properties.Settings.Default.TopMost = StayOnTopCheckbox.Checked;
+            Properties.Settings.Default.Save();
             if (StayOnTopCheckbox.Checked)
             {
                 this.TopMost = true;
