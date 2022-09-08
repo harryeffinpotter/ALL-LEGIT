@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Diagnostics; 
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -231,8 +231,6 @@ namespace ALL_LEGIT
                 this.Hide();
                 Program.form.BringToFront();
                 LoadedOnce = false;
-                Program.form.TopMost = true;
-                Program.form.TopMost = true;
                 Program.form.BringToFront();
 
             }

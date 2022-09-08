@@ -54,11 +54,12 @@ namespace ALL_LEGIT
                 client.DownloadFile("https://github.com/harryeffinpotter/ALL-LEGIT/raw/main/_bin.7z", "_bin.7z");
                 if (Directory.Exists(_bin))
                 {
-                    Directory.Delete(_bin, true);
+                    _bin.DirectoryRecycle();
                     Directory.CreateDirectory(_bin);
                 }
                 ExtractFile2(Environment.CurrentDirectory + "\\_bin.7z", _bin);
-                File.Delete(Environment.CurrentDirectory + "\\_bin\\_bin.7z");
+                string filetodelete = Environment.CurrentDirectory + "\\_bin\\_bin.7z";
+                filetodelete.FileRecycle();
             }
         }
         public static string get_parent_dir_path(string path)
@@ -127,7 +128,7 @@ namespace ALL_LEGIT
                           
                             if (File.Exists(file))
                             {
-                                File.Delete(file);
+                                file.FileRecycle();
                             }
                             foreach (ListViewItem item in Program.form.listView1.Items)
                             {
@@ -147,11 +148,11 @@ namespace ALL_LEGIT
                     }
                     if (File.Exists(sourceArchive))
                     {
-                        File.Delete(sourceArchive);
+                        sourceArchive.FileRecycle();
                     }
                     if (Directory.GetFiles(destination, "*.*", SearchOption.AllDirectories).Length == 0)
                         {
-                            Directory.Delete(destination, true);
+                           destination.DirectoryRecycle();
                         }
                     Program.form.listView1.EndUpdate();
                
@@ -160,7 +161,7 @@ namespace ALL_LEGIT
                 {
                     if (Directory.GetFiles(destination, "*.*", SearchOption.AllDirectories).Length == 0)
                     {
-                        Directory.Delete(destination, true);
+                        destination.DirectoryRecycle();
                     }
 
                     FailedExtract += sourceArchive;
@@ -217,7 +218,7 @@ namespace ALL_LEGIT
                 x.WaitForExit();
                 try
                 {
-                    File.Delete(currentDLCfile);
+                    currentDLCfile.FileRecycle();
                 }
                 catch
                 {

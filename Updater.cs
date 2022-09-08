@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Security.RightsManagement;
 using System.Windows.Forms;
 
 namespace ALL_LEGIT
@@ -14,7 +15,7 @@ namespace ALL_LEGIT
         private static string RawGitHubUrl;
         private static string GitHubUrl;
 
-        static readonly public string LocalVersion = "1.0.9";
+        static readonly public string LocalVersion = "1.1.0";
         public static string currentVersion = "";
         public static string currentHFVersion = "";
         public static string changelog = "";
@@ -78,7 +79,7 @@ namespace ALL_LEGIT
                 string config = $"{Environment.CurrentDirectory}\\All.Legit.exe.config";
                 if (File.Exists(config))
                 {
-                    File.Delete(config);
+                    config.FileRecycle();
                 }
                 fileClient.DownloadFile($"https://github.com/harryeffinpotter/ALL-LEGIT/raw/master/All.Legit.exe.config", $"All.Legit.exe.config");
                 fileClient.Dispose();

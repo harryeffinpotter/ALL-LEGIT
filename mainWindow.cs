@@ -135,8 +135,6 @@ namespace ALL_LEGIT
             InitializeComponent();
             intToolTips();
             Utilities.GetMissingFiles();
-            this.TopMost = true;
-            this.TopMost = false;
             this.components = new System.ComponentModel.Container();
             this.contextMenu1 = new System.Windows.Forms.ContextMenu();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
@@ -212,15 +210,8 @@ namespace ALL_LEGIT
 
         }
         public static string patchNotes =
-
-
-            " • Fixed bug that would stop Auto Download from working after torrent conversion.\n" +
-            " • Fiixed Exclude URLs setting.\n" +
-            " • Fixed bug that caused Always on Top to always be on at launch(please check/uncheck setting to reset it!)\n" +
-            " • Fixed bug that caused torrent files to download multiple times.\n" +
-            " • Fixed crash caused by All Legit attempting to delete zip while it is still extracting.\n" +
-            " • Fixed auto download when posting multiple magnets.\n" +
-            " • Fixed No Internet crash.\n" +
+            " • Changed all delete and overwrite functions to delete to RECYCLE BIN instead of fully deleting.\n" +
+            " • Fixed Stay on Top bug, FINALLY!\n" +
             "\n";
         public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
@@ -233,13 +224,12 @@ namespace ALL_LEGIT
             cme.MaxConnection = 99999;
             System.Net.ServicePointManager.DefaultConnectionLimit = 99999;
 
-            StayOnTopCheckbox.Checked = Properties.Settings.Default.TopMost;
-
-
+   
             changeLog.Text = $"{Updater.LocalVersion} Change log:\n\n";
             tipsText.Text = " • Click settings cog in top-right corner for auto downloads, auto extraction and more.\n" +
                 $" • Shortcut key works everywhere, even when app is minimized/closed to tray.";
             SplashText.Text = $"{patchNotes}";
+            StayOnTopCheckbox.Checked = Properties.Settings.Default.TopMost;
             var converter = new KeysConverter();
             removeURLs.Checked = Properties.Settings.Default.ExcludeURLS;
             HotKeyBox.Text = converter.ConvertToString(Properties.Settings.Default.HotKeyKeyData);
@@ -256,7 +246,6 @@ namespace ALL_LEGIT
                 PWBox.Text = Properties.Settings.Default.ZipPWS;
                 PWLIST = PWBox.Text;
             }
-            StayOnTopCheckbox.Checked = Properties.Settings.Default.TopMost;
             this.Invoke(() =>
             {
                 DownloadingText.Text = $"";
@@ -488,9 +477,8 @@ namespace ALL_LEGIT
 
                         if (File.Exists(DL))
                         {
-                            File.Delete(DL);
+                            DL.FileRecycle();
                         }
-
                     }
                     catch { }
                 }
@@ -573,14 +561,14 @@ namespace ALL_LEGIT
                 {
                     if (File.Exists(DL))
                     {
-                        File.Delete(DL);
+                        DL.FileRecycle();
                     }
                     if (Directory.Exists(DIR))
                     {
                         string[] files = Directory.GetFiles(DIR, "*.*", SearchOption.AllDirectories);
                         if (files.Length == 0)
                         {
-                            Directory.Delete(DIR);
+                            DIR.DirectoryRecycle();
                         }
                     }
                     if (webClient.IsBusy)
@@ -1461,7 +1449,7 @@ namespace ALL_LEGIT
                             }
 
                         }
-                        File.Delete(file);
+                        file.FileRecycle();
                     }
                 }
                 if (!String.IsNullOrWhiteSpace(linkstoget))
@@ -1709,7 +1697,7 @@ namespace ALL_LEGIT
                                     string parent = Utilities.get_parent_dir_path(file);
                                    if (Directory.GetFiles(parent, "*.*", SearchOption.AllDirectories).Length == 0)
                                     {
-                                        Directory.Delete(parent, true);
+                                       parent.DirectoryRecycle();
                                     }
                                 }
 
@@ -1727,22 +1715,22 @@ namespace ALL_LEGIT
                                 string DirName = Path.GetFileName(dir);
                                 DLSDir = parent + "\\" + DirName;
 
-                              
-                                    if (Directory.Exists(DLSDir))
-                                    {
-                                        Directory.Delete(DLSDir, true);
-                                    }
-                              
-                 
+
+                                if (Directory.Exists(DLSDir))
+                                {
+                                    DLSDir.DirectoryRecycle();
+                                }
+
+
                                 Directory.Move(dir, DLSDir + "_temp");
                                 if (Directory.Exists(DLSDir))
                                 {
-                                    Directory.Delete(DLSDir, true);
+                                    DLSDir.DirectoryRecycle();
                                 }
                                       
                                 if (Directory.Exists(DLDir))
                                 {
-                                    Directory.Delete(DLDir, true);
+                                    DLSDir.DirectoryRecycle();
                                 }
                                 
                                 Directory.Move(DLSDir + "_temp", DLSDir);
