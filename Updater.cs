@@ -88,7 +88,10 @@ namespace ALL_LEGIT
                 //Delete current version
                 ALL_LEGIT.Utilities.Melt();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
