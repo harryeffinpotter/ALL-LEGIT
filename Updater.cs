@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Security.RightsManagement;
 using System.Windows.Forms;
+using static System.Net.WebRequestMethods;
+using File = System.IO.File;
 
 namespace ALL_LEGIT
 {
@@ -12,7 +14,8 @@ namespace ALL_LEGIT
     {
         public static string AppName { get; set; }
         public static string Repostory { get; set; }
-        private static string RawGitHubUrl;
+
+        private static string RawGitHubUrl = "https://raw.githubusercontent.com/harryeffinpotter/ALL-LEGIT";
         private static string GitHubUrl;
 
         static readonly public string LocalVersion = "1.1.0";

@@ -12,7 +12,7 @@ namespace ALL_LEGIT
     /// ExtensionDeleteToRecycleBin.cs  
     /// </summary>  
     public static class ExtensionDeleteToRecycleBin
-    {
+    { 
 
         /// <summary>  
         /// Delete File To Recycle Bin  

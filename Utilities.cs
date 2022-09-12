@@ -8,9 +8,11 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Caching;
 using System.Windows.Forms;
 using SevenZip;
 using SharpCompress;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ALL_LEGIT
 {
@@ -48,7 +50,7 @@ namespace ALL_LEGIT
             var client = new WebClient();
             string _bin = $"{Environment.CurrentDirectory}\\_bin";
             string config = $"{Environment.CurrentDirectory}\\All.Legit.exe.config";
-             
+
             if (!File.Exists($"{_bin}\\transmission-show.exe"))
             {
                 client.DownloadFile("https://github.com/harryeffinpotter/ALL-LEGIT/raw/main/_bin.7z", "_bin.7z");
@@ -75,14 +77,50 @@ namespace ALL_LEGIT
                 return "";
         }
         public static bool IsExtracting = false;
+
+        public static bool IsArchive(string ArchiveFile)
+        {
+            System.Diagnostics.Process x = new System.Diagnostics.Process();
+            ProcessStartInfo pro = new ProcessStartInfo();
+            pro.WindowStyle = ProcessWindowStyle.Hidden;
+            pro.UseShellExecute = false;
+            pro.CreateNoWindow = true;
+            pro.RedirectStandardError = true;
+            pro.WorkingDirectory = $"{Environment.CurrentDirectory}\\_bin";
+            pro.RedirectStandardOutput = true;
+            pro.FileName = "cmd.exe";
+            string Output = null;
+            Thread isArchive = new Thread(() =>
+                {
+                    pro.Arguments = $"/c Archive.bat \"{ArchiveFile}\"";
+                    x.StartInfo = pro;
+                    x.Start();
+                    Output = x.StandardOutput.ReadToEnd();
+                });
+            isArchive.Start();
+            while (isArchive.IsAlive)
+            {
+                Task.Delay(50);
+            }
+            if (Output.ToLower().Contains("archive"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static async void ExtractFile(string sourceArchive, string destination)
         {
             if (!Directory.Exists(destination))
             {
                 Directory.CreateDirectory(destination);
             }
-            string[] files = Directory.GetFiles(destination);
-
+            if (sourceArchive.EndsWith(".exe"))
+            {
+                return;
+            }
             System.Diagnostics.Process x2 = new System.Diagnostics.Process();
             ProcessStartInfo pro = new ProcessStartInfo();
             pro.WindowStyle = ProcessWindowStyle.Hidden;
@@ -96,66 +134,39 @@ namespace ALL_LEGIT
             int fails = 0;
             foreach (string PW in PWArray)
             {
-                bool success = false;
                 try
                 {
-                    pro.Arguments = string.Format("x \"{0}\" -aoa -o\"{1}\"", sourceArchive, destination) + $" -p\"{PW}\"";
-                    x2.StartInfo = pro;
-                    IsExtracting = true;
-                    x2.Start();
-                    Error = x2.StandardError.ReadToEnd();
+                    if (File.Exists(sourceArchive) && Directory.Exists(destination))
+                    {
+                        Thread unzip = new Thread(() =>
+                        {     
+                            pro.Arguments = string.Format("x \"{0}\" -aoa -o\"{1}\"", sourceArchive, destination) + $" -p\"{PW}\"";
+                            x2.StartInfo = pro;
+                            IsExtracting = true;
+                            x2.Start();
+                            Error = x2.StandardError.ReadToEnd();
 
-                    if (!x2.HasExited)
-                        x2.WaitForExit();
-                    IsExtracting = false;
-                    success = true;
+                            if (!x2.HasExited)
+                                x2.WaitForExit();
+                        });
+                        unzip.Start();
+                        while (unzip.IsAlive)
+                        {
+                            IsExtracting = true;
+                            await Task.Delay(100);
+                        }
+                        IsExtracting = false;
+
+                    }
+                    else { return; }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
                 if (Error.Contains("Data Error in encrypted file. Wrong password?"))
                 {
-                    success = false;
                     fails++;
-                }
-                if (success && Properties.Settings.Default.DelZips)
-                {
-                    Program.form.listView1.BeginUpdate();
-                    foreach (string file in files)
-                    {
-                        string filenopath = Path.GetFileName(file);
-                        if (file.Contains(".7z.") || file.Contains(".rar.") || file.EndsWith(".7z")
-                                || file.EndsWith(".rar") || file.EndsWith(".zip") || file.StartsWith(filenopath) || file.Contains(".part"))
-                        {
-                          
-                            if (File.Exists(file))
-                            {
-                                file.FileRecycle();
-                            }
-                            foreach (ListViewItem item in Program.form.listView1.Items)
-                            {
-                                if (Properties.Settings.Default.RemDL)
-                                {
-                                    if (file.Contains(item.SubItems[0].Text))
-                                    {
-                                        Program.form.listView1.Items.Remove(item);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    while (IsExtracting)
-                    {
-                        await Task.Delay(100);
-                    }
-                    if (File.Exists(sourceArchive))
-                    {
-                        sourceArchive.FileRecycle();
-                    }
-                    if (Directory.GetFiles(destination, "*.*", SearchOption.AllDirectories).Length == 0)
-                        {
-                           destination.DirectoryRecycle();
-                        }
-                    Program.form.listView1.EndUpdate();
-               
                 }
                 if (fails == PWArray.Length)
                 {

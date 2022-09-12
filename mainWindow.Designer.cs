@@ -59,6 +59,10 @@
             this.Size = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listView1 = new System.Windows.Forms.ListView();
             this.splashPanel = new System.Windows.Forms.Panel();
+            this.tipsText = new System.Windows.Forms.Label();
+            this.tipsHeader = new System.Windows.Forms.Label();
+            this.SplashText = new System.Windows.Forms.Label();
+            this.changeLog = new System.Windows.Forms.Label();
             this.settingsP = new System.Windows.Forms.Panel();
             this.autoUpdateBox = new System.Windows.Forms.CheckBox();
             this.removeURLs = new System.Windows.Forms.CheckBox();
@@ -74,10 +78,6 @@
             this.AutoOverwrite = new System.Windows.Forms.CheckBox();
             this.AutoDLBox = new System.Windows.Forms.CheckBox();
             this.RemDL = new System.Windows.Forms.CheckBox();
-            this.tipsText = new System.Windows.Forms.Label();
-            this.tipsHeader = new System.Windows.Forms.Label();
-            this.SplashText = new System.Windows.Forms.Label();
-            this.changeLog = new System.Windows.Forms.Label();
             this.selectTorrent = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncheckAll)).BeginInit();
@@ -422,6 +422,66 @@
             this.splashPanel.TabIndex = 17;
             this.splashPanel.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
             // 
+            // tipsText
+            // 
+            this.tipsText.AutoSize = true;
+            this.tipsText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
+            this.tipsText.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tipsText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.tipsText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tipsText.ForeColor = System.Drawing.Color.PaleTurquoise;
+            this.tipsText.Location = new System.Drawing.Point(0, 180);
+            this.tipsText.Name = "tipsText";
+            this.tipsText.Size = new System.Drawing.Size(273, 140);
+            this.tipsText.TabIndex = 15;
+            this.tipsText.Text = "All Legit v1.0.0\r\nby HarryEffinPottter/YSG\r\n\r\nGlobal hot key works everywhere,\r\ne" +
+    "ven when app is minimized.\r\n\r\nCTRL+V or Paste button while in app.";
+            this.tipsText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tipsHeader
+            // 
+            this.tipsHeader.AutoSize = true;
+            this.tipsHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
+            this.tipsHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tipsHeader.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.tipsHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.tipsHeader.ForeColor = System.Drawing.Color.PaleGreen;
+            this.tipsHeader.ImageAlign = System.Drawing.ContentAlignment.TopRight;
+            this.tipsHeader.Location = new System.Drawing.Point(0, 160);
+            this.tipsHeader.Name = "tipsHeader";
+            this.tipsHeader.Size = new System.Drawing.Size(47, 20);
+            this.tipsHeader.TabIndex = 14;
+            this.tipsHeader.Text = "Tips:";
+            this.tipsHeader.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // SplashText
+            // 
+            this.SplashText.AutoSize = true;
+            this.SplashText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
+            this.SplashText.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SplashText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SplashText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SplashText.ForeColor = System.Drawing.Color.PaleTurquoise;
+            this.SplashText.Location = new System.Drawing.Point(0, 20);
+            this.SplashText.Name = "SplashText";
+            this.SplashText.Size = new System.Drawing.Size(273, 140);
+            this.SplashText.TabIndex = 13;
+            this.SplashText.Text = "All Legit v1.0.0\r\nby HarryEffinPottter/YSG\r\n\r\nGlobal hot key works everywhere,\r\ne" +
+    "ven when app is minimized.\r\n\r\nCTRL+V or Paste button while in app.";
+            // 
+            // changeLog
+            // 
+            this.changeLog.AutoSize = true;
+            this.changeLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
+            this.changeLog.Dock = System.Windows.Forms.DockStyle.Top;
+            this.changeLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.changeLog.ForeColor = System.Drawing.Color.PaleGreen;
+            this.changeLog.Location = new System.Drawing.Point(0, 0);
+            this.changeLog.Name = "changeLog";
+            this.changeLog.Size = new System.Drawing.Size(105, 20);
+            this.changeLog.TabIndex = 12;
+            this.changeLog.Text = "Change log:\r\n";
+            // 
             // settingsP
             // 
             this.settingsP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -679,66 +739,6 @@
             this.RemDL.UseVisualStyleBackColor = false;
             this.RemDL.CheckedChanged += new System.EventHandler(this.RemDL_CheckedChanged);
             this.RemDL.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
-            // 
-            // tipsText
-            // 
-            this.tipsText.AutoSize = true;
-            this.tipsText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
-            this.tipsText.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tipsText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.tipsText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tipsText.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.tipsText.Location = new System.Drawing.Point(0, 180);
-            this.tipsText.Name = "tipsText";
-            this.tipsText.Size = new System.Drawing.Size(273, 140);
-            this.tipsText.TabIndex = 15;
-            this.tipsText.Text = "All Legit v1.0.0\r\nby HarryEffinPottter/YSG\r\n\r\nGlobal hot key works everywhere,\r\ne" +
-    "ven when app is minimized.\r\n\r\nCTRL+V or Paste button while in app.";
-            this.tipsText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // tipsHeader
-            // 
-            this.tipsHeader.AutoSize = true;
-            this.tipsHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
-            this.tipsHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tipsHeader.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.tipsHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.tipsHeader.ForeColor = System.Drawing.Color.PaleGreen;
-            this.tipsHeader.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-            this.tipsHeader.Location = new System.Drawing.Point(0, 160);
-            this.tipsHeader.Name = "tipsHeader";
-            this.tipsHeader.Size = new System.Drawing.Size(47, 20);
-            this.tipsHeader.TabIndex = 14;
-            this.tipsHeader.Text = "Tips:";
-            this.tipsHeader.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // SplashText
-            // 
-            this.SplashText.AutoSize = true;
-            this.SplashText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
-            this.SplashText.Dock = System.Windows.Forms.DockStyle.Top;
-            this.SplashText.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SplashText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SplashText.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.SplashText.Location = new System.Drawing.Point(0, 20);
-            this.SplashText.Name = "SplashText";
-            this.SplashText.Size = new System.Drawing.Size(273, 140);
-            this.SplashText.TabIndex = 13;
-            this.SplashText.Text = "All Legit v1.0.0\r\nby HarryEffinPottter/YSG\r\n\r\nGlobal hot key works everywhere,\r\ne" +
-    "ven when app is minimized.\r\n\r\nCTRL+V or Paste button while in app.";
-            // 
-            // changeLog
-            // 
-            this.changeLog.AutoSize = true;
-            this.changeLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
-            this.changeLog.Dock = System.Windows.Forms.DockStyle.Top;
-            this.changeLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.changeLog.ForeColor = System.Drawing.Color.PaleGreen;
-            this.changeLog.Location = new System.Drawing.Point(0, 0);
-            this.changeLog.Name = "changeLog";
-            this.changeLog.Size = new System.Drawing.Size(105, 20);
-            this.changeLog.TabIndex = 12;
-            this.changeLog.Text = "Change log:\r\n";
             // 
             // selectTorrent
             // 
