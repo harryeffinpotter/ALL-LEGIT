@@ -16,8 +16,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Timer = System.Windows.Forms.Timer;
-
+using ToolTip = System.Windows.Forms.ToolTip;
 
 namespace ALL_LEGIT
 {
@@ -1577,143 +1578,20 @@ namespace ALL_LEGIT
                 }
                 if (!muteoutputcancelled)
                 {
-
-                    if (AutoExtract.Checked && !isDownloading)
+                    AutoExtraction();
+                }
+                else if (!isDownloading)
+                {
+                    this.Invoke(() =>
                     {
-
-                        this.Invoke(() =>
+                        if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                         {
-                            if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                            {
-                                ALTrayIcon.ShowBalloonTip(2000, "", $"Downloads finished! Checking for and extracting archives...", ToolTipIcon.None);
-                            }
-                            else
-                                DownloadingText.Text = $"Downloads finished! Checking for and extracting archives...";
-                        });
-                        this.Invoke(() =>
-                        {
-                            string DLDir = "";
-                            string DLFile = "";
-                            string ExtractedZips = "";
-                            string[] SplitDLList = DLList.Split('\n');
-                            DLList = "";
-                            foreach (string FullDL in SplitDLList)
-                            {
-                                if (!String.IsNullOrWhiteSpace(FullDL))
-                                {
-                                    string[] DLS = FullDL.Split(';');
-                                    DLDir = DLS[1];
-                                    DLFile = DLS[0];
-                                    string DL = $"{DLS[1]}\\{DLFile}";
-                                    if (DLFile.ToLower().Contains(".7z.") || DLFile.ToLower().Contains(".part") && DLFile.ToLower().EndsWith(".rar"))
-                                    {
-                                        isMultiPart = true;
-                                    }
-
-                                    bool Extract = false;
-                                    string DLSExtension = Path.GetExtension(DLFile);
-
-                                    if (!isMultiPart && DLSExtension.Equals(".7z") || DLSExtension.Equals(".zip") || DLSExtension.Equals(".rar")
-                                        || DLSExtension.Equals(".gz") || DLSExtension.Equals(".tar"))
-                                    {
-                                        Extract = true;
-                                        ExtractedZips += DL + ";";
-                                    }
-                                    else if (DLFile.EndsWith(".part1.rar") || DLFile.EndsWith(".7z.001"))
-                                    {
-                                        isMultiPart = true;
-                                        Extract = true;
-                                        ExtractedZips += DL+ ";";
-                                    }
-                                    else if (isMultiPart && !Extract)
-                                    {
-                                        ExtractedZips += DL + ";";
-                                        continue;
-                                    }
-                                    if (Extract && !muteoutputcancelled)
-                                    {
-                                        this.Invoke(() =>
-                                        {
-                                            DownloadingText.Text = $"Extracting archives...";
-                                        });
-                                     
-                                        if (!Directory.Exists(DLDir))
-                                        {
-                                            Directory.CreateDirectory(DLDir);
-                                        }                            
-                                        Utilities.ExtractFile(DL, DLDir);
-                                        if (Properties.Settings.Default.DelZips)
-                                        {
-                                            string[] ZipsToDelete = ExtractedZips.Split(';');
-                                            foreach (string zip in ZipsToDelete)
-                                            {
-                                                if (File.Exists(zip))
-                                                {
-                                                    bool IsArchive = Utilities.IsArchive(zip);
-                                                    if (IsArchive)
-                                                    {
-                                                        ExtractedZips.Replace($"{zip};", "");
-                                                        zip.FileRecycle();
-                                                    }   
-                                                }
-                                            }
-                                        }
-                                        Extract = false;
-                                        if (Properties.Settings.Default.extractNested)
-                                        {
-                                            string[] files = Directory.GetFiles(DLDir, "*.*", SearchOption.AllDirectories);
-                                            foreach (string file in files)
-                                            {
-                                                bool IsArchive = Utilities.IsArchive(file);
-                                                if (IsArchive)
-                                                {
-                                                ExtractedZips += $"{file};";
-                                                    if (!Directory.Exists(DLDir + "\\" + Path.GetFileNameWithoutExtension(file)))
-                                                    {
-                                                        Directory.CreateDirectory(DLDir + "\\" + Path.GetFileNameWithoutExtension(file));
-                                                    }
-                                                    Utilities.ExtractFile(file, DLDir + "\\" + Path.GetFileNameWithoutExtension(file));
-                                                }
-                                            }
-                                     
-                                            if (Properties.Settings.Default.DelZips)
-                                            {
-                                                string[] ZipsToDelete = ExtractedZips.Split(';');
-                                                foreach (string nested in ZipsToDelete)
-                                                {
-                                                    if (File.Exists(nested))
-                                                    {
-                                                        bool IsArchive = Utilities.IsArchive(nested);
-                                                        if (IsArchive)
-                                                        {
-                                                            ExtractedZips.Replace($"{nested};", "");
-                                                            nested.FileRecycle();
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                 
-                                    }
-                                    Extract = false;
-                                }
-                            }
-  
-                         
-                        });
-                    }
-                    else if (!isDownloading)
-                    {
-                        this.Invoke(() =>
-                        {
-                            if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                            {
-                                ALTrayIcon.ShowBalloonTip(2000, "", $"Downloads finished!", ToolTipIcon.None);
-                            }
-                            else
-                                DownloadingText.Text = $"Downloads finished!";
-                        });
-                    }
+                            ALTrayIcon.ShowBalloonTip(2000, "", $"Downloads finished!", ToolTipIcon.None);
+                        }
+                        else
+                            DownloadingText.Text = $"Downloads finished!";
+                    });
+                
                     Thread t35 = new Thread(() =>
                     {
                         this.Invoke(() =>
@@ -1801,6 +1679,130 @@ namespace ALL_LEGIT
             }
         }
 
+        public void AutoExtraction()
+        {
+            if  (AutoExtract.Checked && !isDownloading)
+            {
+                this.Invoke(() =>
+                {
+                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                    {
+                        ALTrayIcon.ShowBalloonTip(2000, "", $"Downloads finished! Checking for and extracting archives...", ToolTipIcon.None);
+                    }
+                    else
+                        DownloadingText.Text = $"Downloads finished! Checking for and extracting archives...";
+                });
+                this.Invoke(() =>
+                {
+                    string DLDir = "";
+                    string DLFile = "";
+                    string ExtractedZips = "";
+                    string[] SplitDLList = DLList.Split('\n');
+                    DLList = "";
+                    foreach (string FullDL in SplitDLList)
+                    {
+                        if (!String.IsNullOrWhiteSpace(FullDL))
+                        {
+                            string[] DLS = FullDL.Split(';');
+                            DLDir = DLS[1];
+                            DLFile = DLS[0];
+                            string DL = $"{DLS[1]}\\{DLFile}";
+                            if (DLFile.ToLower().Contains(".7z.") || DLFile.ToLower().Contains(".part") && DLFile.ToLower().EndsWith(".rar"))
+                            {
+                                isMultiPart = true;
+                            }
+
+                            bool Extract = false;
+                            string DLSExtension = Path.GetExtension(DLFile);
+
+                            if (!isMultiPart && DLSExtension.Equals(".7z") || DLSExtension.Equals(".zip") || DLSExtension.Equals(".rar")
+                                || DLSExtension.Equals(".gz") || DLSExtension.Equals(".tar"))
+                            {
+                                Extract = true;
+                                ExtractedZips += DL + ";";
+                            }
+                            else if (DLFile.EndsWith(".part1.rar") || DLFile.EndsWith(".7z.001"))
+                            {
+                                isMultiPart = true;
+                                Extract = true;
+                                ExtractedZips += DL + ";";
+                            }
+                            else if (isMultiPart && !Extract)
+                            {
+                                ExtractedZips += DL + ";";
+                                continue;
+                            }
+                            if (Extract && !muteoutputcancelled)
+                            {
+                                this.Invoke(() =>
+                                {
+                                    DownloadingText.Text = $"Extracting archives...";
+                                });
+
+                                if (!Directory.Exists(DLDir))
+                                {
+                                    Directory.CreateDirectory(DLDir);
+                                }
+                                Utilities.ExtractFile(DL, DLDir);
+                                if (Properties.Settings.Default.DelZips)
+                                {
+                                    string[] ZipsToDelete = ExtractedZips.Split(';');
+                                    foreach (string zip in ZipsToDelete)
+                                    {
+                                        if (File.Exists(zip))
+                                        {
+                                            bool IsArchive = Utilities.IsArchive(zip);
+                                            if (IsArchive)
+                                            {
+                                                ExtractedZips.Replace($"{zip};", "");
+                                                zip.FileRecycle();
+                                            }
+                                        }
+                                    }
+                                }
+                                Extract = false;
+                                if (Properties.Settings.Default.extractNested)
+                                {
+                                    string[] files = Directory.GetFiles(DLDir, "*.*", SearchOption.AllDirectories);
+                                    foreach (string file in files)
+                                    {
+                                        bool IsArchive = Utilities.IsArchive(file);
+                                        if (IsArchive)
+                                        {
+                                            ExtractedZips += $"{file};";
+                                            if (!Directory.Exists(DLDir + "\\" + Path.GetFileNameWithoutExtension(file)))
+                                            {
+                                                Directory.CreateDirectory(DLDir + "\\" + Path.GetFileNameWithoutExtension(file));
+                                            }
+                                            Utilities.ExtractFile(file, DLDir + "\\" + Path.GetFileNameWithoutExtension(file));
+                                        }
+                                    }
+
+                                    if (Properties.Settings.Default.DelZips)
+                                    {
+                                        string[] ZipsToDelete = ExtractedZips.Split(';');
+                                        foreach (string nested in ZipsToDelete)
+                                        {
+                                            if (File.Exists(nested))
+                                            {
+                                                bool IsArchive = Utilities.IsArchive(nested);
+                                                if (IsArchive)
+                                                {
+                                                    ExtractedZips.Replace($"{nested};", "");
+                                                    nested.FileRecycle();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                            Extract = false;
+                        }
+                    }
+                });
+            }
+        }
         private void CopyLinks_Click(object sender, EventArgs e)
         {
             if (listView1.CheckedItems.Count > 0)
