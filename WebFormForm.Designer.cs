@@ -38,11 +38,11 @@
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(12, 12);
+            this.webBrowser1.Location = new System.Drawing.Point(-5, -2);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.ScriptErrorsSuppressed = true;
-            this.webBrowser1.Size = new System.Drawing.Size(964, 687);
+            this.webBrowser1.Size = new System.Drawing.Size(996, 720);
             this.webBrowser1.TabIndex = 14;
             this.webBrowser1.Url = new System.Uri("", System.UriKind.Relative);
             this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
@@ -59,12 +59,12 @@
             // 
             // splashCover
             // 
-            this.splashCover.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(18)))));
+            this.splashCover.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(20)))));
             this.splashCover.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.75F);
             this.splashCover.ForeColor = System.Drawing.SystemColors.Control;
-            this.splashCover.Location = new System.Drawing.Point(20, 17);
+            this.splashCover.Location = new System.Drawing.Point(-4, -2);
             this.splashCover.Name = "splashCover";
-            this.splashCover.Size = new System.Drawing.Size(948, 369);
+            this.splashCover.Size = new System.Drawing.Size(995, 388);
             this.splashCover.TabIndex = 17;
             this.splashCover.Text = "\r\nPlease wait...";
             this.splashCover.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -72,13 +72,13 @@
             // 
             // dlcGIF
             // 
-            this.dlcGIF.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(20)))), ((int)(((byte)(18)))));
+            this.dlcGIF.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(20)))));
             this.dlcGIF.Enabled = false;
             this.dlcGIF.Image = ((System.Drawing.Image)(resources.GetObject("dlcGIF.Image")));
             this.dlcGIF.InitialImage = null;
-            this.dlcGIF.Location = new System.Drawing.Point(19, 376);
+            this.dlcGIF.Location = new System.Drawing.Point(-5, 381);
             this.dlcGIF.Name = "dlcGIF";
-            this.dlcGIF.Size = new System.Drawing.Size(950, 319);
+            this.dlcGIF.Size = new System.Drawing.Size(995, 332);
             this.dlcGIF.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.dlcGIF.TabIndex = 18;
             this.dlcGIF.TabStop = false;
@@ -89,7 +89,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(50)))), ((int)(((byte)(42)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(20)))));
             this.ClientSize = new System.Drawing.Size(988, 711);
             this.Controls.Add(this.dlcGIF);
             this.Controls.Add(this.splashCover);

@@ -16,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
+using TheArtOfDev.HtmlRenderer.Adapters.Entities;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Timer = System.Windows.Forms.Timer;
 using ToolTip = System.Windows.Forms.ToolTip;
@@ -214,6 +215,7 @@ namespace ALL_LEGIT
 
         }
         public static string patchNotes =
+            " • Fixed up colors, made new icon. Fixed other major to minor bugs!\n" +
             " • Changed all delete and overwrite functions to delete to RECYCLE BIN instead of fully deleting.\n" +
             " • Fixed Stay on Top bug, FINALLY!\n" +
             "\n";
@@ -688,18 +690,19 @@ namespace ALL_LEGIT
         }
         public static string LinkType = "";
         public static string currentLink = "";
+        public static bool convertingMag = false;
         public static bool showingconversion = false;
         public async void DoAsyncConversion()
         {
             string pasted = Clipboard.GetText();
-            bool convertingMag = false;
+  
             fileDownloading += $"{pasted};";
             if (pasted.ToLower().StartsWith("magnet:?".ToLower()))
             {
                 this.Invoke(() =>
                 {
                     splashPanel.Visible = false;
-                }); convertingMag = true;
+                }); 
                 if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
                 {
 
@@ -753,7 +756,10 @@ namespace ALL_LEGIT
 
                     foreach (string s in output)
                     {
-                        convertingMag = true;
+                        while (convertingMag)
+                        {
+                            await Task.Delay(200);
+                        }
                         var obj = getJson($"magnet/upload?agent={apiNAME}&apikey={APIKEY}&magnets[]={s}");
                         string status = obj.status.ToString();
                         if (obj.data.magnets[0].ToString().Contains("error"))
@@ -810,11 +816,14 @@ namespace ALL_LEGIT
                                     string MagnetStatus = key.status.ToString();
                                     if (MagnetStatus.Equals("Ready"))
                                     {
+                                        torrentDLING = false;
+                                        convertingMag = false;
                                         notdone = false;
                                         ready = true;
                                     }
                                     else
                                     {
+                                        convertingMag = true;
                                         if (cancel)
                                         {
                                             if (torrentDLING)
@@ -846,7 +855,6 @@ namespace ALL_LEGIT
                                                     cancel = false;
                                                     fileDownloading = "";
                                                     CurrentlyShowingID = 0;
-                                                    convertingMag = false;
                                                 }
                                                 else
                                                 {
@@ -1005,6 +1013,8 @@ namespace ALL_LEGIT
                                     }
                                     if (ready)
                                     {
+                                        torrentDLING = false; 
+                                        convertingMag = false;
                                         this.Invoke(() =>
                                         {
                                             DownloadingText.Text = "Magnet conversion finished!";
@@ -1082,9 +1092,6 @@ namespace ALL_LEGIT
                                         {
                                             dlProg.Value = 0;
                                         });
-                                        convertingMag = false;
-
-                                        torrentDLING = false;
                                         notdone = false;
                                     
                                         Thread t35 = new Thread(() =>
@@ -1896,11 +1903,11 @@ namespace ALL_LEGIT
             Properties.Settings.Default.Save();
             if (RemDL.Checked)
             {
-                RemDL.ForeColor = Color.FromArgb(192, 255, 192);
+                RemDL.ForeColor = Color.PaleTurquoise;
             }
             else
             {
-                RemDL.ForeColor = Color.FromArgb(0, 100, 80);
+                RemDL.ForeColor = Color.SteelBlue;
             }
         }
         public static bool muteoutputcancelled = Properties.Settings.Default.DisableNotifies;
@@ -2224,11 +2231,11 @@ namespace ALL_LEGIT
         {
             if (Close2Tray.Checked)
             {
-                Close2Tray.ForeColor = Color.FromArgb(192, 255, 192);
+                Close2Tray.ForeColor = Color.PaleTurquoise;
             }
             else
             {
-                Close2Tray.ForeColor = Color.FromArgb(0, 100, 80);
+                Close2Tray.ForeColor = Color.SteelBlue;
             }
             Properties.Settings.Default.Close2Tray = Close2Tray.Checked;
             Properties.Settings.Default.Save();
@@ -2241,7 +2248,7 @@ namespace ALL_LEGIT
             {
 
                 extractNested.Enabled = true;
-                AutoExtract.ForeColor = Color.FromArgb(192, 255, 192);
+                AutoExtract.ForeColor = Color.PaleTurquoise;
                 PWBox.Enabled = true;
             }
             else
@@ -2250,7 +2257,7 @@ namespace ALL_LEGIT
                 {
                     extractNested.Checked = false;
                 }
-                AutoExtract.ForeColor = Color.FromArgb(0, 100, 80);
+                AutoExtract.ForeColor = Color.SteelBlue;
                 PWBox.Enabled = false;
                 extractNested.Enabled = false;
 
@@ -2263,11 +2270,11 @@ namespace ALL_LEGIT
         {
             if (autoDelZips.Checked)
             {
-                autoDelZips.ForeColor = Color.FromArgb(192, 255, 192);
+                autoDelZips.ForeColor = Color.PaleTurquoise;
             }
             else
             {
-                autoDelZips.ForeColor = Color.FromArgb(0, 100, 80);
+                autoDelZips.ForeColor = Color.SteelBlue;
             }
             Properties.Settings.Default.DelZips = autoDelZips.Checked;
             Properties.Settings.Default.Save();
@@ -2278,11 +2285,11 @@ namespace ALL_LEGIT
             Properties.Settings.Default.Save();
             if (AutoDLBox.Checked)
             {
-                AutoDLBox.ForeColor = Color.FromArgb(192, 255, 192);
+                AutoDLBox.ForeColor = Color.PaleTurquoise;
             }
             else
             {
-                AutoDLBox.ForeColor = Color.FromArgb(0, 100, 80);
+                AutoDLBox.ForeColor = Color.SteelBlue;
             }
         }
 
@@ -2292,11 +2299,11 @@ namespace ALL_LEGIT
             Properties.Settings.Default.Save();
             if (AutoOverwrite.Checked)
             {
-                AutoOverwrite.ForeColor = Color.FromArgb(192, 255, 192);
+                AutoOverwrite.ForeColor = Color.PaleTurquoise;
             }
             else
             {
-                AutoOverwrite.ForeColor = Color.FromArgb(0, 100, 80);
+                AutoOverwrite.ForeColor = Color.SteelBlue;
             }
         }
 
@@ -2368,12 +2375,12 @@ namespace ALL_LEGIT
             if (disableNotiesBox.Checked)
             {
 
-                disableNotiesBox.ForeColor = Color.FromArgb(192, 255, 192);
+                disableNotiesBox.ForeColor = Color.PaleTurquoise;
             }
             else
             {
 
-                disableNotiesBox.ForeColor = Color.FromArgb(0, 100, 80);
+                disableNotiesBox.ForeColor = Color.SteelBlue;
             }
         }
 
@@ -2497,11 +2504,11 @@ namespace ALL_LEGIT
             Properties.Settings.Default.Save();
             if (autoUpdateBox.Checked)
             {
-                autoUpdateBox.ForeColor = Color.FromArgb(192, 255, 192);
+                autoUpdateBox.ForeColor = Color.PaleTurquoise;
             }
             else
             {
-                autoUpdateBox.ForeColor = Color.FromArgb(0, 100, 80);
+                autoUpdateBox.ForeColor = Color.SteelBlue;
             }
 
         }
@@ -2512,8 +2519,8 @@ namespace ALL_LEGIT
             Updater.Update();
             if (Updater.UpdateNotAvailable)
             {
-                updateNow.ForeColor = Color.FromArgb(0, 100, 80);
-                updateNow.FlatAppearance.BorderColor = Color.FromArgb(0, 100, 80);
+                updateNow.ForeColor = Color.PaleTurquoise;
+                updateNow.FlatAppearance.BorderColor = Color.PaleTurquoise;
                 updateNow.Text = "No update available";
                 Thread t1 = new Thread(() =>
                 {
@@ -2528,8 +2535,8 @@ namespace ALL_LEGIT
                 if (!t1.IsAlive)
                 {
                     updateNow.Text = "Check for update now";
-                    updateNow.ForeColor = Color.MediumSpringGreen;
-                    updateNow.FlatAppearance.BorderColor = Color.MediumSpringGreen;
+                    updateNow.ForeColor = Color.SteelBlue;
+                    updateNow.FlatAppearance.BorderColor = Color.SteelBlue;
                 }
             }
 
@@ -2541,11 +2548,11 @@ namespace ALL_LEGIT
             Properties.Settings.Default.Save();
             if (extractNested.Checked)
             {
-                extractNested.ForeColor = Color.FromArgb(192, 255, 192);
+                extractNested.ForeColor = Color.PaleTurquoise;
             }
             else
             {
-                extractNested.ForeColor = Color.FromArgb(0, 100, 80);
+                extractNested.ForeColor = Color.SteelBlue;
             }
         }
 
@@ -2582,11 +2589,11 @@ namespace ALL_LEGIT
             Properties.Settings.Default.Save();
             if (removeURLs.Checked)
             {
-                removeURLs.ForeColor = Color.FromArgb(192, 255, 192);
+                removeURLs.ForeColor = Color.PaleTurquoise;
             }
             else
             {
-                removeURLs.ForeColor = Color.FromArgb(0, 100, 80);
+                removeURLs.ForeColor = Color.SteelBlue;
             }
         }
 
@@ -2628,6 +2635,7 @@ namespace ALL_LEGIT
                 return;
             }
         }
+
     }
 }
 
