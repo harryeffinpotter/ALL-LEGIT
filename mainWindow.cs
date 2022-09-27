@@ -1648,7 +1648,7 @@ namespace ALL_LEGIT
                         }
                     }
                 }
-                if (!isDownloading)
+                 if (!isDownloading)
                 {
                     this.Invoke(() =>
                     {
@@ -1667,23 +1667,6 @@ namespace ALL_LEGIT
                             listView1.Refresh();
                         });
                         Thread.Sleep(3000);
-                        AutoExtraction();
-                              if (Properties.Settings.Default.DelZips)
-                    {
-                        string[] ZipsToDelete = ExtractedZips.Split(';');
-                        foreach (string zip in ZipsToDelete)
-                        {
-                            if (File.Exists(zip))
-                            {
-                                bool IsArchive = Utilities.IsArchive(zip);
-                                if (IsArchive)
-                                {
-                                    ExtractedZips.Replace($"{zip};", "");
-                                    zip.FileRecycle();
-                                }
-                            }
-                        }
-                    }
                     });
                     t35.Start();
                     while (t35.IsAlive)
@@ -1698,7 +1681,7 @@ namespace ALL_LEGIT
                         DownloadingText.Text = "";
                     });
 
-              
+
                     CancelButton.Visible = false;
                 }
                 isMultiPart = false;
@@ -1764,26 +1747,21 @@ namespace ALL_LEGIT
             }
             Dict.Clear();
             dlsGoin = "";
+            if (!muteoutputcancelled)
+            {
+                AutoExtraction();
+            }
         }
-        public static string ExtractedZips = "";
+
         public void AutoExtraction()
         {
             if  (AutoExtract.Checked)
             {
                 this.Invoke(() =>
                 {
-                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                    {
-                        ALTrayIcon.ShowBalloonTip(2000, "", $"Downloads finished! Checking for and extracting archives...", ToolTipIcon.None);
-                    }
-                    else
-                        DownloadingText.Text = $"Downloads finished! Checking for and extracting archives...";
-                });
-                this.Invoke(() =>
-                {
                     string DLDir = "";
                     string DLFile = "";
-      
+                    string ExtractedZips = "";
                     string[] SplitDLList = DLList.Split('\n');
                     DLList = "";
                     foreach (string FullDL in SplitDLList)
@@ -1831,7 +1809,22 @@ namespace ALL_LEGIT
                                     Directory.CreateDirectory(DLDir);
                                 }
                                 Utilities.ExtractFile(DL, DLDir);
-                              
+                                if (Properties.Settings.Default.DelZips)
+                                {
+                                    string[] ZipsToDelete = ExtractedZips.Split(';');
+                                    foreach (string zip in ZipsToDelete)
+                                    {
+                                        if (File.Exists(zip))
+                                        {
+                                            bool IsArchive = Utilities.IsArchive(zip);
+                                            if (IsArchive)
+                                            {
+                                                ExtractedZips.Replace($"{zip};", "");
+                                                zip.FileRecycle();
+                                            }
+                                        }
+                                    }
+                                }
                                 Extract = false;
                                 if (Properties.Settings.Default.extractNested)
                                 {
@@ -1841,17 +1834,31 @@ namespace ALL_LEGIT
                                         bool IsArchive = Utilities.IsArchive(file);
                                         if (IsArchive)
                                         {
-
+                                            ExtractedZips += $"{file};";
                                             if (!Directory.Exists(DLDir + "\\" + Path.GetFileNameWithoutExtension(file)))
                                             {
                                                 Directory.CreateDirectory(DLDir + "\\" + Path.GetFileNameWithoutExtension(file));
                                             }
                                             Utilities.ExtractFile(file, DLDir + "\\" + Path.GetFileNameWithoutExtension(file));
-                                            ExtractedZips += $"{file};";
                                         }
                                     }
 
-                                   
+                                    if (Properties.Settings.Default.DelZips)
+                                    {
+                                        string[] ZipsToDelete = ExtractedZips.Split(';');
+                                        foreach (string nested in ZipsToDelete)
+                                        {
+                                            if (File.Exists(nested))
+                                            {
+                                                bool IsArchive = Utilities.IsArchive(nested);
+                                                if (IsArchive)
+                                                {
+                                                    ExtractedZips.Replace($"{nested};", "");
+                                                    nested.FileRecycle();
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
 
                             }
@@ -1860,8 +1867,12 @@ namespace ALL_LEGIT
                     }
                     DLList = "";
                     dlsPara = "";
-                   
                 });
+                this.Invoke(() =>
+                {
+                    DownloadingText.Text = $"";
+                });
+
             }
         }
         private void CopyLinks_Click(object sender, EventArgs e)

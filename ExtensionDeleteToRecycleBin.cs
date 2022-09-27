@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic.FileIO;
 
 namespace ALL_LEGIT
 {
@@ -29,14 +31,12 @@ namespace ALL_LEGIT
                 {
                     Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(file,
                     Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
-                    Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                    Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, UICancelOption.DoNothing);
                 }
             }
             catch
             {
-                CmdKILL("7zfm");
-                CmdKILL("7z");
-                FileRecycle(file);
+                File.Delete(file);
             }
         }
         /// <summary>  
@@ -52,15 +52,14 @@ namespace ALL_LEGIT
                 {
                     Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path,
                         Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
-                        Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                        Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, UICancelOption.DoNothing);
                 }
             }
             catch
             {
-                CmdKILL("7zfm");
-                CmdKILL("7z");
-                FileRecycle(path);
+                Directory.Delete(path);
             }
+           
 
         }
         public static void CmdKILL(string appname)
