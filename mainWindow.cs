@@ -1,11 +1,13 @@
 ﻿
 using Gma.System.MouseKeyHook;
 using ICSharpCode.SharpZipLib.GZip;
+using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.Graph.Client;
 using Newtonsoft.Json;
 using RestSharp;
 using SharpCompress.Archives.Rar;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -16,8 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
-using TheArtOfDev.HtmlRenderer.Adapters.Entities;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Directory = System.IO.Directory;
 using Timer = System.Windows.Forms.Timer;
 using ToolTip = System.Windows.Forms.ToolTip;
 
@@ -55,6 +56,7 @@ namespace ALL_LEGIT
         /// <returns></returns>
         /// 
         public static string FilecryptURL = "";
+        public static Dictionary<string, string> Dict = new Dictionary<string, string>();
         public static string GetDownloadsPath()
         {
             if (Environment.OSVersion.Version.Major < 6) throw new NotSupportedException();
@@ -215,6 +217,7 @@ namespace ALL_LEGIT
 
         }
         public static string patchNotes =
+            " • Fixed big goofy mistake where I copied every damn button.\n" +
             " • Fixed up colors, made new icon. Fixed other major to minor bugs!\n" +
             " • Changed all delete and overwrite functions to delete to RECYCLE BIN instead of fully deleting.\n" +
             " • Fixed Stay on Top bug, FINALLY!\n" +
@@ -411,6 +414,11 @@ namespace ALL_LEGIT
         string currentGroup = "";
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
+            if (dlsGoin.Contains($"{FILENAME};{MagnetNAME}"))
+            {
+                return;
+            }
+            dlsGoin += $"{FILENAME};{MagnetNAME}\n";
             while (webClient.IsBusy)
             {
                 await (Task.Delay(100));
@@ -790,6 +798,7 @@ namespace ALL_LEGIT
                         else
                         {
                             LinkType = "M";
+
                             string magnetName = obj.data.magnets[0].name.ToString();
                             string magnetID = obj.data.magnets[0].id.ToString();
                             string MagnetPoll = $"magnet/status?agent={apiNAME}&apikey={APIKEY}&id={magnetID}";
@@ -952,6 +961,7 @@ namespace ALL_LEGIT
                                         }
                                         else if (MagnetStatus.Equals("Ready"))
                                         {
+                                            ready = true;
                                             torrentDLING = false;
                                             if (CurrentlyShowingID == int.Parse(magnetID)) CurrentlyShowingID = 0;
                                             this.Invoke(() =>
@@ -1033,6 +1043,7 @@ namespace ALL_LEGIT
                                                         skip = true;
                                                     }
                                                 }
+                                                string Size = result.data.filesize.ToString();
                                                 double FileSize = double.Parse(result.data.filesize.ToString());
                                                 string FileSizeInt = "";
                                                 if ((FileSize / 1024 / 1024) > 1000)
@@ -1066,6 +1077,21 @@ namespace ALL_LEGIT
                                                     }
                                                     if (!skip)
                                                     {
+                                                        if (Dict.ContainsKey(magnetName))
+                                                        {
+                                                            if (Dict[magnetName] == Size)
+                                                            {
+                                                                this.Invoke(() =>
+                                                                {
+                                                                    Program.form.DownloadingText.Text = "Files already in list... skipping!";
+                                                                });
+                                                                return;
+                                                            }
+                                                        }
+                                                        else if (!Dict.ContainsKey(magnetName))
+                                                        {
+                                                            Dict.Add(magnetName, Size);
+                                                        }
                                                         string[] row = { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""), unlockedLink, magnetName, FileSizeInt };
                                                         ListViewItem item = new ListViewItem(row);
                                                         listView1.Items.Add(item);
@@ -1074,11 +1100,27 @@ namespace ALL_LEGIT
 
                                                     if (listView1.Items.Count == 0 && !skip)
                                                     {
+                                                        if (Dict.ContainsKey(magnetName))
+                                                        {
+                                                            if (Dict[magnetName] == Size)
+                                                            {
+                                                                this.Invoke(() =>
+                                                                {
+                                                                    Program.form.DownloadingText.Text = "Files already in list... skipping!";
+                                                                });
+                                                                return;
+                                                            }
+                                                        }
+                                                        else if (!Dict.ContainsKey(magnetName))
+                                                        {
+                                                            Dict.Add(magnetName, Size);
+                                                        }
                                                         this.Invoke(() =>
                                                         {
                                                             listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""),
                                                                 unlockedLink, magnetName, FileSizeInt }));
                                                         });
+                                       
                                                     }
                                                     skip = false;
                                                 });
@@ -1320,6 +1362,7 @@ namespace ALL_LEGIT
                                 });
                                 int addedlinks = 0;
                                 string unlockedLink = obj.data.link.ToString();
+                                string Size = obj.data.filesize.ToString();
                                 double FileSize = double.Parse(obj.data.filesize.ToString());
                                 string FullFileName = obj.data.filename.ToString();
                                 string FileNameNoExt = Utilities.RemoveEverythingAfterLast(FullFileName, ".");
@@ -1354,64 +1397,82 @@ namespace ALL_LEGIT
                                     }
                                     if (!skip)
                                     {
-                                        addedlinks++;
-                                        listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""),
-                                            unlockedLink, FileNameNoExt, FileSizeInt }));
-                                    }
-
-                                    foreach (ListViewItem item in listView1.Items)
-                                    {
-                                        if (item.SubItems[1].Text.Equals(unlockedLink))
+                                        if (Dict.ContainsKey(FullFileName))
                                         {
-                                            item.Checked = true;
+                                            if (Dict[FullFileName] == Size)
+                                            {
+                                                skip = true;
+                                                this.Invoke(() =>
+                                                {
+                                                    Program.form.DownloadingText.Text = "Files already in list... skipping!";
+                                                });
+                                                return;
+                                            }
                                         }
+                                        else if (!Dict.ContainsKey(FullFileName))
+                                        {
+                                            Dict.Add(FullFileName, Size);
+                                        }
+                                        addedlinks++;
+                                        if (!skip)
+                                        {
+                                            listView1.Items.Add(new ListViewItem(new string[] { Utilities.RemoveEverythingBeforeLast(HttpUtility.UrlDecode(unlockedLink), "/").Replace("/", ""),
+                                            unlockedLink, FileNameNoExt, FileSizeInt }));
+                                            foreach (ListViewItem item in listView1.Items)
+                                            {
+                                                if (item.SubItems[1].Text.Equals(unlockedLink))
+                                                {
+                                                    item.Checked = true;
+                                                }
+                                            }
+                                        }                           
+                                        skip = false;
                                     }
-                                    skip = false;
+                                });
+
+                            }
+                            if (isErrors)
+                            {
+                                this.Invoke(() =>
+                                {
+                                    if (linkdown > 0)
+                                    {
+                                        if (!Properties.Settings.Default.DisableNotifies)
+                                        {
+                                            ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) have been taken down from the filehoster's website.\n\nNot adding!", ToolTipIcon.None);
+                                        }
+
+                                        DownloadingText.Text = "Link(s) have been taken down from the filehoster's website.\n\nNot adding!";
+                                    }
+                                    if (linkmissing > 0)
+                                    {
+                                        if (!Properties.Settings.Default.DisableNotifies)
+                                        {
+                                            ALTrayIcon.ShowBalloonTip(2000, "", $"Links missing.\n\nNot adding!", ToolTipIcon.None);
+
+                                        }
+
+                                        DownloadingText.Text = "Links missing.\n\nNot adding!";
+                                    }
+                                    if (linkpass > 0)
+                                    {
+                                        if (!Properties.Settings.Default.DisableNotifies)
+                                        {
+                                            ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) are password protected on the filehost's website.\n\nNot adding!", ToolTipIcon.None);
+                                        }
+
+                                        DownloadingText.Text = "Link(s) are password protected on the file hoster site.\n\nNot adding!";
+                                    }
+                                    if (linknotsup > 0)
+                                    {
+                                        if (!Properties.Settings.Default.DisableNotifies)
+                                        {
+                                            ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) are from an unsupported host.\n\nPlease check this link for a list of supported filehosters:\nhttps://alldebrid.com/hosts/", ToolTipIcon.None);
+                                        }
+                                        DownloadingText.Text = "Link(s) are not supported by All Debrid!";
+                                    }
                                 });
                             }
-
-                        }
-                        if (isErrors)
-                        {
-                            this.Invoke(() =>
-                            {
-                                if (linkdown > 0)
-                                {
-                                    if (!Properties.Settings.Default.DisableNotifies)
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) have been taken down from the filehoster's website.\n\nNot adding!", ToolTipIcon.None);
-                                    }
-
-                                    DownloadingText.Text = "Link(s) have been taken down from the filehoster's website.\n\nNot adding!";
-                                }
-                                if (linkmissing > 0)
-                                {
-                                    if (!Properties.Settings.Default.DisableNotifies)
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Links missing.\n\nNot adding!", ToolTipIcon.None);
-
-                                    }
-
-                                    DownloadingText.Text = "Links missing.\n\nNot adding!";
-                                }
-                                if (linkpass > 0)
-                                {
-                                    if (!Properties.Settings.Default.DisableNotifies)
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) are password protected on the filehost's website.\n\nNot adding!", ToolTipIcon.None);
-                                    }
-
-                                    DownloadingText.Text = "Link(s) are password protected on the file hoster site.\n\nNot adding!";
-                                }
-                                if (linknotsup > 0)
-                                {
-                                    if (!Properties.Settings.Default.DisableNotifies)
-                                    {
-                                        ALTrayIcon.ShowBalloonTip(2000, "", $"Link(s) are from an unsupported host.\n\nPlease check this link for a list of supported filehosters:\nhttps://alldebrid.com/hosts/", ToolTipIcon.None);
-                                    }
-                                    DownloadingText.Text = "Link(s) are not supported by All Debrid!";
-                                }
-                            });
                         }
                     });
                     t1.Start();
@@ -1504,12 +1565,18 @@ namespace ALL_LEGIT
             return base.ProcessCmdKey(ref msg, keyData);
         }
         public static string dlsPara = "";
+        public static string dlsGoin = "";
         public static string DLSDir = "";
         public static bool isDownloading = false;
         public static bool isMultiPart = false;
+ 
 
         public async void startDownloads_Click(object sender, EventArgs e)
         {
+            if (isDownloading)
+            {
+                return;
+            }
             endreached = false;
             this.Invoke(() =>
             {
@@ -1535,20 +1602,25 @@ namespace ALL_LEGIT
                         currentGroup = item.SubItems[2].Text;
                     }
 
-                    this.Invoke(() =>
-                    {
-                        this.Text = $"Downloading {item.SubItems[0].Text}...";
-                        DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
-                    });
+       
                     try
                     {
+                        this.Invoke(() =>
+                        {
+                            if (item.SubItems.Count > 0)
+                            {
+                                this.Text = $"Downloading {item.SubItems[0].Text}...";
+                                DownloadingText.Text = $"Downloading {item.SubItems[0].Text}...";
+                            }
+                        });
                         isDownloading = true;
                         item.BackColor = Color.MediumSpringGreen;
                         //
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-                        await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text.Replace(";", ""));
-                        DLSDir = Properties.Settings.Default.DownloadDir + "\\" + item.SubItems[2].Text.Replace(";", "");
+                                await downloadFiles(item.SubItems[1].Text, item.SubItems[0].Text, item.SubItems[2].Text.Replace(";", ""));
+                                DLSDir = Properties.Settings.Default.DownloadDir + "\\" + item.SubItems[2].Text.Replace(";", "");
+ 
                         //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                         //HERES WHERE IT ADDS THEM TO THE LIST
                         //
@@ -1575,19 +1647,8 @@ namespace ALL_LEGIT
                             });
                         }
                     }
-
-
-                    if (AutoExtract.Checked)
-                    {
-                        dlsPara += $"{Properties.Settings.Default.DownloadDir}\\{item.SubItems[2].Text.Replace(";", "")}\\{item.SubItems[0].Text}";
-           
-                    }
                 }
-                if (!muteoutputcancelled)
-                {
-                    AutoExtraction();
-                }
-                else if (!isDownloading)
+                if (!isDownloading)
                 {
                     this.Invoke(() =>
                     {
@@ -1606,6 +1667,23 @@ namespace ALL_LEGIT
                             listView1.Refresh();
                         });
                         Thread.Sleep(3000);
+                        AutoExtraction();
+                              if (Properties.Settings.Default.DelZips)
+                    {
+                        string[] ZipsToDelete = ExtractedZips.Split(';');
+                        foreach (string zip in ZipsToDelete)
+                        {
+                            if (File.Exists(zip))
+                            {
+                                bool IsArchive = Utilities.IsArchive(zip);
+                                if (IsArchive)
+                                {
+                                    ExtractedZips.Replace($"{zip};", "");
+                                    zip.FileRecycle();
+                                }
+                            }
+                        }
+                    }
                     });
                     t35.Start();
                     while (t35.IsAlive)
@@ -1620,7 +1698,7 @@ namespace ALL_LEGIT
                         DownloadingText.Text = "";
                     });
 
-
+              
                     CancelButton.Visible = false;
                 }
                 isMultiPart = false;
@@ -1684,11 +1762,13 @@ namespace ALL_LEGIT
                 }
 
             }
+            Dict.Clear();
+            dlsGoin = "";
         }
-
+        public static string ExtractedZips = "";
         public void AutoExtraction()
         {
-            if  (AutoExtract.Checked && !isDownloading)
+            if  (AutoExtract.Checked)
             {
                 this.Invoke(() =>
                 {
@@ -1703,7 +1783,7 @@ namespace ALL_LEGIT
                 {
                     string DLDir = "";
                     string DLFile = "";
-                    string ExtractedZips = "";
+      
                     string[] SplitDLList = DLList.Split('\n');
                     DLList = "";
                     foreach (string FullDL in SplitDLList)
@@ -1751,22 +1831,7 @@ namespace ALL_LEGIT
                                     Directory.CreateDirectory(DLDir);
                                 }
                                 Utilities.ExtractFile(DL, DLDir);
-                                if (Properties.Settings.Default.DelZips)
-                                {
-                                    string[] ZipsToDelete = ExtractedZips.Split(';');
-                                    foreach (string zip in ZipsToDelete)
-                                    {
-                                        if (File.Exists(zip))
-                                        {
-                                            bool IsArchive = Utilities.IsArchive(zip);
-                                            if (IsArchive)
-                                            {
-                                                ExtractedZips.Replace($"{zip};", "");
-                                                zip.FileRecycle();
-                                            }
-                                        }
-                                    }
-                                }
+                              
                                 Extract = false;
                                 if (Properties.Settings.Default.extractNested)
                                 {
@@ -1776,37 +1841,26 @@ namespace ALL_LEGIT
                                         bool IsArchive = Utilities.IsArchive(file);
                                         if (IsArchive)
                                         {
-                                            ExtractedZips += $"{file};";
+
                                             if (!Directory.Exists(DLDir + "\\" + Path.GetFileNameWithoutExtension(file)))
                                             {
                                                 Directory.CreateDirectory(DLDir + "\\" + Path.GetFileNameWithoutExtension(file));
                                             }
                                             Utilities.ExtractFile(file, DLDir + "\\" + Path.GetFileNameWithoutExtension(file));
+                                            ExtractedZips += $"{file};";
                                         }
                                     }
 
-                                    if (Properties.Settings.Default.DelZips)
-                                    {
-                                        string[] ZipsToDelete = ExtractedZips.Split(';');
-                                        foreach (string nested in ZipsToDelete)
-                                        {
-                                            if (File.Exists(nested))
-                                            {
-                                                bool IsArchive = Utilities.IsArchive(nested);
-                                                if (IsArchive)
-                                                {
-                                                    ExtractedZips.Replace($"{nested};", "");
-                                                    nested.FileRecycle();
-                                                }
-                                            }
-                                        }
-                                    }
+                                   
                                 }
 
                             }
                             Extract = false;
                         }
                     }
+                    DLList = "";
+                    dlsPara = "";
+                   
                 });
             }
         }
@@ -2398,22 +2452,13 @@ namespace ALL_LEGIT
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
+
         }
 
         private void OpenDirBox_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.OpenDir = OpenDirBox.Checked;
             Properties.Settings.Default.Save();
-        }
-
-        private void HotKeyBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void HotKeyBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
         }
 
         public void HotKeyBox_KeyDown(object sender, KeyEventArgs e)
@@ -2469,17 +2514,6 @@ namespace ALL_LEGIT
 
         }
 
-        private void HotKeyBox_Click(object sender, EventArgs e)
-        {
-            listView1.Focus();
-            return;
-        }
-
-        private void HotKeyBox_MouseClick(object sender, MouseEventArgs e)
-        {
-            listView1.Focus();
-            return;
-        }
 
         private void HotKeyBox_KeyUp(object sender, KeyEventArgs e)
         {
