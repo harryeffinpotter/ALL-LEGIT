@@ -1743,13 +1743,20 @@ namespace ALL_LEGIT
                         }
                     }
                 }
-
             }
             Dict.Clear();
             dlsGoin = "";
             if (!muteoutputcancelled)
             {
-                AutoExtraction();
+                if (Properties.Settings.Default.AutoExtract)
+                {
+                     AutoExtraction();
+                }
+                if (Properties.Settings.Default.extractNested)
+                {
+                     ExtractNestedPath(DLSDir);
+                     DLSDir = "";
+                }
             }
         }
 
@@ -1761,7 +1768,7 @@ namespace ALL_LEGIT
                 {
                     string DLDir = "";
                     string DLFile = "";
-                    string ExtractedZips = "";
+                    ExtractedZips = "";
                     string[] SplitDLList = DLList.Split('\n');
                     DLList = "";
                     foreach (string FullDL in SplitDLList)
@@ -1826,40 +1833,7 @@ namespace ALL_LEGIT
                                     }
                                 }
                                 Extract = false;
-                                if (Properties.Settings.Default.extractNested)
-                                {
-                                    string[] files = Directory.GetFiles(DLDir, "*.*", SearchOption.AllDirectories);
-                                    foreach (string file in files)
-                                    {
-                                        bool IsArchive = Utilities.IsArchive(file);
-                                        if (IsArchive)
-                                        {
-                                            ExtractedZips += $"{file};";
-                                            if (!Directory.Exists(DLDir + "\\" + Path.GetFileNameWithoutExtension(file)))
-                                            {
-                                                Directory.CreateDirectory(DLDir + "\\" + Path.GetFileNameWithoutExtension(file));
-                                            }
-                                            Utilities.ExtractFile(file, DLDir + "\\" + Path.GetFileNameWithoutExtension(file));
-                                        }
-                                    }
-
-                                    if (Properties.Settings.Default.DelZips)
-                                    {
-                                        string[] ZipsToDelete = ExtractedZips.Split(';');
-                                        foreach (string nested in ZipsToDelete)
-                                        {
-                                            if (File.Exists(nested))
-                                            {
-                                                bool IsArchive = Utilities.IsArchive(nested);
-                                                if (IsArchive)
-                                                {
-                                                    ExtractedZips.Replace($"{nested};", "");
-                                                    nested.FileRecycle();
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                               
 
                             }
                             Extract = false;
@@ -1873,6 +1847,50 @@ namespace ALL_LEGIT
                     DownloadingText.Text = $"";
                 });
 
+            }
+        }
+
+        public void ExtractNestedPath(string DLDir)
+        {
+            if (Properties.Settings.Default.extractNested && !String.IsNullOrEmpty(DLSDir))
+            {
+                string[] files = Directory.GetFiles(DLSDir, "*.*", SearchOption.AllDirectories);
+                foreach (string file in files)
+                {
+                    bool IsArchive = Utilities.IsArchive(file);
+                    if (IsArchive)
+                    {
+                        if (ExtractedZips.Contains(file))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            ExtractedZips += $"{file};";
+                            if (!Directory.Exists(DLSDir + "\\" + Path.GetFileNameWithoutExtension(file)))
+                            {
+                                Directory.CreateDirectory(DLSDir + "\\" + Path.GetFileNameWithoutExtension(file));
+                            }
+                            Utilities.ExtractFile(file, DLSDir + "\\" + Path.GetFileNameWithoutExtension(file));
+                        }
+                    }
+                }
+            }
+            if (Properties.Settings.Default.DelZips)
+            {
+                string[] ZipsToDelete = ExtractedZips.Split(';');
+                foreach (string nested in ZipsToDelete)
+                {
+                    if (File.Exists(nested))
+                    {
+                        bool IsArchive = Utilities.IsArchive(nested);
+                        if (IsArchive)
+                        {
+                            ExtractedZips.Replace($"{nested};", "");
+                            nested.FileRecycle();
+                        }
+                    }
+                }
             }
         }
         private void CopyLinks_Click(object sender, EventArgs e)
@@ -2251,6 +2269,8 @@ namespace ALL_LEGIT
         public Stopwatch stopwatch = Stopwatch.StartNew();
         private EventArgs e;
         private object sender;
+
+        public string ExtractedZips { get; private set; }
 
         public async void settingsP_MouseLeave(object sender, EventArgs e)
         {
@@ -2680,7 +2700,6 @@ namespace ALL_LEGIT
                 return;
             }
         }
-
     }
 }
 

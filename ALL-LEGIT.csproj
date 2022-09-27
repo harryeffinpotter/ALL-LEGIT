@@ -67,7 +67,7 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
-    <ApplicationIcon>AllLegitIcon.ico</ApplicationIcon>
+    <ApplicationIcon>AL.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -1353,7 +1353,6 @@
     <EmbeddedResource Include="System.Web.Http.WebHost.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AllLegitIcon.ico" />
     <Content Include="_bin\file\bin\file.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

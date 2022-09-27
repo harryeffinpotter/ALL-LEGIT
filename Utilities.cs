@@ -121,6 +121,11 @@ namespace ALL_LEGIT
             {
                 return;
             }
+            if (String.IsNullOrEmpty(MainWindow.DLSDir))
+            {
+                MainWindow.DLSDir = destination;
+            }
+
             System.Diagnostics.Process x2 = new System.Diagnostics.Process();
             ProcessStartInfo pro = new ProcessStartInfo();
             pro.WindowStyle = ProcessWindowStyle.Hidden;
