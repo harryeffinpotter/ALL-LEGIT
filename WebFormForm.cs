@@ -50,7 +50,7 @@ namespace ALL_LEGIT
             return new FileInfo(destinationFullPathWithName);
         }
         public static bool mustsignin = false;
-        private async void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             DownloadedOnce = false;
             string text = "";

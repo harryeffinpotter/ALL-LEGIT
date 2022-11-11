@@ -111,6 +111,7 @@ namespace ALL_LEGIT
                 return false;
             }
         }
+
         public static async void ExtractFile(string sourceArchive, string destination)
         {
             if (!Directory.Exists(destination))
@@ -121,9 +122,9 @@ namespace ALL_LEGIT
             {
                 return;
             }
-            if (String.IsNullOrEmpty(MainWindow.DLSDir))
+            if (String.IsNullOrEmpty(MainWindow.MainDLDir))
             {
-                MainWindow.DLSDir = destination;
+                MainWindow.MainDLDir = destination;
             }
 
             System.Diagnostics.Process x2 = new System.Diagnostics.Process();
@@ -234,7 +235,7 @@ namespace ALL_LEGIT
                 x.WaitForExit();
                 try
                 {
-                    currentDLCfile.FileRecycle();
+                    File.Delete(currentDLCfile);
                 }
                 catch
                 {

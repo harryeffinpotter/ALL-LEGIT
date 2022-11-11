@@ -18,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
+using static Azure.Core.HttpHeader;
 using Directory = System.IO.Directory;
 using Timer = System.Windows.Forms.Timer;
 using ToolTip = System.Windows.Forms.ToolTip;
@@ -312,7 +313,7 @@ namespace ALL_LEGIT
         }
         public static bool loginsuccess = false;
         public static bool isloggingin = false;
-        public async Task ConnectViaAPIAsync()
+        public async Task ConnectViaAPIAsync(bool wasManual = false)
         {
             isloggingin = true;
             Thread t1 = new Thread(() =>
@@ -332,6 +333,7 @@ namespace ALL_LEGIT
                         }
                         else
                         {
+                            if (!wasManual)
                             MessageBox.Show(new Form { TopMost = true }, "Previously set API key no longer working... you must reconnect!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
@@ -345,14 +347,15 @@ namespace ALL_LEGIT
                         Properties.Settings.Default.Save();
                         var obj = getJson($"pin/get?agent={apiNAME}");
                         FilecryptURL = obj.data.user_url.ToString();
-
-                        this.Invoke(() =>
+                        if (!wasManual)
                         {
-                            Form WebFormForm = new WebFormForm();
-                            WebFormForm.ShowDialog();
-                            this.Show();
-                        });
-
+                            this.Invoke(() =>
+                            {
+                                Form WebFormForm = new WebFormForm();
+                                WebFormForm.ShowDialog();
+                                this.Show();
+                            });
+                        }
                         string CheckURL = obj.data.check_url.ToString();
                         obj = getJson(CheckURL);
                         bool Activated;
@@ -641,8 +644,6 @@ namespace ALL_LEGIT
             };
 
             await webClient.DownloadFileTaskAsync(new Uri(URL), $"{DL}");
-
-
             if (webClient.IsBusy)
                 await Task.Delay(100);
             webClient.Dispose();
@@ -1134,18 +1135,7 @@ namespace ALL_LEGIT
                                         {
                                             dlProg.Value = 0;
                                         });
-                                        notdone = false;
-                                    
-                                        Thread t35 = new Thread(() =>
-                                        {
-                                            Thread.Sleep(3000);
-                                        });
-                                        t35.Start();
-                                        while (t35.IsAlive)
-                                        {
-                                            await Task.Delay(100);
-                                        }
-                                    
+                                        notdone = false;                      
                                         this.Invoke(() =>
                                         {
                                             Program.form.DownloadingText.Text = "";
@@ -1242,7 +1232,6 @@ namespace ALL_LEGIT
                 {
                     string[] pastedsplit = pasted.Split(';');
                     output = pastedsplit;
-
                 }
                 else if (pasted.Contains("\r\n"))
                 {
@@ -1264,12 +1253,11 @@ namespace ALL_LEGIT
                 {
 
                     FilecryptURL = s;
-
+                    filecryptinprog = true;
                     Form WebFormForm = new WebFormForm();
                     WebFormForm.ShowDialog();
                     this.Show();
                     this.TopMost = false;
-                    filecryptinprog = true;
                     Utilities.DecryptDLC();
 
                 }
@@ -1535,16 +1523,6 @@ namespace ALL_LEGIT
 
             }
             CancelButton.Visible = false;
-     
-            Thread t34 = new Thread(() =>
-            {
-                Thread.Sleep(3000);
-            });
-            t34.Start();
-            while (t34.IsAlive)
-            {
-                await Task.Delay(100);
-            }
             DownloadingText.Text = "";
             if (Properties.Settings.Default.AutoDL)
             {
@@ -1569,7 +1547,6 @@ namespace ALL_LEGIT
         public static string DLSDir = "";
         public static bool isDownloading = false;
         public static bool isMultiPart = false;
- 
 
         public async void startDownloads_Click(object sender, EventArgs e)
         {
@@ -1659,20 +1636,6 @@ namespace ALL_LEGIT
                         else
                             DownloadingText.Text = $"Downloads finished!";
                     });
-                
-                    Thread t35 = new Thread(() =>
-                    {
-                        this.Invoke(() =>
-                        {
-                            listView1.Refresh();
-                        });
-                        Thread.Sleep(3000);
-                    });
-                    t35.Start();
-                    while (t35.IsAlive)
-                    {
-                        await Task.Delay(100);
-                    }
                     this.Invoke(() =>
                     {
                         this.Text = "";
@@ -1705,26 +1668,8 @@ namespace ALL_LEGIT
             cancel = false;
             Utilities.FailedExtract = "";
             startDownloads.Enabled = true;
-            Thread t34 = new Thread(() =>
-            {
-                Thread.Sleep(3000);
-            });
-            t34.Start();
-            while (t34.IsAlive)
-            {
-                await Task.Delay(100);
-            }
             if (listView1.CheckedItems.Count == 0)
             {
-                this.Invoke(() =>
-                {
-                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
-                    {
-                        ALTrayIcon.ShowBalloonTip(2000, "", $"All jobs complete!", ToolTipIcon.None);
-                    }
-                    else
-                        DownloadingText.Text = $"All jobs complete!";
-                });
                 if (Properties.Settings.Default.OpenDir)
                 {
                     if (tempNoOpen)
@@ -1733,9 +1678,9 @@ namespace ALL_LEGIT
                     }
                     else
                     {
-                        if (Directory.Exists(DLSDir))
+                        if (Directory.Exists(MainDLDir))
                         {
-                            Process.Start(DLSDir);
+                            Process.Start(MainDLDir);
                         }
                         else
                         {
@@ -1746,20 +1691,80 @@ namespace ALL_LEGIT
             }
             Dict.Clear();
             dlsGoin = "";
-            if (!muteoutputcancelled)
+            bool bothsteps = false;
+            bool first = false;
+            bool second = false;
+            if (Properties.Settings.Default.AutoExtract)
             {
-                if (Properties.Settings.Default.AutoExtract)
+                AutoExtraction();
+                first = true;
+                this.Invoke(() =>
                 {
-                     AutoExtraction();
-                }
-                if (Properties.Settings.Default.extractNested)
+                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                    {
+                        ALTrayIcon.ShowBalloonTip(5000, "", $"Downloads complete, extracting zips...", ToolTipIcon.None);
+                    }
+                    else
+                        DownloadingText.Text = $"Downloads complete, extracting zips...";
+                });
+            }
+            else
+            {
+                first = true;
+                this.Invoke(() =>
                 {
-                     ExtractNestedPath(DLSDir);
-                     DLSDir = "";
+                    if (!Program.form.Focused && TrayNotify && !Properties.Settings.Default.DisableNotifies)
+                    {
+                        ALTrayIcon.ShowBalloonTip(5000, "", $"Downloads complete!", ToolTipIcon.None);
+                    }
+                    else
+                        DownloadingText.Text = $"Downloads complete!";
+                });
+            }
+
+            if (Properties.Settings.Default.extractNested)
+            {
+                ExtractNestedPath(MainDLDir);
+                second = true;
+            }
+            else second=true;
+            if (first && second)
+            {
+                if (Properties.Settings.Default.DelZips)
+                {
+                    AutoDelete();
+                    bothsteps = true;
                 }
+                else bothsteps = true;
+            }
+            if (bothsteps)
+            {
+                MainDLDir = "";
+                first = false;
+                second = false;
+                bothsteps = false;
             }
         }
 
+        public void AutoDelete()
+        {
+            if (Properties.Settings.Default.DelZips)
+            {
+                string[] ZipsToDelete = ExtractedZips.Split(';');
+                foreach (string nested in ZipsToDelete)
+                {
+                    if (File.Exists(nested))
+                    {
+                        bool IsArchive = Utilities.IsArchive(nested);
+                        if (IsArchive)
+                        {
+                            ExtractedZips.Replace($"{nested};", "");
+                            nested.FileRecycle();
+                        }
+                    }
+                }
+            }
+        }
         public void AutoExtraction()
         {
             if  (AutoExtract.Checked)
@@ -1783,7 +1788,6 @@ namespace ALL_LEGIT
                             {
                                 isMultiPart = true;
                             }
-
                             bool Extract = false;
                             string DLSExtension = Path.GetExtension(DLFile);
 
@@ -1806,35 +1810,12 @@ namespace ALL_LEGIT
                             }
                             if (Extract && !muteoutputcancelled)
                             {
-                                this.Invoke(() =>
-                                {
-                                    DownloadingText.Text = $"Extracting archives...";
-                                });
-
                                 if (!Directory.Exists(DLDir))
                                 {
                                     Directory.CreateDirectory(DLDir);
                                 }
                                 Utilities.ExtractFile(DL, DLDir);
-                                if (Properties.Settings.Default.DelZips)
-                                {
-                                    string[] ZipsToDelete = ExtractedZips.Split(';');
-                                    foreach (string zip in ZipsToDelete)
-                                    {
-                                        if (File.Exists(zip))
-                                        {
-                                            bool IsArchive = Utilities.IsArchive(zip);
-                                            if (IsArchive)
-                                            {
-                                                ExtractedZips.Replace($"{zip};", "");
-                                                zip.FileRecycle();
-                                            }
-                                        }
-                                    }
-                                }
-                                Extract = false;
-                               
-
+                                Extract = false;                              
                             }
                             Extract = false;
                         }
@@ -1846,15 +1827,14 @@ namespace ALL_LEGIT
                 {
                     DownloadingText.Text = $"";
                 });
-
             }
         }
 
-        public void ExtractNestedPath(string DLDir)
+        public void ExtractNestedPath(string MainDLDir)
         {
-            if (Properties.Settings.Default.extractNested && !String.IsNullOrEmpty(DLSDir))
+            if (Properties.Settings.Default.extractNested && !String.IsNullOrEmpty(MainDLDir))
             {
-                string[] files = Directory.GetFiles(DLSDir, "*.*", SearchOption.AllDirectories);
+                string[] files = Directory.GetFiles(MainDLDir, "*.*", SearchOption.AllDirectories);
                 foreach (string file in files)
                 {
                     bool IsArchive = Utilities.IsArchive(file);
@@ -1867,27 +1847,11 @@ namespace ALL_LEGIT
                         else
                         {
                             ExtractedZips += $"{file};";
-                            if (!Directory.Exists(DLSDir + "\\" + Path.GetFileNameWithoutExtension(file)))
+                            if (!Directory.Exists(MainDLDir + "\\" + Path.GetFileNameWithoutExtension(file)))
                             {
-                                Directory.CreateDirectory(DLSDir + "\\" + Path.GetFileNameWithoutExtension(file));
+                                Directory.CreateDirectory(MainDLDir + "\\" + Path.GetFileNameWithoutExtension(file));
                             }
-                            Utilities.ExtractFile(file, DLSDir + "\\" + Path.GetFileNameWithoutExtension(file));
-                        }
-                    }
-                }
-            }
-            if (Properties.Settings.Default.DelZips)
-            {
-                string[] ZipsToDelete = ExtractedZips.Split(';');
-                foreach (string nested in ZipsToDelete)
-                {
-                    if (File.Exists(nested))
-                    {
-                        bool IsArchive = Utilities.IsArchive(nested);
-                        if (IsArchive)
-                        {
-                            ExtractedZips.Replace($"{nested};", "");
-                            nested.FileRecycle();
+                            Utilities.ExtractFile(file, MainDLDir + "\\" + Path.GetFileNameWithoutExtension(file));
                         }
                     }
                 }
@@ -2037,15 +2001,6 @@ namespace ALL_LEGIT
                 listView1.EndUpdate();
             }
             startDownloads.Enabled = true;
-            Thread t1 = new Thread(() =>
-            {
-                Thread.Sleep(2000);
-            });
-            t1.Start();
-            while (t1.IsAlive)
-            {
-                await Task.Delay(100);
-            }
             cancel = false;
             muteoutputcancelled = false;
         }
@@ -2075,16 +2030,15 @@ namespace ALL_LEGIT
             }
         }
 
+        public bool INPWBOX = false;
         private void PWBox_Enter(object sender, EventArgs e)
         {
+            INPWBOX = true;
             if (PWBox.Text == "your;common;zip;passwords")
             {
                 PWBox.Text = "";
             }
-            else
-            {
-                PWBox.Text = Properties.Settings.Default.ZipPWS;
-            }
+
         }
 
         private void PWBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -2093,7 +2047,7 @@ namespace ALL_LEGIT
             {
                 settingsP.Focus();
             }
-            if (e.KeyChar == (char)System.Windows.Forms.Keys.Enter && PWBox.Text.Length > 0 && !PWBox.Text.Equals("your;commonly;used;zip;passwords"))
+            if (e.KeyChar == (char)System.Windows.Forms.Keys.Enter && PWBox.Text.Length > 0 && !PWBox.Text.Equals("your;common;zip;passwords"))
             {
                 if (PWBox.Text.Length > 0)
                 {
@@ -2120,7 +2074,7 @@ namespace ALL_LEGIT
 
         private void PWBox_Leave(object sender, EventArgs e)
         {
-            if (PWBox.Text == "")
+            if (String.IsNullOrWhiteSpace(PWBox.Text))
             {
                 if (!String.IsNullOrWhiteSpace(Properties.Settings.Default.ZipPWS))
                 {
@@ -2132,7 +2086,7 @@ namespace ALL_LEGIT
                 }
 
             }
-            else if (!PWBox.Text.Equals("your;commonly;used;zip;passwords") && PWBox.Text.Length > 0)
+            else if (!PWBox.Text.Equals("your;common;zip;passwords") && PWBox.Text.Length > 0)
             {
                 Properties.Settings.Default.ZipPWS = PWBox.Text;
                 Properties.Settings.Default.Save();
@@ -2161,7 +2115,7 @@ namespace ALL_LEGIT
 
         private void HotKeyBtn_Click(object sender, EventArgs e)
         {
-            if (HotKeyBtn.Text == "Set Shortcut")
+            if (HotKeyBtn.Text != "Hold Ctrl/Shift/Alt + press letter key...")
             {
                 HotKeyBox.Text = "Hold Ctrl/Shift/Alt + press letter key...";
                 HotKeyBox.Focus();
@@ -2271,6 +2225,7 @@ namespace ALL_LEGIT
         private object sender;
 
         public string ExtractedZips { get; private set; }
+        public static string MainDLDir { get; set; }
 
         public async void settingsP_MouseLeave(object sender, EventArgs e)
         {
@@ -2699,6 +2654,61 @@ namespace ALL_LEGIT
             {
                 return;
             }
+        }
+
+
+
+        private async void ApiManConnect_Click(object sender, EventArgs e)
+        {
+            if (ApiNameMan.Text.Length < 1 && ApiKeyMan.Text.Length < 1)
+            {
+                MessageBox.Show("You must enter APP name AND api key in the boxes!");
+                return;
+            }
+            ApiManPanel.Visible = false;
+            Properties.Settings.Default.ApiNAME = ApiNameMan.Text;
+            Properties.Settings.Default.ApiKEY = ApiKeyMan.Text;
+            Properties.Settings.Default.Save();
+            await ConnectViaAPIAsync(true);
+            while (!loginsuccess)
+            {
+                this.Invoke(() =>
+                {
+                    this.Text = $"All-Legit {Updater.LocalVersion}: Not Connected";
+                });
+
+
+            }
+            if (loginsuccess)
+            {
+                this.Invoke(() =>
+                {
+                    isloggingin = false;
+                    this.Text = $"All-Legit {Updater.LocalVersion}: Connected";
+                });
+            }
+
+        }
+
+        private void ApiNameMan_TextChanged(object sender, EventArgs e)
+        {
+            if (ApiKeyMan.Text.Trim().Length > 0 && ApiKeyMan.Text.Trim().Length > 0)
+            {
+                ApiManConnect.Enabled = true;
+            }
+        }
+
+        private void ApiKeyMan_TextChanged(object sender, EventArgs e)
+        {
+            if (ApiKeyMan.Text.Trim().Length > 0 && ApiKeyMan.Text.Trim().Length > 0)
+            {
+                    ApiManConnect.Enabled = true;
+            }
+        }
+
+        private void ShowManualPanel_Click(object sender, EventArgs e)
+        {
+            ApiManPanel.Visible = true;
         }
     }
 }
