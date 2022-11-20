@@ -218,7 +218,8 @@ namespace ALL_LEGIT
 
         }
         public static string patchNotes =
-            " • BIG DAY!! Fixed the UI freezing during downloads! REJOICE!" +
+            " • BIG DAY!! Fixed the UI freezing during downloads! REJOICE!\n" +
+            " • Added+Finished Manual API key entry, it can be found in settings.\n" +
             "\n";
         public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
