@@ -218,10 +218,7 @@ namespace ALL_LEGIT
 
         }
         public static string patchNotes =
-            " • Fixed big goofy mistake where I copied every damn button.\n" +
-            " • Fixed up colors, made new icon. Fixed other major to minor bugs!\n" +
-            " • Changed all delete and overwrite functions to delete to RECYCLE BIN instead of fully deleting.\n" +
-            " • Fixed Stay on Top bug, FINALLY!\n" +
+            " • BIG DAY!! Fixed the UI freezing during downloads! REJOICE!" +
             "\n";
         public static bool endreached = false;
         private async void MainWindow_Load(object sender, EventArgs e)
@@ -540,31 +537,34 @@ namespace ALL_LEGIT
             //
             //
             //
-
+            string DLS = null;
+            bool hasgonethru = false;
             webClient.DownloadProgressChanged += (s, e) =>
-            {
-                sw.Start();
-                string DLS;
-                if (listView1.Items.Count > 0)
+            { 
+                if (!hasgonethru)
                 {
-                    CurrentDLFileName = listView1.TopItem.SubItems[1].Text;
+                    this.Invoke(() =>
+                    {
+                        CancelButton.Visible = true;
+                    });
+                        DLS = String.Format("{0:0.00}", (e.BytesReceived / 1024 / 1024 / sw.Elapsed.TotalSeconds).ToString("0.00"));
+                    if (listView1.Items.Count > 0)
+                    {
+                        CurrentDLFileName = listView1.TopItem.SubItems[1].Text;
+                    }
+                    var name = FILENAME;
+                    const int MaxLength = 35;
+                    if (name.Length > MaxLength)
+                    {
+                        FILENAME = name.Substring(0, MaxLength) + "..."; //
+                    }
+                    hasgonethru = true;
                 }
-                DLS = String.Format("{0:0.00}", (e.BytesReceived / 1024 / 1024 / sw.Elapsed.TotalSeconds).ToString("0.00"));
-                var name = FILENAME;
-                const int MaxLength = 35;
-                if (name.Length > MaxLength)
-                {
-                    FILENAME = name.Substring(0, MaxLength) + "..."; //
-                }
-
                 this.Invoke(() =>
                 {
-                    CancelButton.Visible = true;
                     DownloadingText.Text = $"{FILENAME} - {e.ProgressPercentage}% - {DLS}MB\\s";
                     dlProg.Value = e.ProgressPercentage;
                 });
-
-
             };
 
             webClient.DownloadFileCompleted += (s, e) =>
@@ -642,10 +642,9 @@ namespace ALL_LEGIT
 
 
             };
-
+    
+       
             await webClient.DownloadFileTaskAsync(new Uri(URL), $"{DL}");
-            if (webClient.IsBusy)
-                await Task.Delay(100);
             webClient.Dispose();
             isDownloading = false;
             fileDownloading = "";
@@ -2230,7 +2229,8 @@ namespace ALL_LEGIT
         public async void settingsP_MouseLeave(object sender, EventArgs e)
         {
             TrayNotify = true;
-            if (PWBox.Focused) return;
+            if (PWBox.Focused || ApiNameMan.Focused || ApiKeyMan.Focused) return;
+            ApiManPanel.Visible = false;
             if (stopwatch.IsRunning) return;
             stopwatch.Restart();
             while (stopwatch.ElapsedMilliseconds < 500)
@@ -2709,6 +2709,19 @@ namespace ALL_LEGIT
         private void ShowManualPanel_Click(object sender, EventArgs e)
         {
             ApiManPanel.Visible = true;
+            ApiManPanel.BringToFront();
+            ApiNameMan.Focus();
+        }
+
+        private void splashPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void CancelAPIMan_Click(object sender, EventArgs e)
+        {
+            ApiManPanel.Visible = false;
+            settingsP.Visible = false;
         }
     }
 }
