@@ -18,7 +18,7 @@ namespace ALL_LEGIT
         private static string RawGitHubUrl = "https://raw.githubusercontent.com/harryeffinpotter/ALL-LEGIT";
         private static string GitHubUrl;
 
-        static readonly public string LocalVersion = "1.1.4";
+        static readonly public string LocalVersion = "1.1.5";
         public static string currentVersion = "";
         public static string currentHFVersion = "";
         public static string changelog = "";

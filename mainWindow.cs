@@ -415,6 +415,7 @@ namespace ALL_LEGIT
         string currentGroup = "";
         private async Task downloadFiles(string URL, string FILENAME, string MagnetNAME)
         {
+            bool hasgonethru = false;
             if (dlsGoin.Contains($"{FILENAME};{MagnetNAME}"))
             {
                 return;
@@ -538,17 +539,17 @@ namespace ALL_LEGIT
             //
             //
             //
-            string DLS = null;
-            bool hasgonethru = false;
+            string DLS = "";
+            sw.Start();
             webClient.DownloadProgressChanged += (s, e) =>
-            { 
+            {
                 if (!hasgonethru)
                 {
                     this.Invoke(() =>
                     {
                         CancelButton.Visible = true;
                     });
-                        DLS = String.Format("{0:0.00}", (e.BytesReceived / 1024 / 1024 / sw.Elapsed.TotalSeconds).ToString("0.00"));
+       
                     if (listView1.Items.Count > 0)
                     {
                         CurrentDLFileName = listView1.TopItem.SubItems[1].Text;
@@ -561,11 +562,13 @@ namespace ALL_LEGIT
                     }
                     hasgonethru = true;
                 }
+                DLS = String.Format("{0:0.00}", (e.BytesReceived / 1024 / 1024 / sw.Elapsed.TotalSeconds).ToString("0.00"));
                 this.Invoke(() =>
-                {
-                    DownloadingText.Text = $"{FILENAME} - {e.ProgressPercentage}% - {DLS}MB\\s";
-                    dlProg.Value = e.ProgressPercentage;
-                });
+                    {
+                        DownloadingText.Text = $"{FILENAME} - {e.ProgressPercentage}% - {DLS}MB\\s";
+                        dlProg.Value = e.ProgressPercentage;
+                    });
+
             };
 
             webClient.DownloadFileCompleted += (s, e) =>
