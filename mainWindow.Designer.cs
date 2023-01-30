@@ -126,7 +126,7 @@
             this.SetDLDIR.Location = new System.Drawing.Point(240, 49);
             this.SetDLDIR.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.SetDLDIR.Name = "SetDLDIR";
-            this.SetDLDIR.Size = new System.Drawing.Size(289, 38);
+            this.SetDLDIR.Size = new System.Drawing.Size(290, 38);
             this.SetDLDIR.TabIndex = 5;
             this.SetDLDIR.Text = "Set Download Directory";
             this.SetDLDIR.UseVisualStyleBackColor = false;
@@ -147,7 +147,7 @@
             this.PasteButton.Location = new System.Drawing.Point(1122, 951);
             this.PasteButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.PasteButton.Name = "PasteButton";
-            this.PasteButton.Size = new System.Drawing.Size(91, 38);
+            this.PasteButton.Size = new System.Drawing.Size(92, 38);
             this.PasteButton.TabIndex = 2;
             this.PasteButton.Text = "Paste links";
             this.PasteButton.UseVisualStyleBackColor = false;
@@ -281,7 +281,7 @@
             this.ClearButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ClearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.ClearButton.ForeColor = System.Drawing.SystemColors.Control;
-            this.ClearButton.Location = new System.Drawing.Point(55, 951);
+            this.ClearButton.Location = new System.Drawing.Point(56, 951);
             this.ClearButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(201, 38);
@@ -309,7 +309,7 @@
             this.UncheckAll.Location = new System.Drawing.Point(18, 949);
             this.UncheckAll.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.UncheckAll.Name = "UncheckAll";
-            this.UncheckAll.Size = new System.Drawing.Size(35, 39);
+            this.UncheckAll.Size = new System.Drawing.Size(34, 38);
             this.UncheckAll.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.UncheckAll.TabIndex = 16;
             this.UncheckAll.TabStop = false;
@@ -323,7 +323,7 @@
             this.CheckAll.Location = new System.Drawing.Point(18, 949);
             this.CheckAll.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CheckAll.Name = "CheckAll";
-            this.CheckAll.Size = new System.Drawing.Size(35, 39);
+            this.CheckAll.Size = new System.Drawing.Size(34, 38);
             this.CheckAll.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.CheckAll.TabIndex = 16;
             this.CheckAll.TabStop = false;
@@ -339,7 +339,7 @@
             this.OpenDirBox.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.OpenDirBox.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold);
             this.OpenDirBox.ForeColor = System.Drawing.Color.White;
-            this.OpenDirBox.Location = new System.Drawing.Point(774, 51);
+            this.OpenDirBox.Location = new System.Drawing.Point(771, 51);
             this.OpenDirBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.OpenDirBox.Name = "OpenDirBox";
             this.OpenDirBox.Size = new System.Drawing.Size(389, 32);
@@ -392,7 +392,7 @@
             this.listView1.Location = new System.Drawing.Point(18, 98);
             this.listView1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(1196, 839);
+            this.listView1.Size = new System.Drawing.Size(1196, 838);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -410,7 +410,7 @@
             this.splashPanel.Location = new System.Drawing.Point(68, 155);
             this.splashPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.splashPanel.Name = "splashPanel";
-            this.splashPanel.Size = new System.Drawing.Size(1097, 771);
+            this.splashPanel.Size = new System.Drawing.Size(1096, 771);
             this.splashPanel.TabIndex = 17;
             this.splashPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.splashPanel_Paint);
             this.splashPanel.MouseEnter += new System.EventHandler(this.settingsP_MouseLeave);
@@ -523,10 +523,10 @@
             this.ApiManPanel.Controls.Add(this.label3);
             this.ApiManPanel.Controls.Add(this.ApiKeyMan);
             this.ApiManPanel.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ApiManPanel.Location = new System.Drawing.Point(275, 4);
+            this.ApiManPanel.Location = new System.Drawing.Point(274, 5);
             this.ApiManPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ApiManPanel.Name = "ApiManPanel";
-            this.ApiManPanel.Size = new System.Drawing.Size(450, 443);
+            this.ApiManPanel.Size = new System.Drawing.Size(450, 444);
             this.ApiManPanel.TabIndex = 13;
             this.ApiManPanel.Visible = false;
             this.ApiManPanel.MouseEnter += new System.EventHandler(this.showSettings_MouseEnter);
@@ -541,10 +541,10 @@
             this.CancelAPIMan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelAPIMan.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.CancelAPIMan.ForeColor = System.Drawing.Color.Moccasin;
-            this.CancelAPIMan.Location = new System.Drawing.Point(62, 379);
+            this.CancelAPIMan.Location = new System.Drawing.Point(62, 378);
             this.CancelAPIMan.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CancelAPIMan.Name = "CancelAPIMan";
-            this.CancelAPIMan.Size = new System.Drawing.Size(176, 44);
+            this.CancelAPIMan.Size = new System.Drawing.Size(176, 45);
             this.CancelAPIMan.TabIndex = 3;
             this.CancelAPIMan.Text = "Cancel";
             this.CancelAPIMan.UseVisualStyleBackColor = false;
@@ -560,10 +560,10 @@
             this.ApiManConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ApiManConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.ApiManConnect.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.ApiManConnect.Location = new System.Drawing.Point(252, 379);
+            this.ApiManConnect.Location = new System.Drawing.Point(252, 378);
             this.ApiManConnect.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ApiManConnect.Name = "ApiManConnect";
-            this.ApiManConnect.Size = new System.Drawing.Size(176, 44);
+            this.ApiManConnect.Size = new System.Drawing.Size(176, 45);
             this.ApiManConnect.TabIndex = 3;
             this.ApiManConnect.Text = "Connect";
             this.ApiManConnect.UseVisualStyleBackColor = false;
@@ -574,7 +574,7 @@
             this.APIHeader.AutoSize = true;
             this.APIHeader.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.APIHeader.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.APIHeader.Location = new System.Drawing.Point(29, 36);
+            this.APIHeader.Location = new System.Drawing.Point(28, 35);
             this.APIHeader.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.APIHeader.Name = "APIHeader";
             this.APIHeader.Size = new System.Drawing.Size(238, 31);
@@ -589,7 +589,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.label4.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.label4.Location = new System.Drawing.Point(27, 181);
+            this.label4.Location = new System.Drawing.Point(27, 182);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(126, 31);
@@ -622,7 +622,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Consolas", 13F, System.Drawing.FontStyle.Bold);
             this.label3.ForeColor = System.Drawing.Color.PaleTurquoise;
-            this.label3.Location = new System.Drawing.Point(29, 282);
+            this.label3.Location = new System.Drawing.Point(28, 282);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(112, 31);
@@ -662,7 +662,7 @@
             this.ShowManualPanel.Location = new System.Drawing.Point(546, 5);
             this.ShowManualPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ShowManualPanel.Name = "ShowManualPanel";
-            this.ShowManualPanel.Size = new System.Drawing.Size(179, 46);
+            this.ShowManualPanel.Size = new System.Drawing.Size(178, 46);
             this.ShowManualPanel.TabIndex = 0;
             this.ShowManualPanel.Text = "Add APIKey";
             this.ShowManualPanel.UseVisualStyleBackColor = false;
@@ -837,6 +837,7 @@
             this.PWBox.TabIndex = 14;
             this.PWBox.Text = "your;common;zip;passwords";
             this.PWBox.Click += new System.EventHandler(this.PWBox_Enter);
+            this.PWBox.TextChanged += new System.EventHandler(this.PWBox_TextChanged);
             this.PWBox.Enter += new System.EventHandler(this.PWBox_Enter);
             this.PWBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PWBox_KeyPress);
             this.PWBox.Leave += new System.EventHandler(this.PWBox_Leave);
@@ -927,7 +928,7 @@
             this.selectTorrent.Location = new System.Drawing.Point(18, 992);
             this.selectTorrent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.selectTorrent.Name = "selectTorrent";
-            this.selectTorrent.Size = new System.Drawing.Size(238, 39);
+            this.selectTorrent.Size = new System.Drawing.Size(238, 38);
             this.selectTorrent.TabIndex = 3;
             this.selectTorrent.Text = "Select torrent file";
             this.selectTorrent.UseVisualStyleBackColor = false;
@@ -946,7 +947,7 @@
             this.startDownloads.Location = new System.Drawing.Point(978, 992);
             this.startDownloads.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.startDownloads.Name = "startDownloads";
-            this.startDownloads.Size = new System.Drawing.Size(235, 39);
+            this.startDownloads.Size = new System.Drawing.Size(236, 38);
             this.startDownloads.TabIndex = 1;
             this.startDownloads.Text = "Download Selected";
             this.startDownloads.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -966,7 +967,7 @@
             this.CancelButton.Location = new System.Drawing.Point(978, 992);
             this.CancelButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(235, 39);
+            this.CancelButton.Size = new System.Drawing.Size(236, 38);
             this.CancelButton.TabIndex = 0;
             this.CancelButton.Text = "Cancel Current Job";
             this.CancelButton.UseVisualStyleBackColor = false;
@@ -999,12 +1000,12 @@
             this.Controls.Add(this.selectTorrent);
             this.Controls.Add(this.CopyLinks);
             this.Controls.Add(this.startDownloads);
-            this.Controls.Add(this.listView1);
             this.Controls.Add(this.DownloadingText);
+            this.Controls.Add(this.listView1);
             this.ForeColor = System.Drawing.Color.NavajoWhite;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MinimumSize = new System.Drawing.Size(1074, 751);
+            this.MinimumSize = new System.Drawing.Size(1068, 733);
             this.Name = "MainWindow";
             this.Opacity = 0.98D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

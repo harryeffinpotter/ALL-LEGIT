@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Caching;
 using System.Windows.Forms;
-using SevenZip;
+using Microsoft.VisualStudio.Services.Identity;
 using SharpCompress;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -205,6 +205,7 @@ namespace ALL_LEGIT
                 Program.form.DownloadingText.Text = $"Decrypting Filecrypt links...";
               
             });
+            bool filecryptinprog = false;
             string[] files = Directory.GetFiles(Environment.CurrentDirectory, "*.dlc", SearchOption.AllDirectories);
             string[] files2 = Directory.GetFiles(MainWindow.GetDownloadsPath(), "*.dlc", SearchOption.AllDirectories);
             string[] joinedResult = files.Concatenate(files2);
@@ -222,6 +223,7 @@ namespace ALL_LEGIT
                 }
                 else
                 {
+                    filecryptinprog= true;
                     currentDLCfile = file;
                 }
                 int DLCNumber = MainWindow.randomNumber;
@@ -241,7 +243,38 @@ namespace ALL_LEGIT
                 {
                 }
             }
+            if (filecryptinprog)
+            {
+                string[] filez = Directory.GetFiles($"{Environment.CurrentDirectory}\\_bin", "*.txt", SearchOption.TopDirectoryOnly);
+                string linkstoget = "";
+                foreach (string file in files)
+                {
+                    if (file.Contains(".txt"))
+                    {
+                        string[] list = File.ReadAllLines(file);
+                        foreach (string line in list)
+                        {
+                            if (!line.Contains("Urls stored"))
+                            {
+                                linkstoget += line + "\n";
+                                DLCCount++;
+                            }
+
+                        }
+                        file.FileRecycle();
+                    }
+                }
+                if (!String.IsNullOrWhiteSpace(linkstoget))
+                {
+                    Clipboard.SetText(linkstoget);
+                    linkstoget = "";
+                    filecryptinprog = false;
+                }
+
+            }
         }
+
+        public static int DLCCount = 0;
 
         public static void Melt()
         {

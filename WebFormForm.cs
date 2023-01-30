@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Diagnostics; 
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace ALL_LEGIT
 {
@@ -37,7 +38,8 @@ namespace ALL_LEGIT
             Int32 reserved,
             IntPtr callBack);
         public static bool LoadedOnce = false;
-
+        public static string dlcGroup = "";
+        public static bool isDLC = false;
         /// <summary>
         /// Download a file from the webpage and save it to the destination without promting the user
         /// </summary>
@@ -54,7 +56,22 @@ namespace ALL_LEGIT
         {
             DownloadedOnce = false;
             string text = "";
+            var name = webBrowser1.Document.GetElementsByTagName("h2");
             var links = webBrowser1.Document.GetElementsByTagName("button");
+            if (name.Count > 0)
+            {
+                foreach (HtmlElement textname in name)
+                {
+                    string h2name = textname.InnerText;
+                    if (!h2name.Equals("Security prompt"))
+                    {
+                        Console.WriteLine(h2name);
+                        isDLC = true;
+                        dlcGroup = h2name;
+                    }
+                }
+
+            }
             foreach (HtmlElement link in links)
             {
 
