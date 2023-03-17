@@ -20,6 +20,7 @@ namespace ALL_LEGIT
         [STAThread]
         static void Main()
         {
+            Task.Delay(2000);
             bool mutexCreated = false;
             mutex = new System.Threading.Mutex(false, "All Legit.exe", out mutexCreated);
 
@@ -33,7 +34,7 @@ namespace ALL_LEGIT
             try
             {
                 // Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
+                Application.SetCompatibleTextRenderingDefault(true);
                 form = new MainWindow();
                 Application.Run(form);
                 Application.Exit();

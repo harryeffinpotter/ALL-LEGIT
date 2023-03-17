@@ -64,6 +64,7 @@
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -92,7 +93,7 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -113,6 +114,12 @@
   <PropertyGroup />
   <PropertyGroup />
   <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup>
+    <StartupObject>ALL_LEGIT.Program</StartupObject>
+  </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
   <PropertyGroup>
@@ -441,6 +448,12 @@
     <Compile Include="Download\ADFIleHosterLink.cs" />
     <Compile Include="Download\CompletedDownloads.cs" />
     <Compile Include="ExtensionDeleteToRecycleBin.cs" />
+    <Compile Include="bulkAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="bulkAdd.Designer.cs">
+      <DependentUpon>bulkAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="GetBrowser.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Updater.cs" />
@@ -461,6 +474,9 @@
     <Compile Include="WebFormForm.Designer.cs">
       <DependentUpon>WebFormForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="bulkAdd.resx">
+      <DependentUpon>bulkAdd.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="mainWindow.resx">
       <DependentUpon>mainWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -479,6 +495,7 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Local.testsettings" />
+    <EmbeddedResource Include="Properties\ka1.ttf" />
     <None Include="README" />
     <None Include="version" />
     <None Include="_bin\Archive.bat">
@@ -502,7 +519,10 @@
     <None Include="_bin\decrypt-dlc.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="_bin\file\share\misc\magic.mgc">
+    <Content Include="_bin\file\bin\share\misc\magic.mgc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="_bin\ka1.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="_bin\LICENSE">
@@ -514,9 +534,7 @@
     <None Include="_bin\node_etw_provider.man">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="_bin\node_modules\.package-lock.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="_bin\node_modules\.package-lock.json" />
     <None Include="_bin\node_modules\corepack\LICENSE.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -931,9 +949,15 @@
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\dashdash\etc\dashdash.bash_completion.in" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\dashdash\package.json" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\dashdash\README.md" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\.eslintrc" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\package.json" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\README.md" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\.eslintrc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\package.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\delayed-stream\.npmignore" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\delayed-stream\License" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\delayed-stream\Makefile" />
@@ -1219,11 +1243,21 @@
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\universalify\LICENSE" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\universalify\package.json" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\universalify\README.md" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\es5\uri.all.js.map" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\es5\uri.all.min.js.map" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\index.js.map" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\regexps-iri.js.map" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\regexps-uri.js.map" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\es5\uri.all.js.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\es5\uri.all.min.js.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\index.js.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\regexps-iri.js.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\regexps-uri.js.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\http.js.map" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\https.js.map" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\mailto.js.map" />
@@ -1231,12 +1265,24 @@
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\urn.js.map" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\ws.js.map" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\wss.js.map" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\uri.js.map" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\util.js.map" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\LICENSE" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\package.json" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\README.md" />
-    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\yarn.lock" />
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\uri.js.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\util.js.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\LICENSE">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\package.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\yarn.lock">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uuid\AUTHORS" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uuid\bin\uuid" />
     <None Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uuid\CHANGELOG.md" />
@@ -1344,21 +1390,11 @@
     <EmbeddedResource Include="System.Web.Http.WebHost.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="_bin\file\bin\file.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\file\bin\msys-1.0.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\file\bin\msys-magic-1.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\file\bin\msys-regex-1.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="_bin\file\bin\msys-z.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="_bin\file\bin\file.exe" />
+    <Content Include="_bin\file\bin\msys-1.0.dll" />
+    <Content Include="_bin\file\bin\msys-magic-1.dll" />
+    <Content Include="_bin\file\bin\msys-regex-1.dll" />
+    <Content Include="_bin\file\bin\msys-z.dll" />
     <Content Include="_bin\libcrypto-1_1.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1667,8 +1703,12 @@
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\core-util-is\test.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\dashdash\lib\dashdash.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\dashdash\LICENSE.txt" />
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\index.js" />
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\test\test.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\index.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\decrypt-dlc\test\test.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\delayed-stream\lib\delayed_stream.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ecc-jsbn\index.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\ecc-jsbn\lib\ec.js" />
@@ -2451,11 +2491,21 @@
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\tweetnacl\nacl.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\tweetnacl\nacl.min.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\universalify\index.js" />
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\es5\uri.all.js" />
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\es5\uri.all.min.js" />
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\index.js" />
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\regexps-iri.js" />
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\regexps-uri.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\es5\uri.all.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\es5\uri.all.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\index.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\regexps-iri.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\regexps-uri.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\http.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\https.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\mailto.js" />
@@ -2463,8 +2513,12 @@
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\urn.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\ws.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\wss.js" />
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\uri.js" />
-    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\util.js" />
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\uri.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\util.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uuid\index.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uuid\lib\bytesToUuid.js" />
     <Content Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uuid\lib\md5-browser.js" />
@@ -2519,11 +2573,21 @@
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\performance-now\src\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\safe-buffer\index.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\tweetnacl\nacl.d.ts" />
-    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\es5\uri.all.d.ts" />
-    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\es5\uri.all.min.d.ts" />
-    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\index.d.ts" />
-    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\regexps-iri.d.ts" />
-    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\regexps-uri.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\es5\uri.all.d.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\es5\uri.all.min.d.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\index.d.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\regexps-iri.d.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\regexps-uri.d.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\http.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\https.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\mailto.d.ts" />
@@ -2531,10 +2595,16 @@
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\urn.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\ws.d.ts" />
     <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\schemes\wss.d.ts" />
-    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\uri.d.ts" />
-    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\util.d.ts" />
+    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\uri.d.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="_bin\node_modules\decrypt-dlc-cli\node_modules\uri-js\dist\esnext\util.d.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="_bin\node_modules\.bin\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\System.Text.Json.6.0.5\build\System.Text.Json.targets" Condition="Exists('packages\System.Text.Json.6.0.5\build\System.Text.Json.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
