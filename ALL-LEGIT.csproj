@@ -522,9 +522,9 @@
     <Content Include="_bin\file\bin\share\misc\magic.mgc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="_bin\ka1.ttf">
+    <EmbeddedResource Include="_bin\ka1.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </EmbeddedResource>
     <None Include="_bin\LICENSE">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
