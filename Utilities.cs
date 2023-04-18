@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Caching;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.Services.Identity;
 using SharpCompress;
